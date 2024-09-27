@@ -1,0 +1,4 @@
+C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Release/CMakeFiles/MediaManager.dir
+C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Release/CMakeFiles/edit_cache.dir
+C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Release/CMakeFiles/rebuild_cache.dir
+C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Release/CMakeFiles/MediaManager_autogen.dir
