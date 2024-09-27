@@ -79,6 +79,12 @@
 	"HEADERS" : 
 	[
 		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h",
+			"MU",
+			"EWIEGA46WW/moc_ButtomBar.cpp",
+			null
+		],
+		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h",
 			"MU",
 			"EWIEGA46WW/moc_FrameQueue.cpp",
@@ -100,6 +106,12 @@
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h",
 			"MU",
 			"EWIEGA46WW/moc_SdlPlayer.cpp",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h",
+			"MU",
+			"EWIEGA46WW/moc_SideBar.cpp",
 			null
 		]
 	],
@@ -168,6 +180,11 @@
 	"SOURCES" : 
 	[
 		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.cpp",
 			"MU",
 			null
@@ -179,6 +196,11 @@
 		],
 		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.cpp",
 			"MU",
 			null
 		],

@@ -26,6 +26,10 @@ set(PROJECT_SOURCES
     MainWindow.cpp
     SdlPlayer.h
     SdlPlayer.cpp
+    ButtomBar.h
+    ButtomBar.cpp
+    SideBar.h
+    SideBar.cpp
 )
 
 # 创建可执行文件，并指定输出目录为项目的根目录

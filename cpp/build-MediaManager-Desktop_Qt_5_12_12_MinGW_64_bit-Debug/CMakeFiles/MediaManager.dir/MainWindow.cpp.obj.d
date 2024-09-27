@@ -363,8 +363,9 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/imgutils.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixdesc.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/time.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QMainWindow \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qmainwindow.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\ButtomBar.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtguiglobal.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -393,7 +394,6 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtgui-config.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtwidgets-config.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qwindowdefs.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qobjectdefs.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qnamespace.h \
@@ -461,11 +461,49 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qsizepolicy.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qcursor.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qkeysequence.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qicon.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QSlider \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractslider.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QLabel \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QPushButton \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qpushbutton.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractbutton.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qicon.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QTimer \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qtimer.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qbasictimer.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayout.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayoutitem.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QVBoxLayout \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QStyle \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qcoreapplication.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qcoreevent.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qguiapplication.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qinputmethod.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qlocale.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qvariant.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qmap.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\SideBar.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QMainWindow \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qmainwindow.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/QMediaPlayer \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaplayer.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaobject.h \
@@ -474,7 +512,6 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmultimedia.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediacontent.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaresource.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qmap.h \
  D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkrequest.h \
  D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetworkglobal.h \
  D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
@@ -488,25 +525,15 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qvariant.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaenumdebug.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qmetaobject.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qvariant.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qlocale.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qset.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qaudio.h \
  D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkconfiguration.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/QTimer \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qtimer.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qbasictimer.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QCoreApplication \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qcoreapplication.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qcoreevent.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
@@ -520,17 +547,9 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qvalidator.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractslider.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QVBoxLayout \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayout.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayoutitem.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QSpacerItem \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayoutitem.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/QResizeEvent \
@@ -539,19 +558,4 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qvector2d.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QSlider \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QPushButton \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qpushbutton.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractbutton.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qcoreapplication.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qguiapplication.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qinputmethod.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QStyle \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h

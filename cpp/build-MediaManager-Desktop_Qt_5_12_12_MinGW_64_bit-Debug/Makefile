@@ -141,6 +141,30 @@ MediaManager_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager_autogen.dir\build.make CMakeFiles/MediaManager_autogen.dir/build
 .PHONY : MediaManager_autogen/fast
 
+ButtomBar.obj: ButtomBar.cpp.obj
+.PHONY : ButtomBar.obj
+
+# target to build an object file
+ButtomBar.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj
+.PHONY : ButtomBar.cpp.obj
+
+ButtomBar.i: ButtomBar.cpp.i
+.PHONY : ButtomBar.i
+
+# target to preprocess a source file
+ButtomBar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.i
+.PHONY : ButtomBar.cpp.i
+
+ButtomBar.s: ButtomBar.cpp.s
+.PHONY : ButtomBar.s
+
+# target to generate assembly for a file
+ButtomBar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.s
+.PHONY : ButtomBar.cpp.s
+
 MainWindow.obj: MainWindow.cpp.obj
 .PHONY : MainWindow.obj
 
@@ -237,6 +261,30 @@ SdlPlayer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SdlPlayer.cpp.s
 .PHONY : SdlPlayer.cpp.s
 
+SideBar.obj: SideBar.cpp.obj
+.PHONY : SideBar.obj
+
+# target to build an object file
+SideBar.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SideBar.cpp.obj
+.PHONY : SideBar.cpp.obj
+
+SideBar.i: SideBar.cpp.i
+.PHONY : SideBar.i
+
+# target to preprocess a source file
+SideBar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SideBar.cpp.i
+.PHONY : SideBar.cpp.i
+
+SideBar.s: SideBar.cpp.s
+.PHONY : SideBar.s
+
+# target to generate assembly for a file
+SideBar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SideBar.cpp.s
+.PHONY : SideBar.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -271,6 +319,9 @@ help:
 	@echo ... rebuild_cache
 	@echo ... MediaManager_autogen
 	@echo ... MediaManager
+	@echo ... ButtomBar.obj
+	@echo ... ButtomBar.i
+	@echo ... ButtomBar.s
 	@echo ... MainWindow.obj
 	@echo ... MainWindow.i
 	@echo ... MainWindow.s
@@ -283,6 +334,9 @@ help:
 	@echo ... SdlPlayer.obj
 	@echo ... SdlPlayer.i
 	@echo ... SdlPlayer.s
+	@echo ... SideBar.obj
+	@echo ... SideBar.i
+	@echo ... SideBar.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

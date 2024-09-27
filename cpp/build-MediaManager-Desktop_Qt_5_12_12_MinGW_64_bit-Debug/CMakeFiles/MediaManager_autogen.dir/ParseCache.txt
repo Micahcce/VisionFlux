@@ -10,3 +10,9 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.cpp
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.cpp
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtAudioPlayer.h
  mmc:Q_OBJECT
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h
+ mmc:Q_OBJECT
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h
+ mmc:Q_OBJECT
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.cpp
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.cpp
