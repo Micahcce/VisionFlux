@@ -109,15 +109,15 @@
 			null
 		],
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h",
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h",
 			"MU",
-			"EWIEGA46WW/moc_SdlPlayer.cpp",
+			"EWIEGA46WW/moc_PlayList.cpp",
 			null
 		],
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h",
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h",
 			"MU",
-			"EWIEGA46WW/moc_SideBar.cpp",
+			"EWIEGA46WW/moc_SdlPlayer.cpp",
 			null
 		]
 	],
@@ -206,12 +206,12 @@
 			null
 		],
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.cpp",
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.cpp",
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.cpp",
 			"MU",
 			null
 		],

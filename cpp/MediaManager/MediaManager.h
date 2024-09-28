@@ -50,6 +50,7 @@ public:
     static int thread_audio_display(void* data);
 
     //线程状态
+    bool getThreadQuit() {return m_thread_quit;}
     void setThreadQuit(bool status) {m_thread_quit = status;}
     void setThreadPause(bool status) {m_thread_pause = status;}
 

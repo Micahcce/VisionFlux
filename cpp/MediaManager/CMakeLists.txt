@@ -28,8 +28,8 @@ set(PROJECT_SOURCES
     SdlPlayer.cpp
     ButtomBar.h
     ButtomBar.cpp
-    SideBar.h
-    SideBar.cpp
+    PlayList.h
+    PlayList.cpp
     PlayController.h
     PlayController.cpp
 )

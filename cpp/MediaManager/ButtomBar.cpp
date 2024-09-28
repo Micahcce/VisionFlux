@@ -35,18 +35,28 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     this->setLayout(vBox);
 }
 
-bool ButtomBar::videoDoubleClicked()
+void ButtomBar::setPlayList(PlayList *playList)
 {
-    //结束当前视频
-    m_playController->endPlay();
+    m_playList = playList;
+    connect(m_playList, &QListWidget::itemDoubleClicked, this, &ButtomBar::slotVideoDoubleClicked);  //双击播放
+}
 
+bool ButtomBar::slotVideoDoubleClicked()
+{
     //获取路径
-    QString videoPath = m_sideBar->getVideoPath();
-    if(videoPath == nullptr)
+    QString videoPath = m_playList->getVideoPath();
+    if(videoPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
+    {
+        return false;
+    }
+    else if(videoPath == "")
     {
         std::cerr << "video path get failed." << std::endl;
         return false;
     }
+
+    //结束当前视频
+    m_playController->endPlay();
 
     //获取时长
     int totalTime = m_playController->getMediaDuration(videoPath.toStdString());
@@ -54,12 +64,18 @@ bool ButtomBar::videoDoubleClicked()
 
     // 设置相关控件
     m_timeSlider->setRange(0, totalTime);
+    m_timeSlider->setValue(0);
+    m_currentTime->setText("00:00:00");
     m_totalTime->setText(totalTimeStr);
     QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
     m_playBtn->setIcon(playIcon);
 
     //开始播放
     m_playController->startPlay(videoPath.toStdString());
+
+    //定时器启动
+    m_sliderTimer->start(1000);
+    m_elapsedTimer->start();
 
     return true;
 }
@@ -68,7 +84,7 @@ void ButtomBar::slotPlayVideo()
 {
     if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
     {
-        if(videoDoubleClicked() == false)
+        if(slotVideoDoubleClicked() == false)
             return;
     }
     else

@@ -4,7 +4,7 @@
 #include <iostream>
 #include "PlayController.h"
 #include "ButtomBar.h"
-#include "SideBar.h"
+#include "PlayList.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -18,6 +18,7 @@
 #include <QResizeEvent>
 #include <QPushButton>
 #include <QTabWidget>
+#include <QListWidget>
 
 
 extern "C"
@@ -42,7 +43,7 @@ public:
 private:
     PlayController* m_playController;
     QLabel* m_videoView;
-    SideBar* m_sideBar;
+    PlayList* m_playList;
     ButtomBar* m_bottomBar;
 };
 #endif // MAINWINDOW_H

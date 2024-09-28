@@ -9,7 +9,7 @@ PlayController::PlayController()
 void PlayController::startPlay(std::string filePath)
 {
     m_mediaManager->decodeToPlay(filePath.data());
-
+    m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isStarted = true;
     m_mediaInfo->isPlaying = true;
 }
@@ -29,6 +29,7 @@ void PlayController::pausePlay()
 void PlayController::endPlay()
 {
     m_mediaManager->setThreadQuit(true);
+    m_mediaInfo->mediaName = "";
     m_mediaInfo->isStarted = false;
     m_mediaInfo->isPlaying = false;
 }

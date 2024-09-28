@@ -261,6 +261,30 @@ PlayController.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayController.cpp.s
 .PHONY : PlayController.cpp.s
 
+PlayList.obj: PlayList.cpp.obj
+.PHONY : PlayList.obj
+
+# target to build an object file
+PlayList.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayList.cpp.obj
+.PHONY : PlayList.cpp.obj
+
+PlayList.i: PlayList.cpp.i
+.PHONY : PlayList.i
+
+# target to preprocess a source file
+PlayList.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayList.cpp.i
+.PHONY : PlayList.cpp.i
+
+PlayList.s: PlayList.cpp.s
+.PHONY : PlayList.s
+
+# target to generate assembly for a file
+PlayList.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayList.cpp.s
+.PHONY : PlayList.cpp.s
+
 SdlPlayer.obj: SdlPlayer.cpp.obj
 .PHONY : SdlPlayer.obj
 
@@ -284,30 +308,6 @@ SdlPlayer.s: SdlPlayer.cpp.s
 SdlPlayer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SdlPlayer.cpp.s
 .PHONY : SdlPlayer.cpp.s
-
-SideBar.obj: SideBar.cpp.obj
-.PHONY : SideBar.obj
-
-# target to build an object file
-SideBar.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SideBar.cpp.obj
-.PHONY : SideBar.cpp.obj
-
-SideBar.i: SideBar.cpp.i
-.PHONY : SideBar.i
-
-# target to preprocess a source file
-SideBar.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SideBar.cpp.i
-.PHONY : SideBar.cpp.i
-
-SideBar.s: SideBar.cpp.s
-.PHONY : SideBar.s
-
-# target to generate assembly for a file
-SideBar.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/SideBar.cpp.s
-.PHONY : SideBar.cpp.s
 
 main.obj: main.cpp.obj
 .PHONY : main.obj
@@ -358,12 +358,12 @@ help:
 	@echo ... PlayController.obj
 	@echo ... PlayController.i
 	@echo ... PlayController.s
+	@echo ... PlayList.obj
+	@echo ... PlayList.i
+	@echo ... PlayList.s
 	@echo ... SdlPlayer.obj
 	@echo ... SdlPlayer.i
 	@echo ... SdlPlayer.s
-	@echo ... SideBar.obj
-	@echo ... SideBar.i
-	@echo ... SideBar.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

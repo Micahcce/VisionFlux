@@ -46,7 +46,6 @@ public:
     void renderFrame(const AVFrame* frame);
     void renderFrameRGB(const AVFrame* frameRGB);
     void resize(int width, int height, bool RGBMode);
-    void close();
 
     unsigned int m_audioLen = 0;          //音频数据块的长度
     unsigned char *m_audioChunk = NULL;   //指向新获取的音频数据块的指针，目前多余

@@ -499,11 +499,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qlocale.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qvariant.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qmap.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\SideBar.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayList.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
@@ -522,12 +518,16 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qstring.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qimage.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QMainWindow \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qmainwindow.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/QMediaPlayer \
@@ -544,7 +544,6 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qshareddata.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qstring.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QUrl \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QVariant \
@@ -565,4 +564,6 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qvector2d.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h

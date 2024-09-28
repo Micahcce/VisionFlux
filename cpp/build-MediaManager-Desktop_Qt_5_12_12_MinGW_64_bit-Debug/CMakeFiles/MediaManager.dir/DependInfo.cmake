@@ -13,8 +13,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.cpp" "CMakeFiles/MediaManager.dir/MediaManager.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/MediaManager.cpp.obj.d"
   "C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/MediaManager_autogen/mocs_compilation.cpp" "CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj.d"
   "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.cpp" "CMakeFiles/MediaManager.dir/PlayController.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/PlayController.cpp.obj.d"
+  "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.cpp" "CMakeFiles/MediaManager.dir/PlayList.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/PlayList.cpp.obj.d"
   "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.cpp" "CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj.d"
-  "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.cpp" "CMakeFiles/MediaManager.dir/SideBar.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/SideBar.cpp.obj.d"
   "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/main.cpp" "CMakeFiles/MediaManager.dir/main.cpp.obj" "gcc" "CMakeFiles/MediaManager.dir/main.cpp.obj.d"
   )
 

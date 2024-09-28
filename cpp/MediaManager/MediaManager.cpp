@@ -195,10 +195,9 @@ int MediaManager::thread_media_decode(void *data)
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
     int64_t start_time = av_gettime() - pThis->m_startTime;
-    bool end_of_file = false;
 
     //解码
-    while(!pThis->m_thread_quit)
+    while(pThis->m_thread_quit == false)
     {
         if(pThis->m_thread_pause)
         {
@@ -207,24 +206,8 @@ int MediaManager::thread_media_decode(void *data)
             continue;
         }
 
-        if(!end_of_file)
-        {
-            //读取一个包数据
-            ret = av_read_frame(pThis->m_pFormatCtx, packet);
-            if (ret < 0)
-            {
-                if(ret == AVERROR_EOF)
-                {
-                    end_of_file = true;  // 文件读取结束
-                    std::clog << "Reached EOF." << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Error while reading frame: " << ret << std::endl;
-                }
-                break;
-            }
-        }
+        if(av_read_frame(pThis->m_pFormatCtx, packet) < 0)
+            break;
 
         if(packet->stream_index == pThis->m_videoIndex)
         {
@@ -237,7 +220,7 @@ int MediaManager::thread_media_decode(void *data)
                 if(ret < 0)
                 {
                     if(ret == AVERROR_EOF)
-                        end_of_file = true;  // 视频解码结束
+                        std::clog << "Media playback finished." << std::endl;  // 视频解码结束
                     break;
                 }
 
@@ -260,7 +243,7 @@ int MediaManager::thread_media_decode(void *data)
                 if(ret < 0)
                 {
                     if(ret == AVERROR_EOF)
-                        end_of_file = true;  // 音频解码结束
+                        std::clog << "Media playback finished." << std::endl;  // 音频解码结束
                     break;
                 }
 
@@ -278,11 +261,8 @@ int MediaManager::thread_media_decode(void *data)
     av_frame_free(&frame);
     av_packet_free(&packet);
 
-    if(end_of_file)
-    {
-        std::clog << "Media playback finished." << std::endl;
-        pThis->close();
-    }
+    //等待回收资源
+    pThis->close();
 
     return 0;
 }
@@ -310,16 +290,16 @@ void MediaManager::close()
         m_pSwsCtx = nullptr;
     }
 
-    if (m_pAudioParams->outBuff)
-    {
-        av_free(m_pAudioParams->outBuff);
-        m_pAudioParams->outBuff = nullptr;
-    }
-
     if (m_sdlPlayer)
     {
         delete m_sdlPlayer;
         m_sdlPlayer = nullptr;
+    }
+
+    if (m_pAudioParams->outBuff)
+    {
+        av_free(m_pAudioParams->outBuff);
+        m_pAudioParams->outBuff = nullptr;
     }
 
     if (m_frameQueue)
@@ -338,7 +318,7 @@ int MediaManager::thread_video_display(void* data)
     AVFrame* frame = av_frame_alloc();
     int64_t start_time = av_gettime() - pThis->m_startTime;              //获取从公元1970年1月1日0时0分0秒开始的微秒值
 
-    while(!pThis->m_thread_quit)
+    while(pThis->m_thread_quit == false)
     {
         if(pThis->m_thread_pause)
         {
@@ -398,7 +378,7 @@ int MediaManager::thread_audio_display(void *data)
     //渲染
     AVFrame* frame = av_frame_alloc();
 
-    while(!pThis->m_thread_quit)
+    while(pThis->m_thread_quit == false)
     {
         if(pThis->m_thread_pause)
         {

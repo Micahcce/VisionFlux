@@ -300,11 +300,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/functional \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/refwrap.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
@@ -323,12 +319,16 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qstring.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qimage.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avformat.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \
@@ -547,7 +547,6 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qshareddata.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qstring.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QUrl \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QVariant \
@@ -569,5 +568,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qvector2d.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\EWIEGA46WW/moc_SideBar.cpp \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\EWIEGA46WW/moc_PlayList.cpp \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h

@@ -8,7 +8,23 @@ SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullpt
 // 析构函数
 SdlPlayer::~SdlPlayer()
 {
-    close();
+    if (m_texture != nullptr) {
+        SDL_DestroyTexture(m_texture);
+        m_texture = nullptr;
+    }
+
+    if (m_renderer != nullptr) {
+        SDL_DestroyRenderer(m_renderer);
+        m_renderer = nullptr;
+    }
+
+    if (m_window != nullptr) {
+        SDL_DestroyWindow(m_window);
+        m_window = nullptr;
+    }
+
+    SDL_CloseAudio();
+    SDL_Quit();
 }
 
 // 创建窗口和渲染器
@@ -58,8 +74,8 @@ bool SdlPlayer::initAudioDevice(AudioParams* audioParams)
     //打开音频设备
     if(SDL_OpenAudio(&wantSpec, NULL) < 0)
     {
-        printf("can not open SDL!\n");
         std::cerr << "Error occurred in SDL_OpenAudio" << std::endl;
+        SDL_Quit();
     }
 
     //开始播放
@@ -118,26 +134,6 @@ void SdlPlayer::resize(int width, int height, bool RGBMode)
 
     // 修改显示区域
     m_rect = SDL_Rect{0, 0, width, height};
-}
-
-// 关闭窗口和释放资源
-void SdlPlayer::close() {
-    if (m_texture != nullptr) {
-        SDL_DestroyTexture(m_texture);
-        m_texture = nullptr;
-    }
-
-    if (m_renderer != nullptr) {
-        SDL_DestroyRenderer(m_renderer);
-        m_renderer = nullptr;
-    }
-
-    if (m_window != nullptr) {
-        SDL_DestroyWindow(m_window);
-        m_window = nullptr;
-    }
-
-    SDL_Quit();
 }
 
 

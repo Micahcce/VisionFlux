@@ -9,6 +9,8 @@ class MediaPlayInfo
 public:
     bool isStarted = false;
     bool isPlaying = false;
+
+    std::string mediaName = "";
 };
 
 class PlayController

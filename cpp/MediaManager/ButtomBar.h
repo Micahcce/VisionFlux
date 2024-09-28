@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QApplication>
-#include "SideBar.h"
+#include "PlayList.h"
 #include "PlayController.h"
 
 extern "C"
@@ -23,7 +23,6 @@ extern "C"
 }
 
 
-
 class ButtomBar : public QWidget
 {
     Q_OBJECT
@@ -31,17 +30,17 @@ public:
     ButtomBar(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
-    void setSideBar(SideBar* sideBar) {m_sideBar = sideBar;}
-    bool videoDoubleClicked();
+    void setPlayList(PlayList* playList);
 
 public slots:
     void slotPlayVideo();
     void slotUpdateProgress();
+    bool slotVideoDoubleClicked();
 
 private:
     QString timeFormatting(int secs);       //秒数格式化为hh:mm:ss
     PlayController* m_playController;
-    SideBar* m_sideBar;
+    PlayList* m_playList;
 
     QLabel* m_currentTime;
     QSlider* m_timeSlider;

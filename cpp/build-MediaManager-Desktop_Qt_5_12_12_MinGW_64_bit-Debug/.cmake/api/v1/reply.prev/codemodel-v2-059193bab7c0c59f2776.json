@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MediaManager",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "MediaManager::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MediaManager-Debug-a3db5d426cfd61cc1606.json",
+					"name" : "MediaManager",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MediaManager_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MediaManager_autogen-Debug-79e7f77d891c3e145461.json",
+					"name" : "MediaManager_autogen",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug",
+		"source" : "C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
