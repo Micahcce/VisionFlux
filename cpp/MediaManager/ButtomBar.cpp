@@ -6,8 +6,6 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(60);
 
-    m_playInfo = new VideoPlayInfo;
-
     m_currentTime = new QLabel(this);
     m_currentTime->setText("00:00:00");
     m_timeSlider = new QSlider(Qt::Horizontal, this);
@@ -37,95 +35,76 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     this->setLayout(vBox);
 }
 
-void ButtomBar::videoDoubleClicked()
+bool ButtomBar::videoDoubleClicked()
 {
     //结束当前视频
-    if(m_playInfo->isStarted)
+    m_playController->endPlay();
+
+    //获取路径
+    QString videoPath = m_sideBar->getVideoPath();
+    if(videoPath == nullptr)
     {
-        m_sliderTimer->stop();
-        m_mediaManager->setThreadQuit(true);
-        m_playInfo->isStarted = false;
+        std::cerr << "video path get failed." << std::endl;
+        return false;
     }
+
+    //获取时长
+    int totalTime = m_playController->getMediaDuration(videoPath.toStdString());
+    QString totalTimeStr = timeFormatting(totalTime);
+
+    // 设置相关控件
+    m_timeSlider->setRange(0, totalTime);
+    m_totalTime->setText(totalTimeStr);
+    QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
+    m_playBtn->setIcon(playIcon);
 
     //开始播放
-    if(!m_playInfo->isStarted)
-    {
-        //获取视频路径
-        QString videoPath = m_sideBar->getVideoPath();
+    m_playController->startPlay(videoPath.toStdString());
 
-        //获取时长
-        AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(videoPath.toUtf8().data());
-        int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
-        avformat_close_input(&formatCtx);        // 释放资源
-        int secs = duration / AV_TIME_BASE;     // 将微秒转换为秒
-        QString totalTimeStr = timeFormatting(secs);    //格式化
-
-        // 设置相关控件
-        m_totalTime->setText(totalTimeStr);
-        m_timeSlider->setRange(0, secs);
-
-        // 播放
-        m_mediaManager->decodeToPlay(videoPath.toUtf8().data());
-
-        m_playInfo->isStarted = true;
-    }
+    return true;
 }
 
 void ButtomBar::slotPlayVideo()
 {
-    //未开始则播放
-    if(!m_playInfo->isStarted)
+    if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
     {
-        //获取视频路径
-        QString videoPath = m_sideBar->getVideoPath();
-
-        //获取时长
-        AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(videoPath.toUtf8().data());
-        int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
-        avformat_close_input(&formatCtx);        // 释放资源
-        int secs = duration / AV_TIME_BASE;     // 将微秒转换为秒
-        QString totalTimeStr = timeFormatting(secs);    //格式化
-
-        // 设置相关控件
-        m_totalTime->setText(totalTimeStr);
-        m_timeSlider->setRange(0, secs);
-
-        // 播放
-        m_mediaManager->decodeToPlay(videoPath.toUtf8().data());
-
-        m_playInfo->isStarted = true;
-    }
-
-    //播放状态切换
-    if(m_playInfo->isPlaying)
-    {
-        m_playInfo->isPlaying = false;
-        QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
-        m_playBtn->setIcon(playIcon);
-        m_mediaManager->setThreadPause(true);
-
-        // 记录误差时间
-        m_elapsedTime = m_elapsedTimer->elapsed();
-        m_needRectify = true;
-
-        m_sliderTimer->stop();
+        if(videoDoubleClicked() == false)
+            return;
     }
     else
     {
-        m_playInfo->isPlaying = true;
-        QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
-        m_playBtn->setIcon(playIcon);
-        m_mediaManager->setThreadPause(false);
-
-        if(m_needRectify)           // 校正误差时间
+        if(m_playController->getMediaPlayInfo()->isPlaying)
         {
-            int remainingTime = 1000 - m_elapsedTime % 1000;  // 计算剩余时间
-            m_sliderTimer->start(remainingTime);              // 重新启动定时器，剩余时间作为间隔
+            //暂停
+            m_playController->pausePlay();
+
+            QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
+            m_playBtn->setIcon(playIcon);
+
+            // 记录误差时间
+            m_elapsedTime = m_elapsedTimer->elapsed();
+            m_needRectify = true;
+
+            m_sliderTimer->stop();
         }
         else
         {
-            m_sliderTimer->start(1000);
-            m_elapsedTimer->start();
+            //继续
+            m_playController->continuePlay();
+
+            QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
+            m_playBtn->setIcon(playIcon);
+
+            if(m_needRectify)           // 校正误差时间
+            {
+                int remainingTime = 1000 - m_elapsedTime % 1000;  // 计算剩余时间
+                m_sliderTimer->start(remainingTime);              // 重新启动定时器，剩余时间作为间隔
+            }
+            else
+            {
+                m_sliderTimer->start(1000);
+                m_elapsedTimer->start();
+            }
         }
     }
 }
@@ -147,9 +126,7 @@ void ButtomBar::slotUpdateProgress()
     //播放完成
     if(currentTime == m_timeSlider->maximum())
     {
-        m_sliderTimer->stop();
-        m_mediaManager->setThreadQuit(true);
-        m_playInfo->isStarted = false;
+        m_playController->endPlay();
     }
 
     //开启误差计时器

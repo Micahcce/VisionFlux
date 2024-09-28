@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <iostream>
-#include "MediaManager.h"
+#include "PlayController.h"
 #include "ButtomBar.h"
 #include "SideBar.h"
 
@@ -40,7 +40,7 @@ public:
     void renderFrameRGB(AVFrame *frameRGB, int width, int height, float aspectRatio);
 
 private:
-    MediaManager* m_mediaManeger;
+    PlayController* m_playController;
     QLabel* m_videoView;
     SideBar* m_sideBar;
     ButtomBar* m_bottomBar;

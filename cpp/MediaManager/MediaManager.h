@@ -54,19 +54,19 @@ public:
     void setThreadPause(bool status) {m_thread_pause = status;}
 
     //设置渲染回调函数
-    using RenderCallback = std::function<void(AVFrame* frameRGB, int width, int height, float aspectRatio)>;
-    void setRenderCallback(RenderCallback callback) {this->m_renderCallback = callback;}
+    using RenderCallback = std::function<void(AVFrame*, int, int, float)>;
+    void setRenderCallback(RenderCallback callback) {std::move(m_renderCallback) = callback;}
 
     SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
 
 private:
-    void videoDelayContrl(AVFrame* frame);
+    void videoDelayControl(AVFrame* frame);
     void frameYuvToRgb();
 
     void delayMs(int ms);
     void close();
 
-    RenderCallback m_renderCallback;      //回调，用于GUI渲染
+    RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
 
     FrameQueue* m_frameQueue;
     SdlPlayer* m_sdlPlayer;

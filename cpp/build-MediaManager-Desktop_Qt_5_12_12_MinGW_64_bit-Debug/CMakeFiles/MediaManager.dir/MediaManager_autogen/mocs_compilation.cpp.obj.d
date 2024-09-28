@@ -300,6 +300,95 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/functional \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/refwrap.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qitemselectionmodel.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qset.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemdelegate.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyleoption.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qvalidator.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qimage.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avformat.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/common.h \
+ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/inttypes.h \
+ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/math.h \
+ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
+ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/math.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/attributes.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/error.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/macros.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avconfig.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/mem.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/rational.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/version.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/mathematics.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/intfloat.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/log.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixfmt.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/channel_layout.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/rational.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixfmt.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_id.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/samplefmt.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version_major.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/defs.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/packet.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/attributes.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/buffer.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/dict.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/version.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version_major.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/defs.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/packet.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/log.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avio.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/version_major.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/version.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/version_major.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/frame.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/buffer.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/channel_layout.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/dict.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/samplefmt.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/hwcontext.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/frame.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_id.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/avcodec.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_desc.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/swscale.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version_major.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/imgutils.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixdesc.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/thread \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/memory \
@@ -319,51 +408,6 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/deque.tcc \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_queue.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/avcodec.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/samplefmt.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/attributes.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/common.h \
- D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/inttypes.h \
- D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/math.h \
- D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
- D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/math.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/attributes.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/error.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/macros.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avconfig.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/mem.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/rational.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/version.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/mathematics.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/intfloat.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/log.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixfmt.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/buffer.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/channel_layout.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/dict.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/frame.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/buffer.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/channel_layout.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/dict.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/samplefmt.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/log.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixfmt.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/rational.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/hwcontext.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/frame.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_id.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version_major.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version_major.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_id.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/defs.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/packet.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/version.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_desc.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_main.h \
@@ -479,54 +523,11 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_version.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_locale.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_misc.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avformat.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/defs.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/packet.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avio.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/version_major.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/version.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/version_major.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/swresample.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version_major.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version_major.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/swscale.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version_major.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/imgutils.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixdesc.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/time.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SideBar.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qitemselectionmodel.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qset.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemdelegate.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyleoption.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qvalidator.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qimage.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
  C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\EWIEGA46WW/moc_MainWindow.cpp \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h \

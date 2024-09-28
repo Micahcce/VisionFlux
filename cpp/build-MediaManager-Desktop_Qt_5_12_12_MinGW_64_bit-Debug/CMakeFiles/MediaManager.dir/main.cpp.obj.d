@@ -127,6 +127,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/ostream.tcc \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/istream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/istream.tcc \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayController.h \
  C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MediaManager.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/map \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_tree.h \

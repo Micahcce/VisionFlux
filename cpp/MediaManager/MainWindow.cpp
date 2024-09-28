@@ -7,8 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
     resize(1000, 600);
 
     //媒体管理器
-    m_mediaManeger = new MediaManager;
-    m_mediaManeger->setRenderCallback(
+    m_playController = new PlayController;
+
+    //设置回调
+    m_playController->setRenderCallback(
                 [this](AVFrame* frameRGB, int width, int height, float aspectRatio)
     {
         renderFrameRGB(frameRGB, width, height, aspectRatio);  // 渲染帧的回调
@@ -25,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //底栏
     m_bottomBar = new ButtomBar(this);
-    m_bottomBar->setMediaManager(m_mediaManeger);       //传递MediaManager类
+    m_bottomBar->setPlayController(m_playController);       //传递MediaManager类
     m_bottomBar->setSideBar(m_sideBar);
 
     //布局管理器

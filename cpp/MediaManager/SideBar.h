@@ -25,6 +25,7 @@ public:
     SideBar(QWidget *parent = nullptr);
 
     QString getVideoPath();
+    QListWidget* getPlayList() {return m_playList};
 
 public slots:
     void slotVideoDoubleClicked();
@@ -33,8 +34,6 @@ private:
     void extractThumbnail(const char* videoFilePath, const char* outputImagePath);
     void addVideoItem(const QString &title, const QString &duration, const QString &status, const QString &thumbnailPath);
 
-    QWidget* m_playListTab;
-    QWidget* m_videoSummaryTab;
     QListWidget* m_playList;
 
 };

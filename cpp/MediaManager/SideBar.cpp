@@ -7,13 +7,13 @@ SideBar::SideBar(QWidget *parent) : QTabWidget(parent)
     setFixedWidth(280);
 
     QFont font("微软雅黑");
-    m_playListTab = new QWidget(this);
-    m_videoSummaryTab = new QWidget(this);
-    m_playListTab->resize(100, 40);
-    m_videoSummaryTab->resize(100, 40);
+    QWidget* playListTab = new QWidget(this);
+    QWidget* videoSummaryTab = new QWidget(this);
+    playListTab->resize(100, 40);
+    videoSummaryTab->resize(100, 40);
     setFont(font);
-    addTab(m_playListTab, "播放列表");
-    addTab(m_videoSummaryTab, "AI总结");
+    addTab(playListTab, "播放列表");
+    addTab(videoSummaryTab, "AI总结");
     setStyleSheet("QTabBar::tab { width: 100px; height: 40px;background-color:transparent;color:rgb(120,120,120);}"
           "QTabBar::tab:selected{ color:rgb(75,75,110); border-bottom:2px solid#4b4b6e; }"
           "QTabBar::tab:hover{ color:rgb(0,0,0); }"
@@ -21,21 +21,24 @@ SideBar::SideBar(QWidget *parent) : QTabWidget(parent)
 
 
     //播放列表
-    m_playList = new QListWidget(m_playListTab);
+    m_playList = new QListWidget(playListTab);
     m_playList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     connect(m_playList, &QListWidget::itemDoubleClicked, this, &SideBar::slotVideoDoubleClicked);
 
     QVBoxLayout* vBox = new QVBoxLayout;
     vBox->addWidget(m_playList);
-    m_playListTab->setLayout(vBox);
+    playListTab->setLayout(vBox);
 
-    //提取封面
-    extractThumbnail("C:\\Users\\13055\\Desktop\\aki.mp4", "C:\\Users\\13055\\Desktop\\aki.png");
-    extractThumbnail("C:\\Users\\13055\\Desktop\\output.mp4", "C:\\Users\\13055\\Desktop\\output.png");
+    //Debug
+    {
+        //提取封面
+        extractThumbnail("C:\\Users\\13055\\Desktop\\aki.mp4", "C:\\Users\\13055\\Desktop\\aki.png");
+        extractThumbnail("C:\\Users\\13055\\Desktop\\output.mp4", "C:\\Users\\13055\\Desktop\\output.png");
 
-    // 添加视频项
-    addVideoItem("C:\\Users\\13055\\Desktop\\aki.mp4", "00:10", "未观看", "C:\\Users\\13055\\Desktop\\aki.mp4");
-    addVideoItem("C:\\Users\\13055\\Desktop\\output.mp4", "00:07", "未观看", "C:\\Users\\13055\\Desktop\\output.png");
+        // 添加视频项
+        addVideoItem("C:\\Users\\13055\\Desktop\\aki.mp4", "00:10", "未观看", "C:\\Users\\13055\\Desktop\\aki.mp4");
+        addVideoItem("C:\\Users\\13055\\Desktop\\output.mp4", "00:07", "未观看", "C:\\Users\\13055\\Desktop\\output.png");
+    }
 }
 
 QString SideBar::getVideoPath()

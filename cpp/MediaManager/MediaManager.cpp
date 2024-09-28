@@ -373,13 +373,13 @@ int MediaManager::thread_video_display(void* data)
 
         // 调用回调函数，通知 GUI 渲染
         if (pThis->m_renderCallback)
-        {
             pThis->m_renderCallback(pThis->m_frameRGB, pThis->m_pCodecCtx_video->width, pThis->m_pCodecCtx_video->height, pThis->m_aspectRatio);
-        }
+        else
+            std::cerr << "Render callback not set";
 #endif
 
         //延时控制
-        pThis->videoDelayContrl(frame);
+        pThis->videoDelayControl(frame);
 
         av_frame_unref(frame);
     }
@@ -429,7 +429,7 @@ int MediaManager::thread_audio_display(void *data)
     return 0;
 }
 
-void MediaManager::videoDelayContrl(AVFrame* frame)
+void MediaManager::videoDelayControl(AVFrame* frame)
 {
     //视频按pts渲染
     static double lastPTS = 0.0;

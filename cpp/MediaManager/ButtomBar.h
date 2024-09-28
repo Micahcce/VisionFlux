@@ -13,8 +13,8 @@
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QApplication>
-#include "MediaManager.h"
 #include "SideBar.h"
+#include "PlayController.h"
 
 extern "C"
 {
@@ -23,13 +23,6 @@ extern "C"
 }
 
 
-class VideoPlayInfo
-{
-public:
-    bool isStarted = false;
-    bool isPlaying = false;
-};
-
 
 class ButtomBar : public QWidget
 {
@@ -37,9 +30,9 @@ class ButtomBar : public QWidget
 public:
     ButtomBar(QWidget *parent = nullptr);
 
-    void setMediaManager(MediaManager* mediaManager) {m_mediaManager = mediaManager;}
+    void setPlayController(PlayController* playController) {m_playController = playController;}
     void setSideBar(SideBar* sideBar) {m_sideBar = sideBar;}
-    void videoDoubleClicked();
+    bool videoDoubleClicked();
 
 public slots:
     void slotPlayVideo();
@@ -47,9 +40,7 @@ public slots:
 
 private:
     QString timeFormatting(int secs);       //秒数格式化为hh:mm:ss
-
-    VideoPlayInfo* m_playInfo;
-    MediaManager* m_mediaManager;
+    PlayController* m_playController;
     SideBar* m_sideBar;
 
     QLabel* m_currentTime;
