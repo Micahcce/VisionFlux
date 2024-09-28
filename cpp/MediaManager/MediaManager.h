@@ -44,24 +44,25 @@ public:
         MAX_NODE_NUMBER = 20
     };
 
+    //线程函数
     static int thread_media_decode(void* data);
     static int thread_video_display(void* data);
     static int thread_audio_display(void* data);
 
-    bool getThreadQuit() {return m_thread_quit;}
-    bool getThreadPause() {return m_thread_pause;}
+    //线程状态
     void setThreadQuit(bool status) {m_thread_quit = status;}
     void setThreadPause(bool status) {m_thread_pause = status;}
 
-    SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
-
+    //设置渲染回调函数
     using RenderCallback = std::function<void(AVFrame* frameRGB, float aspectRatio)>;
     void setRenderCallback(RenderCallback callback) {this->m_renderCallback = callback;}
 
+    SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
+
+private:
     void videoDelayContrl();
     void frameYuvToRgb();
 
-private:
     void delayMs(int ms);
     void close();
 

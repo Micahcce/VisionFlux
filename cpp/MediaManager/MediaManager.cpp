@@ -24,12 +24,12 @@ AVFormatContext* MediaManager::getMediaInfo(const char* filePath)
     //2.打开文件
     int ret = avformat_open_input(&formatCtx, filePath, nullptr, nullptr);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avformat_open_input");
+        std::cerr << "Error occurred in avformat_open_input";
 
     //3.上下文获取流信息
     ret = avformat_find_stream_info(formatCtx, nullptr);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avformat_find_stream_info");
+        std::cerr << "Error occurred in avformat_find_stream_info";
 
     //4.获取视频数据
     av_dump_format(formatCtx, -1, nullptr, 0);
@@ -48,21 +48,21 @@ void MediaManager::decodeToPlay(const char* filePath)
     //2.打开文件
     ret = avformat_open_input(&m_pFormatCtx, filePath, nullptr, nullptr);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avformat_open_input");
+        std::cerr << "Error occurred in avformat_open_input";
 
     //3.上下文获取流信息
     ret = avformat_find_stream_info(m_pFormatCtx, nullptr);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avformat_find_stream_info");
+        std::cerr << "Error occurred in avformat_find_stream_info";
 
     //4.查找视频流和音频流
     m_videoIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(m_videoIndex < 0)
-        throw std::runtime_error("Error occurred in av_find_best_stream");
+        std::cerr << "Error occurred in av_find_best_stream";
 
     m_audioIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
     if(m_audioIndex < 0)
-        throw std::runtime_error("Error occurred in av_find_best_stream");
+        std::cerr << "Error occurred in av_find_best_stream";
 
     //5.获取视频数据
     av_dump_format(m_pFormatCtx, -1, nullptr, 0);
@@ -74,26 +74,26 @@ void MediaManager::decodeToPlay(const char* filePath)
     //7.解码器上下文获取参数
     ret = avcodec_parameters_to_context(m_pCodecCtx_video, m_pFormatCtx->streams[m_videoIndex]->codecpar);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avcodec_parameters_to_context");
+        std::cerr << "Error occurred in avcodec_parameters_to_context";
 
     ret = avcodec_parameters_to_context(m_pCodecCtx_audio, m_pFormatCtx->streams[m_audioIndex]->codecpar);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avcodec_parameters_to_context");
+        std::cerr << "Error occurred in avcodec_parameters_to_context";
 
     //8.查找解码器
     m_pCodec_video = avcodec_find_decoder(m_pCodecCtx_video->codec_id);
     m_pCodec_audio = avcodec_find_decoder(m_pCodecCtx_audio->codec_id);
     if(!(m_pCodec_video || m_pCodecCtx_audio))
-        throw std::runtime_error("Error occurred in avcodec_find_decoder");
+        std::cerr << "Error occurred in avcodec_find_decoder";
 
     //9.打开解码器并绑定上下文
     ret = avcodec_open2(m_pCodecCtx_video, m_pCodec_video, nullptr);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avcodec_open2");
+        std::cerr << "Error occurred in avcodec_open2";
 
     ret = avcodec_open2(m_pCodecCtx_audio, m_pCodec_audio, nullptr);
     if(ret < 0)
-        throw std::runtime_error("Error occurred in avcodec_open2");
+        std::cerr << "Error occurred in avcodec_open2";
 
     //10.保存视频宽高比
     m_aspectRatio = static_cast<float>(m_pCodecCtx_video->width) / static_cast<float>(m_pCodecCtx_video->height);
@@ -158,7 +158,7 @@ void MediaManager::decodeToPlay(const char* filePath)
         {
             if(event.key.keysym.sym == SDLK_SPACE)  //空格键暂停
             {
-                this->setThreadPause(!this->getThreadPause());
+                this->setThreadPause(!this->m_thread_pause);
             }
         }
         else if(event.type == SDL_WINDOWEVENT)
@@ -171,6 +171,7 @@ void MediaManager::decodeToPlay(const char* filePath)
         }
     }
 #else
+    m_thread_quit = false;
     m_thread_pause = false;
     frameYuvToRgb();
     SDL_CreateThread(thread_media_decode, NULL, this);
@@ -197,6 +198,7 @@ int MediaManager::thread_media_decode(void *data)
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
     int64_t start_time = av_gettime() - pThis->m_startTime;
+    bool end_of_file = false;
 
     //解码
     while(!pThis->m_thread_quit)
@@ -208,28 +210,43 @@ int MediaManager::thread_media_decode(void *data)
             continue;
         }
 
-        //读取一个包数据
-        if(av_read_frame(pThis->m_pFormatCtx, packet) < 0)
-            break;
+        if(!end_of_file)
+        {
+            //读取一个包数据
+            ret = av_read_frame(pThis->m_pFormatCtx, packet);
+            if (ret < 0)
+            {
+                if(ret == AVERROR_EOF)
+                {
+                    end_of_file = true;  // 文件读取结束
+                    std::cerr << "Reached EOF." << std::endl;
+                }
+                else
+                {
+                    std::cerr << "Error while reading frame: " << ret << std::endl;
+                }
+                break;
+            }
+        }
 
         if(packet->stream_index == pThis->m_videoIndex)
         {
-            //发送一个包数据
             avcodec_send_packet(pThis->m_pCodecCtx_video, packet);
 
-            //显示数据
             while(1)
             {
                 ret = avcodec_receive_frame(pThis->m_pCodecCtx_video, frame);
 
-                if(ret < 0) break;
-                else if(ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
+                if(ret < 0)
+                {
+                    if(ret == AVERROR_EOF)
+                        end_of_file = true;  // 视频解码结束
+                    break;
+                }
 
-                //队列节点太多则暂停解码
                 while(pThis->m_frameQueue->getVideoFrameCount() >= MAX_NODE_NUMBER)
                     pThis->delayMs(10);
 
-                //存入队列
                 pThis->m_frameQueue->pushVideoFrame(frame);
 
                 av_frame_unref(frame);
@@ -237,19 +254,22 @@ int MediaManager::thread_media_decode(void *data)
         }
         else if(packet->stream_index == pThis->m_audioIndex)
         {
-            avcodec_send_packet(pThis->m_pCodecCtx_audio, packet);      // 送一帧到解码器
+            avcodec_send_packet(pThis->m_pCodecCtx_audio, packet);
 
             while(1)
             {
                 ret = avcodec_receive_frame(pThis->m_pCodecCtx_audio, frame);
-                if(ret < 0) break;
-                else if(ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
 
-                //队列节点太多则暂停解码
+                if(ret < 0)
+                {
+                    if(ret == AVERROR_EOF)
+                        end_of_file = true;  // 音频解码结束
+                    break;
+                }
+
                 while(pThis->m_frameQueue->getAudioFrameCount() >= MAX_NODE_NUMBER)
                     pThis->delayMs(10);
 
-                //存入队列
                 pThis->m_frameQueue->pushAudioFrame(frame);
 
                 av_frame_unref(frame);
@@ -259,6 +279,14 @@ int MediaManager::thread_media_decode(void *data)
     }
 
     av_frame_free(&frame);
+    av_packet_free(&packet);
+
+    if(end_of_file)
+    {
+        std::cerr << "Media playback finished." << std::endl;
+        pThis->close();
+    }
+
     return 0;
 }
 
@@ -269,10 +297,41 @@ void MediaManager::delayMs(int ms)
 
 void MediaManager::close()
 {
+    //安全退出
+    while(m_thread_quit == false)
+        delayMs(10);
+
+    //清理资源
     swr_free(&m_swrCtx);
     avcodec_free_context(&m_pCodecCtx_video);
     avcodec_free_context(&m_pCodecCtx_audio);
     avformat_close_input(&m_pFormatCtx);
+
+    if (m_pSwsCtx)
+    {
+        sws_freeContext(m_pSwsCtx);
+        m_pSwsCtx = nullptr;
+    }
+
+    if (m_pAudioParams->outBuff)
+    {
+        av_free(m_pAudioParams->outBuff);
+        m_pAudioParams->outBuff = nullptr;
+    }
+
+    if (m_sdlPlayer)
+    {
+        delete m_sdlPlayer;
+        m_sdlPlayer = nullptr;
+    }
+
+    if (m_frameQueue)
+    {
+        delete m_frameQueue;
+        m_frameQueue = nullptr;
+    }
+
+
 }
 
 //视频播放线程
@@ -357,7 +416,7 @@ int MediaManager::thread_audio_display(void *data)
         ret = swr_convert(pThis->m_swrCtx, &pThis->m_pAudioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
         if(ret < 0)
         {
-            av_log(NULL, AV_LOG_ERROR, "Error while converting\n");
+            std::cerr <<  "Error while converting\n";
             break;
         }
 

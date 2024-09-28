@@ -83,8 +83,7 @@ void ButtomBar::slotPlayVideo()
         if(m_needRectify)           // 校正误差时间
         {
             int remainingTime = 1000 - m_elapsedTime % 1000;  // 计算剩余时间
-            std::cout << remainingTime << std::endl;
-            m_sliderTimer->start(remainingTime);       // 重新启动定时器，剩余时间作为间隔
+            m_sliderTimer->start(remainingTime);              // 重新启动定时器，剩余时间作为间隔
         }
         else
         {
