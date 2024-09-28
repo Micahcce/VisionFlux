@@ -14,6 +14,7 @@
 #include <QStyle>
 #include <QApplication>
 #include "MediaManager.h"
+#include "SideBar.h"
 
 extern "C"
 {
@@ -37,15 +38,19 @@ public:
     ButtomBar(QWidget *parent = nullptr);
 
     void setMediaManager(MediaManager* mediaManager) {m_mediaManager = mediaManager;}
-    QString timeFormatting(int secs);       //秒数格式化为hh:mm:ss
+    void setSideBar(SideBar* sideBar) {m_sideBar = sideBar;}
+    void videoDoubleClicked();
 
 public slots:
     void slotPlayVideo();
     void slotUpdateProgress();
 
 private:
+    QString timeFormatting(int secs);       //秒数格式化为hh:mm:ss
+
     VideoPlayInfo* m_playInfo;
     MediaManager* m_mediaManager;
+    SideBar* m_sideBar;
 
     QLabel* m_currentTime;
     QSlider* m_timeSlider;
@@ -55,7 +60,6 @@ private:
 
 
     QTimer* m_sliderTimer;        //进度条定时器 1000ms
-    QDateTime m_lastTriggerTime = QDateTime::currentDateTime();  //上一次触发的时间
     QElapsedTimer* m_elapsedTimer;//校准定时器
     qint64 m_elapsedTime;         //已经经过的时间
     bool m_needRectify = false;

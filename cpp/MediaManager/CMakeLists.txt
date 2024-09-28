@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
     ButtomBar.cpp
     SideBar.h
     SideBar.cpp
+    PlayController.h
+    PlayController.cpp
 )
 
 # 创建可执行文件，并指定输出目录为项目的根目录

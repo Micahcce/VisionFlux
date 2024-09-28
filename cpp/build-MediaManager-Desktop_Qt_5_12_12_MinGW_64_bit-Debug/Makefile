@@ -237,6 +237,30 @@ MediaManager_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.s
 .PHONY : MediaManager_autogen/mocs_compilation.cpp.s
 
+PlayController.obj: PlayController.cpp.obj
+.PHONY : PlayController.obj
+
+# target to build an object file
+PlayController.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayController.cpp.obj
+.PHONY : PlayController.cpp.obj
+
+PlayController.i: PlayController.cpp.i
+.PHONY : PlayController.i
+
+# target to preprocess a source file
+PlayController.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayController.cpp.i
+.PHONY : PlayController.cpp.i
+
+PlayController.s: PlayController.cpp.s
+.PHONY : PlayController.s
+
+# target to generate assembly for a file
+PlayController.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayController.cpp.s
+.PHONY : PlayController.cpp.s
+
 SdlPlayer.obj: SdlPlayer.cpp.obj
 .PHONY : SdlPlayer.obj
 
@@ -331,6 +355,9 @@ help:
 	@echo ... MediaManager_autogen/mocs_compilation.obj
 	@echo ... MediaManager_autogen/mocs_compilation.i
 	@echo ... MediaManager_autogen/mocs_compilation.s
+	@echo ... PlayController.obj
+	@echo ... PlayController.i
+	@echo ... PlayController.s
 	@echo ... SdlPlayer.obj
 	@echo ... SdlPlayer.i
 	@echo ... SdlPlayer.s

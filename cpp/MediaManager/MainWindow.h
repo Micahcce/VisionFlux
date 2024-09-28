@@ -12,7 +12,6 @@
 #include <QTime>
 #include <QTimer>
 #include <QCoreApplication>
-#include <QListWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSpacerItem>
@@ -38,7 +37,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void renderFrameRGB(AVFrame *frameRGB, float aspectRatio);
+    void renderFrameRGB(AVFrame *frameRGB, int width, int height, float aspectRatio);
 
 private:
     MediaManager* m_mediaManeger;

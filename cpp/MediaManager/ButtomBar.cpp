@@ -19,10 +19,10 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     connect(m_sliderTimer, &QTimer::timeout, this, &ButtomBar::slotUpdateProgress);
     m_elapsedTimer = new QElapsedTimer;
 
-    QHBoxLayout* bottomHBox = new QHBoxLayout;
-    bottomHBox->addWidget(m_currentTime);
-    bottomHBox->addWidget(m_timeSlider);
-    bottomHBox->addWidget(m_totalTime);
+    QHBoxLayout* hBox = new QHBoxLayout;
+    hBox->addWidget(m_currentTime);
+    hBox->addWidget(m_timeSlider);
+    hBox->addWidget(m_totalTime);
 
     m_playBtn = new QPushButton(this);
     m_playBtn->setFixedSize(30, 30);
@@ -30,22 +30,31 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     m_playBtn->setIcon(playIcon);
     connect(m_playBtn, &QPushButton::clicked, this, &ButtomBar::slotPlayVideo);
 
-    QVBoxLayout* bottomVBox = new QVBoxLayout;
-    bottomVBox->addLayout(bottomHBox);
-    bottomVBox->addWidget(m_playBtn);
+    QVBoxLayout* vBox = new QVBoxLayout;
+    vBox->addLayout(hBox);
+    vBox->addWidget(m_playBtn);
 
-    this->setLayout(bottomVBox);
+    this->setLayout(vBox);
 }
 
-void ButtomBar::slotPlayVideo()
+void ButtomBar::videoDoubleClicked()
 {
-    //未开始则播放
+    //结束当前视频
+    if(m_playInfo->isStarted)
+    {
+        m_sliderTimer->stop();
+        m_mediaManager->setThreadQuit(true);
+        m_playInfo->isStarted = false;
+    }
+
+    //开始播放
     if(!m_playInfo->isStarted)
     {
-        m_playInfo->isStarted = true;
+        //获取视频路径
+        QString videoPath = m_sideBar->getVideoPath();
 
         //获取时长
-        AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo("C:\\Users\\13055\\Desktop\\aki.mp4");
+        AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(videoPath.toUtf8().data());
         int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
         avformat_close_input(&formatCtx);        // 释放资源
         int secs = duration / AV_TIME_BASE;     // 将微秒转换为秒
@@ -56,7 +65,35 @@ void ButtomBar::slotPlayVideo()
         m_timeSlider->setRange(0, secs);
 
         // 播放
-        m_mediaManager->decodeToPlay("C:\\Users\\13055\\Desktop\\aki.mp4");
+        m_mediaManager->decodeToPlay(videoPath.toUtf8().data());
+
+        m_playInfo->isStarted = true;
+    }
+}
+
+void ButtomBar::slotPlayVideo()
+{
+    //未开始则播放
+    if(!m_playInfo->isStarted)
+    {
+        //获取视频路径
+        QString videoPath = m_sideBar->getVideoPath();
+
+        //获取时长
+        AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(videoPath.toUtf8().data());
+        int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
+        avformat_close_input(&formatCtx);        // 释放资源
+        int secs = duration / AV_TIME_BASE;     // 将微秒转换为秒
+        QString totalTimeStr = timeFormatting(secs);    //格式化
+
+        // 设置相关控件
+        m_totalTime->setText(totalTimeStr);
+        m_timeSlider->setRange(0, secs);
+
+        // 播放
+        m_mediaManager->decodeToPlay(videoPath.toUtf8().data());
+
+        m_playInfo->isStarted = true;
     }
 
     //播放状态切换
@@ -112,6 +149,7 @@ void ButtomBar::slotUpdateProgress()
     {
         m_sliderTimer->stop();
         m_mediaManager->setThreadQuit(true);
+        m_playInfo->isStarted = false;
     }
 
     //开启误差计时器

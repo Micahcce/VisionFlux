@@ -103,6 +103,12 @@
 			null
 		],
 		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.h",
+			"MU",
+			"EWIEGA46WW/moc_PlayController.cpp",
+			null
+		],
+		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h",
 			"MU",
 			"EWIEGA46WW/moc_SdlPlayer.cpp",
@@ -191,6 +197,11 @@
 		],
 		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.cpp",
 			"MU",
 			null
 		],

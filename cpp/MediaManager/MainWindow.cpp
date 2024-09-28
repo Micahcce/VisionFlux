@@ -5,11 +5,13 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     resize(1000, 600);
+
+    //媒体管理器
     m_mediaManeger = new MediaManager;
     m_mediaManeger->setRenderCallback(
-                [this](AVFrame* frameRGB, float aspectRatio)
+                [this](AVFrame* frameRGB, int width, int height, float aspectRatio)
     {
-        renderFrameRGB(frameRGB, aspectRatio);  // 渲染帧的回调
+        renderFrameRGB(frameRGB, width, height, aspectRatio);  // 渲染帧的回调
     });
 
     //播放窗口
@@ -18,12 +20,13 @@ MainWindow::MainWindow(QWidget *parent)
     m_videoView->show();
     m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
+    //播放列表
+    m_sideBar = new SideBar(this);
+
     //底栏
     m_bottomBar = new ButtomBar(this);
     m_bottomBar->setMediaManager(m_mediaManeger);       //传递MediaManager类
-
-    //播放列表
-    m_sideBar = new SideBar(this);
+    m_bottomBar->setSideBar(m_sideBar);
 
     //布局管理器
     QVBoxLayout* vBox = new QVBoxLayout;
@@ -46,11 +49,8 @@ MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::renderFrameRGB(AVFrame *frameRGB, float aspectRatio)
+void MainWindow::renderFrameRGB(AVFrame *frameRGB, int width, int height, float aspectRatio)
 {
-    int width = 388;
-    int height = 218;
-
     QImage img((uchar*)frameRGB->data[0], width, height, QImage::Format_RGB32);
     m_videoView->setPixmap(QPixmap::fromImage(img));
 }

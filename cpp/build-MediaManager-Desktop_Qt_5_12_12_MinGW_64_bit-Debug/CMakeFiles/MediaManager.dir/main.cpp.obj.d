@@ -501,9 +501,34 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\SideBar.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qitemselectionmodel.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qset.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemdelegate.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyleoption.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qvalidator.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qimage.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QMainWindow \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qmainwindow.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/QMediaPlayer \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaplayer.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaobject.h \
@@ -526,30 +551,11 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qmediaenumdebug.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qmetaobject.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qset.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qaudio.h \
  D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkconfiguration.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QCoreApplication \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qcoreapplication.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qitemselectionmodel.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemdelegate.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyleoption.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
- D:/Qt/5.12.12/mingw73_64/include/QtGui/qvalidator.h \
- D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qslider.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyle.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
- D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QSpacerItem \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayoutitem.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/QResizeEvent \

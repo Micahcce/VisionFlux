@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MediaManager.dir/MediaManager.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj"
   "CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj.d"
+  "CMakeFiles/MediaManager.dir/PlayController.cpp.obj"
+  "CMakeFiles/MediaManager.dir/PlayController.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj"
   "CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/SideBar.cpp.obj"

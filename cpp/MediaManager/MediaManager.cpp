@@ -18,7 +18,7 @@ MediaManager::~MediaManager()
 
 AVFormatContext* MediaManager::getMediaInfo(const char* filePath)
 {
-    //1.创建上下文
+    //1.创建上下文，注意使用后要释放
     AVFormatContext* formatCtx = avformat_alloc_context();
 
     //2.打开文件
@@ -30,9 +30,6 @@ AVFormatContext* MediaManager::getMediaInfo(const char* filePath)
     ret = avformat_find_stream_info(formatCtx, nullptr);
     if(ret < 0)
         std::cerr << "Error occurred in avformat_find_stream_info";
-
-    //4.获取视频数据
-    av_dump_format(formatCtx, -1, nullptr, 0);
 
     return formatCtx;
 }
@@ -219,7 +216,7 @@ int MediaManager::thread_media_decode(void *data)
                 if(ret == AVERROR_EOF)
                 {
                     end_of_file = true;  // 文件读取结束
-                    std::cerr << "Reached EOF." << std::endl;
+                    std::clog << "Reached EOF." << std::endl;
                 }
                 else
                 {
@@ -283,7 +280,7 @@ int MediaManager::thread_media_decode(void *data)
 
     if(end_of_file)
     {
-        std::cerr << "Media playback finished." << std::endl;
+        std::clog << "Media playback finished." << std::endl;
         pThis->close();
     }
 
@@ -330,8 +327,6 @@ void MediaManager::close()
         delete m_frameQueue;
         m_frameQueue = nullptr;
     }
-
-
 }
 
 //视频播放线程
@@ -379,12 +374,12 @@ int MediaManager::thread_video_display(void* data)
         // 调用回调函数，通知 GUI 渲染
         if (pThis->m_renderCallback)
         {
-            pThis->m_renderCallback(pThis->m_frameRGB, pThis->m_aspectRatio);
+            pThis->m_renderCallback(pThis->m_frameRGB, pThis->m_pCodecCtx_video->width, pThis->m_pCodecCtx_video->height, pThis->m_aspectRatio);
         }
 #endif
 
         //延时控制
-        pThis->videoDelayContrl();
+        pThis->videoDelayContrl(frame);
 
         av_frame_unref(frame);
     }
@@ -434,30 +429,19 @@ int MediaManager::thread_audio_display(void *data)
     return 0;
 }
 
-void MediaManager::videoDelayContrl()
+void MediaManager::videoDelayContrl(AVFrame* frame)
 {
-    //原方案（Qt不可用）
-//        AVRational time_base_q = {1,AV_TIME_BASE};          // 1/1000000秒，即1us
-//        int64_t pts_time = av_rescale_q(frame->pkt_dts, pThis->m_pFormatCtx->streams[pThis->m_videoIndex]->time_base, time_base_q);  //该函数将<参数二>时基中的<参数一>时间戳转换<参数三>时基下的<返回值>时间戳
-//        int64_t now_time = av_gettime() - start_time;       // 计算当前程序已开始时间
-//        std::clog << pts_time - now_time << std::endl;
-//        if(pts_time > now_time)                             // 若应帧解码时间>当前时间对比，延时到应解码的时间再开始解下一帧(若无此延时则计算机将会很快解码显示完)
-//              av_usleep(pts_time - now_time);
-
-    //新方案（Qt不可用）（未测试）
-//        static double lastPTS = 0.0;
-//        double currentPTS = frame->pts * av_q2d(pThis->m_pFormatCtx->streams[pThis->m_videoIndex]->time_base);
-//        if (lastPTS != 0.0) {
-//            double delayDuration = currentPTS - lastPTS;
-//            if (delayDuration > 0.0)
-//            {
-//                av_usleep(delayDuration);
-//            }
-//        }
-//        lastPTS = currentPTS;
-
-    //固定25帧
-    delayMs(40);
+    //视频按pts渲染
+    static double lastPTS = 0.0;
+    double currentPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
+    if (lastPTS != 0.0) {
+        double delayDuration = currentPTS - lastPTS;
+        if (delayDuration > 0.0)
+        {
+            av_usleep(delayDuration);
+        }
+    }
+    lastPTS = currentPTS;
 }
 
 void MediaManager::frameYuvToRgb()
@@ -479,7 +463,6 @@ void MediaManager::frameYuvToRgb()
     unsigned char *buf = (unsigned char *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, dstWidth*2, dstHeight*2, 1));
     av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, buf, AV_PIX_FMT_RGB32, dstWidth, dstHeight, 1);
 }
-
 
 
 
