@@ -91,6 +91,12 @@
 			null
 		],
 		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h",
+			"MU",
+			"EWIEGA46WW/moc_Logger.cpp",
+			null
+		],
+		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.h",
 			"MU",
 			"EWIEGA46WW/moc_MainWindow.cpp",
@@ -187,6 +193,11 @@
 	[
 		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.cpp",
 			"MU",
 			null
 		],

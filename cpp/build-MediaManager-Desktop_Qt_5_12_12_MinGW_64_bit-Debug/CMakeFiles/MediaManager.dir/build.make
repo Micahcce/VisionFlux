@@ -113,11 +113,26 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MediaManager.dir/MediaManager.cpp.s"
 	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MediaManager.cpp -o CMakeFiles\MediaManager.dir\MediaManager.cpp.s
 
+CMakeFiles/MediaManager.dir/Logger.cpp.obj: CMakeFiles/MediaManager.dir/flags.make
+CMakeFiles/MediaManager.dir/Logger.cpp.obj: CMakeFiles/MediaManager.dir/includes_CXX.rsp
+CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.cpp
+CMakeFiles/MediaManager.dir/Logger.cpp.obj: CMakeFiles/MediaManager.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MediaManager.dir/Logger.cpp.obj"
+	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MediaManager.dir/Logger.cpp.obj -MF CMakeFiles\MediaManager.dir\Logger.cpp.obj.d -o CMakeFiles\MediaManager.dir\Logger.cpp.obj -c C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\Logger.cpp
+
+CMakeFiles/MediaManager.dir/Logger.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MediaManager.dir/Logger.cpp.i"
+	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\Logger.cpp > CMakeFiles\MediaManager.dir\Logger.cpp.i
+
+CMakeFiles/MediaManager.dir/Logger.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MediaManager.dir/Logger.cpp.s"
+	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\Logger.cpp -o CMakeFiles\MediaManager.dir\Logger.cpp.s
+
 CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: CMakeFiles/MediaManager.dir/flags.make
 CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: CMakeFiles/MediaManager.dir/includes_CXX.rsp
 CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.cpp
 CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: CMakeFiles/MediaManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MediaManager.dir/MainWindow.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MediaManager.dir/MainWindow.cpp.obj"
 	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MediaManager.dir/MainWindow.cpp.obj -MF CMakeFiles\MediaManager.dir\MainWindow.cpp.obj.d -o CMakeFiles\MediaManager.dir\MainWindow.cpp.obj -c C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MainWindow.cpp
 
 CMakeFiles/MediaManager.dir/MainWindow.cpp.i: cmake_force
@@ -132,7 +147,7 @@ CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj: CMakeFiles/MediaManager.dir/flags
 CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj: CMakeFiles/MediaManager.dir/includes_CXX.rsp
 CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.cpp
 CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj: CMakeFiles/MediaManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj"
 	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj -MF CMakeFiles\MediaManager.dir\SdlPlayer.cpp.obj.d -o CMakeFiles\MediaManager.dir\SdlPlayer.cpp.obj -c C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\SdlPlayer.cpp
 
 CMakeFiles/MediaManager.dir/SdlPlayer.cpp.i: cmake_force
@@ -147,7 +162,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: CMakeFiles/MediaManager.dir/flags
 CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: CMakeFiles/MediaManager.dir/includes_CXX.rsp
 CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.cpp
 CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: CMakeFiles/MediaManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj"
 	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj -MF CMakeFiles\MediaManager.dir\ButtomBar.cpp.obj.d -o CMakeFiles\MediaManager.dir\ButtomBar.cpp.obj -c C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\ButtomBar.cpp
 
 CMakeFiles/MediaManager.dir/ButtomBar.cpp.i: cmake_force
@@ -162,7 +177,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: CMakeFiles/MediaManager.dir/flags.
 CMakeFiles/MediaManager.dir/PlayList.cpp.obj: CMakeFiles/MediaManager.dir/includes_CXX.rsp
 CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.cpp
 CMakeFiles/MediaManager.dir/PlayList.cpp.obj: CMakeFiles/MediaManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MediaManager.dir/PlayList.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MediaManager.dir/PlayList.cpp.obj"
 	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MediaManager.dir/PlayList.cpp.obj -MF CMakeFiles\MediaManager.dir\PlayList.cpp.obj.d -o CMakeFiles\MediaManager.dir\PlayList.cpp.obj -c C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayList.cpp
 
 CMakeFiles/MediaManager.dir/PlayList.cpp.i: cmake_force
@@ -177,7 +192,7 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: CMakeFiles/MediaManager.dir/
 CMakeFiles/MediaManager.dir/PlayController.cpp.obj: CMakeFiles/MediaManager.dir/includes_CXX.rsp
 CMakeFiles/MediaManager.dir/PlayController.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.cpp
 CMakeFiles/MediaManager.dir/PlayController.cpp.obj: CMakeFiles/MediaManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MediaManager.dir/PlayController.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/MediaManager.dir/PlayController.cpp.obj"
 	D:\Qt\Tools\mingw730_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MediaManager.dir/PlayController.cpp.obj -MF CMakeFiles\MediaManager.dir\PlayController.cpp.obj.d -o CMakeFiles\MediaManager.dir\PlayController.cpp.obj -c C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayController.cpp
 
 CMakeFiles/MediaManager.dir/PlayController.cpp.i: cmake_force
@@ -193,6 +208,7 @@ MediaManager_OBJECTS = \
 "CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj" \
 "CMakeFiles/MediaManager.dir/main.cpp.obj" \
 "CMakeFiles/MediaManager.dir/MediaManager.cpp.obj" \
+"CMakeFiles/MediaManager.dir/Logger.cpp.obj" \
 "CMakeFiles/MediaManager.dir/MainWindow.cpp.obj" \
 "CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj" \
 "CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj" \
@@ -205,6 +221,7 @@ MediaManager_EXTERNAL_OBJECTS =
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/main.cpp.obj
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/MediaManager.cpp.obj
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/Logger.cpp.obj
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/MainWindow.cpp.obj
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/SdlPlayer.cpp.obj
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj
@@ -230,7 +247,7 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: D:/Qt/5.12.
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/linkLibs.rsp
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/objects1.rsp
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: CMakeFiles/MediaManager.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MediaManager.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MediaManager.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\MediaManager.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

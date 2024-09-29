@@ -22,6 +22,8 @@ set(PROJECT_SOURCES
     MediaManager.h
     MediaManager.cpp
     FrameQueue.h
+    Logger.h
+    Logger.cpp
     MainWindow.h
     MainWindow.cpp
     SdlPlayer.h

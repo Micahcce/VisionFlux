@@ -10,6 +10,7 @@
 #include <functional>
 #include "FrameQueue.h"
 #include "SdlPlayer.h"
+#include "Logger.h"
 
 extern "C"
 {

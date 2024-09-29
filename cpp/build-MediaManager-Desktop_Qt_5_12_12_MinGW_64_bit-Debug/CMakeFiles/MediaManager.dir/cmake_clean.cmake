@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "MediaManager_autogen"
   "CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj"
   "CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj.d"
+  "CMakeFiles/MediaManager.dir/Logger.cpp.obj"
+  "CMakeFiles/MediaManager.dir/Logger.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/MainWindow.cpp.obj"
   "CMakeFiles/MediaManager.dir/MainWindow.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/MediaManager.cpp.obj"

@@ -165,6 +165,30 @@ ButtomBar.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.s
 .PHONY : ButtomBar.cpp.s
 
+Logger.obj: Logger.cpp.obj
+.PHONY : Logger.obj
+
+# target to build an object file
+Logger.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/Logger.cpp.obj
+.PHONY : Logger.cpp.obj
+
+Logger.i: Logger.cpp.i
+.PHONY : Logger.i
+
+# target to preprocess a source file
+Logger.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/Logger.cpp.i
+.PHONY : Logger.cpp.i
+
+Logger.s: Logger.cpp.s
+.PHONY : Logger.s
+
+# target to generate assembly for a file
+Logger.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/Logger.cpp.s
+.PHONY : Logger.cpp.s
+
 MainWindow.obj: MainWindow.cpp.obj
 .PHONY : MainWindow.obj
 
@@ -346,6 +370,9 @@ help:
 	@echo ... ButtomBar.obj
 	@echo ... ButtomBar.i
 	@echo ... ButtomBar.s
+	@echo ... Logger.obj
+	@echo ... Logger.i
+	@echo ... Logger.s
 	@echo ... MainWindow.obj
 	@echo ... MainWindow.i
 	@echo ... MainWindow.s
