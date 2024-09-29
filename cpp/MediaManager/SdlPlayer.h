@@ -29,7 +29,7 @@ public:
     enum AVSampleFormat out_sample_fmt;  //声音格式
 
     int out_buffer_size;        //输出缓冲区大小
-    unsigned char *outBuff;     //音频数据缓冲区
+    unsigned char *outBuff = nullptr;     //音频数据缓冲区
 };
 
 // 定义 SdlPlayer 类

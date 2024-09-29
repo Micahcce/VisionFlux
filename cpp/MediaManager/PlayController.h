@@ -6,6 +6,7 @@
 
 class MediaPlayInfo
 {
+    //仅用作判断，不用于传参
 public:
     bool isStarted = false;
     bool isPlaying = false;
@@ -34,7 +35,15 @@ public:
     void setRenderCallback(MediaManager::RenderCallback callback){m_mediaManager->setRenderCallback(std::move(callback));}
 
     //提供播放状态查询
-    MediaPlayInfo* getMediaPlayInfo() {return m_mediaInfo;}
+    MediaPlayInfo* getMediaPlayInfo()
+    {
+        if (!m_mediaInfo)
+        {
+            std::cerr << "Media info is null." << std::endl;
+            return nullptr;
+        }
+        return m_mediaInfo;
+    }
 
 private:
 

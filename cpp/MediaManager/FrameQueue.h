@@ -15,8 +15,16 @@ extern "C"
 class FrameQueue
 {
 public:
-    FrameQueue() {}
-    ~FrameQueue() {clear();}
+    FrameQueue() : m_exit(false) {}
+    ~FrameQueue() { clear(); }
+
+    // Add a method to signal exit
+    void signalExit()
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        m_exit = true;
+        cv.notify_all(); // Notify all waiting threads
+    }
 
     // Push an audio frame into the queue
     void pushAudioFrame(const AVFrame* frame)
@@ -44,10 +52,11 @@ public:
     AVFrame* popAudioFrame()
     {
         std::unique_lock<std::mutex> lock(mutex);
-        while (audioFrames.empty())
+        while (audioFrames.empty() && !m_exit)
         {
             cv.wait(lock);
         }
+        if (m_exit) return nullptr; // Return nullptr if exit signaled
         AVFrame* frame = audioFrames.front();
         audioFrames.pop();
         return frame;
@@ -57,27 +66,31 @@ public:
     AVFrame* popVideoFrame()
     {
         std::unique_lock<std::mutex> lock(mutex);
-        while (videoFrames.empty())
+        while (videoFrames.empty() && !m_exit)
         {
             cv.wait(lock);
         }
+        if (m_exit) return nullptr; // Return nullptr if exit signaled
         AVFrame* frame = videoFrames.front();
         videoFrames.pop();
         return frame;
     }
 
-    int getAudioFrameCount(){return audioFrames.size();}
-    int getVideoFrameCount(){return videoFrames.size();}
+    // Check if we should exit
+    bool shouldExit() const { return m_exit; }
+
+    int getAudioFrameCount() { return audioFrames.size(); }
+    int getVideoFrameCount() { return videoFrames.size(); }
 
 private:
     void clear()
     {
         std::unique_lock<std::mutex> lock(mutex);
-        while (!audioFrames.empty()) {
+        while (!audioFrames.empty()){
             av_frame_free(&audioFrames.front());
             audioFrames.pop();
         }
-        while (!videoFrames.empty()) {
+        while (!videoFrames.empty()){
             av_frame_free(&videoFrames.front());
             videoFrames.pop();
         }
@@ -87,8 +100,9 @@ private:
     std::queue<AVFrame*> videoFrames; // Queue for video frames
     std::mutex mutex;                   // Mutex for thread safety
     std::condition_variable cv;         // Condition variable for synchronization
-
+    bool m_exit;                        // Exit flag
 };
+
 
 
 #endif // FRAMEQUEUE_H

@@ -164,6 +164,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/atomic_base.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/atomic_lockfree_defines.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/backward/auto_ptr.h \
+ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/atomic \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/functional \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
  C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\FrameQueue.h \
@@ -389,7 +390,6 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qbasicatomic.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qatomic_cxx11.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
- D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/atomic \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobalstatic.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qnumeric.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \

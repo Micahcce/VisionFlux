@@ -2,6 +2,29 @@
 #define USE_SDL 0
 
 MediaManager::MediaManager()
+    : m_renderCallback(nullptr),
+      m_frameQueue(nullptr),
+      m_sdlPlayer(nullptr),
+      m_pFormatCtx(nullptr),
+      m_videoIndex(-1),
+      m_audioIndex(-1),
+      m_pCodecCtx_video(nullptr),
+      m_pCodecCtx_audio(nullptr),
+      m_pCodec_video(nullptr),
+      m_pCodec_audio(nullptr),
+      m_aspectRatio(0.0f),
+      m_RGBMode(false),
+      m_pAudioParams(nullptr),
+      m_swrCtx(nullptr),
+      m_frameRGB(nullptr),
+      m_pSwsCtx(nullptr),
+      m_thread_quit(true),
+      m_thread_pause(false),
+      m_thread_safe_exited(true),
+      m_thread_decode_exited(true),
+      m_thread_video_exited(true),
+      m_thread_audio_exited(true),
+      m_lastPTS(0.0)
 {
 #if !USE_SDL
 
@@ -168,8 +191,13 @@ void MediaManager::decodeToPlay(const char* filePath)
         }
     }
 #else
+    m_lastPTS = 0.0;
     m_thread_quit = false;
     m_thread_pause = false;
+    m_thread_safe_exited = false;
+    m_thread_decode_exited = false;
+    m_thread_video_exited = false;
+    m_thread_audio_exited = false;
     frameYuvToRgb();
     SDL_CreateThread(thread_media_decode, NULL, this);
     SDL_CreateThread(thread_video_display, NULL, this);
@@ -194,7 +222,7 @@ int MediaManager::thread_media_decode(void *data)
 
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
-    int64_t start_time = av_gettime() - pThis->m_startTime;
+    int64_t start_time = av_gettime();
 
     //解码
     while(pThis->m_thread_quit == false)
@@ -224,7 +252,7 @@ int MediaManager::thread_media_decode(void *data)
                     break;
                 }
 
-                while(pThis->m_frameQueue->getVideoFrameCount() >= MAX_NODE_NUMBER)
+                while(pThis->m_frameQueue->getVideoFrameCount() >= MAX_NODE_NUMBER && !pThis->m_thread_quit)
                     pThis->delayMs(10);
 
                 pThis->m_frameQueue->pushVideoFrame(frame);
@@ -247,7 +275,7 @@ int MediaManager::thread_media_decode(void *data)
                     break;
                 }
 
-                while(pThis->m_frameQueue->getAudioFrameCount() >= MAX_NODE_NUMBER)
+                while(pThis->m_frameQueue->getAudioFrameCount() >= MAX_NODE_NUMBER && !pThis->m_thread_quit)
                     pThis->delayMs(10);
 
                 pThis->m_frameQueue->pushAudioFrame(frame);
@@ -260,9 +288,7 @@ int MediaManager::thread_media_decode(void *data)
 
     av_frame_free(&frame);
     av_packet_free(&packet);
-
-    //等待回收资源
-    pThis->close();
+    pThis->m_thread_decode_exited = true;
 
     return 0;
 }
@@ -274,16 +300,19 @@ void MediaManager::delayMs(int ms)
 
 void MediaManager::close()
 {
+    std::cerr << "wait." << std::endl;
+    m_thread_quit = true;
+    if(m_frameQueue)
+        m_frameQueue->signalExit();
+
     //安全退出
-    while(m_thread_quit == false)
-        delayMs(10);
+    while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
+    {
+        std::cerr << "waitting thread exit." << std::endl;
+        delayMs(20);
+    }
 
-    //清理资源
-    swr_free(&m_swrCtx);
-    avcodec_free_context(&m_pCodecCtx_video);
-    avcodec_free_context(&m_pCodecCtx_audio);
-    avformat_close_input(&m_pFormatCtx);
-
+    //清理资源，注意顺序避免崩溃
     if (m_pSwsCtx)
     {
         sws_freeContext(m_pSwsCtx);
@@ -296,7 +325,7 @@ void MediaManager::close()
         m_sdlPlayer = nullptr;
     }
 
-    if (m_pAudioParams->outBuff)
+    if (m_pAudioParams && m_pAudioParams->outBuff)
     {
         av_free(m_pAudioParams->outBuff);
         m_pAudioParams->outBuff = nullptr;
@@ -307,6 +336,34 @@ void MediaManager::close()
         delete m_frameQueue;
         m_frameQueue = nullptr;
     }
+
+    if(m_swrCtx)
+    {
+        swr_free(&m_swrCtx);
+        m_swrCtx = nullptr;
+    }
+
+    if(m_pCodecCtx_video)
+    {
+        avcodec_free_context(&m_pCodecCtx_video);
+        m_pCodecCtx_video = nullptr;
+    }
+
+    if(m_pCodecCtx_audio)
+    {
+        avcodec_free_context(&m_pCodecCtx_audio);
+        m_pCodecCtx_audio = nullptr;
+    }
+
+    if(m_pFormatCtx)
+    {
+        avformat_close_input(&m_pFormatCtx);
+        m_pFormatCtx = nullptr;
+    }
+
+    //安全退出标志
+    m_thread_safe_exited = true;
+    std::clog << "all thread exit." << std::endl;
 }
 
 //视频播放线程
@@ -316,7 +373,7 @@ int MediaManager::thread_video_display(void* data)
 
     //渲染
     AVFrame* frame = av_frame_alloc();
-    int64_t start_time = av_gettime() - pThis->m_startTime;              //获取从公元1970年1月1日0时0分0秒开始的微秒值
+    int64_t start_time = av_gettime();              //获取从公元1970年1月1日0时0分0秒开始的微秒值
 
     while(pThis->m_thread_quit == false)
     {
@@ -328,6 +385,8 @@ int MediaManager::thread_video_display(void* data)
         }
 
         frame = pThis->m_frameQueue->popVideoFrame();
+        if(!frame)
+            continue;
 
         //渲染
 #if USE_SDL
@@ -364,6 +423,7 @@ int MediaManager::thread_video_display(void* data)
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
+    pThis->m_thread_video_exited = true;
 
     return 0;
 }
@@ -387,6 +447,8 @@ int MediaManager::thread_audio_display(void *data)
         }
 
         frame = pThis->m_frameQueue->popAudioFrame();
+        if(!frame)
+            continue;
 
         ret = swr_convert(pThis->m_swrCtx, &pThis->m_pAudioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
         if(ret < 0)
@@ -405,6 +467,7 @@ int MediaManager::thread_audio_display(void *data)
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
+    pThis->m_thread_audio_exited = true;
 
     return 0;
 }
@@ -412,16 +475,19 @@ int MediaManager::thread_audio_display(void *data)
 void MediaManager::videoDelayControl(AVFrame* frame)
 {
     //视频按pts渲染
-    static double lastPTS = 0.0;
     double currentPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
-    if (lastPTS != 0.0) {
-        double delayDuration = currentPTS - lastPTS;
-        if (delayDuration > 0.0)
+    if (m_lastPTS != 0.0)
+    {
+        double delayDuration = currentPTS - m_lastPTS;
+        if (delayDuration > 0.0 && delayDuration < AV_TIME_BASE && m_thread_quit == false)
         {
             av_usleep(delayDuration);
         }
     }
-    lastPTS = currentPTS;
+    std::cerr << "Current PTS: " << currentPTS << ", Last PTS: " << m_lastPTS << std::endl;
+
+    m_lastPTS = currentPTS;
+//    delayMs(40);
 }
 
 void MediaManager::frameYuvToRgb()

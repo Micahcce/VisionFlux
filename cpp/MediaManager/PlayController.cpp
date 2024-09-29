@@ -8,6 +8,11 @@ PlayController::PlayController()
 
 void PlayController::startPlay(std::string filePath)
 {
+    while (m_mediaManager->getThreadSafeExited() == false)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    std::cerr << "ready play: " << filePath << std::endl;
     m_mediaManager->decodeToPlay(filePath.data());
     m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isStarted = true;
@@ -29,6 +34,8 @@ void PlayController::pausePlay()
 void PlayController::endPlay()
 {
     m_mediaManager->setThreadQuit(true);
+    if(m_mediaInfo->mediaName != "")
+        m_mediaManager->close();
     m_mediaInfo->mediaName = "";
     m_mediaInfo->isStarted = false;
     m_mediaInfo->isPlaying = false;

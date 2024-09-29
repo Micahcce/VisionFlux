@@ -6,6 +6,7 @@
 #include <map>
 #include <chrono>
 #include <thread>
+#include <atomic>
 #include <functional>
 #include "FrameQueue.h"
 #include "SdlPlayer.h"
@@ -31,11 +32,10 @@ public:
     AVFormatContext* getMediaInfo(const char* filePath);
     //解码播放
     void decodeToPlay(const char* filePath);
-    //解码保存
+    //转码保存
     //拉流播放
     //拉流保存
     //推流
-    //转码保存
 
     //最大音频帧
     enum
@@ -50,9 +50,12 @@ public:
     static int thread_audio_display(void* data);
 
     //线程状态
-    bool getThreadQuit() {return m_thread_quit;}
+    bool getThreadSafeExited() {return m_thread_safe_exited;}
     void setThreadQuit(bool status) {m_thread_quit = status;}
     void setThreadPause(bool status) {m_thread_pause = status;}
+
+    //关闭线程与回收资源
+    void close();
 
     //设置渲染回调函数
     using RenderCallback = std::function<void(AVFrame*, int, int, float)>;
@@ -65,7 +68,6 @@ private:
     void frameYuvToRgb();
 
     void delayMs(int ms);
-    void close();
 
     RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
 
@@ -93,11 +95,16 @@ private:
     AVFrame *m_frameRGB;
     SwsContext* m_pSwsCtx;
 
-    //线程变量
-    bool m_thread_quit = false;
-    bool m_thread_pause = true;
+    //线程状态变量
+    std::atomic<bool> m_thread_quit;
+    std::atomic<bool> m_thread_pause;
+    bool m_thread_safe_exited;
+    bool m_thread_decode_exited;
+    bool m_thread_video_exited;
+    bool m_thread_audio_exited;
 
-    int64_t m_startTime;
+    //计时相关
+    double m_lastPTS;
 };
 
 #endif // MEDIAMANAGER_H
