@@ -8,6 +8,8 @@
 #include <string>
 #include <chrono>
 #include <iomanip>
+#include <sstream> // 添加ostringstream
+#include <cstdarg> // 添加可变参数支持
 
 enum class LogLevel {
     DEBUG,
@@ -22,17 +24,17 @@ public:
     Logger();
     ~Logger();
 
-    void setLogLevel(LogLevel level);                 // 设置输出等级，默认DEBUG
-    void setOutputFile(const std::string& filename);  // 设置输出文件，默认无
+    void setLogLevel(LogLevel level);
+    void setOutputFile(const std::string& filename);
 
-    void debug(const std::string& message);
-    void info(const std::string& message);
-    void warning(const std::string& message);
-    void error(const std::string& message);
-    void critical(const std::string& message);
+    // 添加格式化的日志函数
+    void debug(const char* format, ...);
+    void info(const char* format, ...);
+    void warning(const char* format, ...);
+    void error(const char* format, ...);
+    void critical(const char* format, ...);
 
 private:
-
     std::string logLevelToString(LogLevel level);
     std::string getCurrentTime(); // 获取当前时间
     void log(LogLevel level, const std::string& message);

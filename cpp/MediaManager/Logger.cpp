@@ -2,7 +2,7 @@
 
 Logger logger; // 定义全局变量
 
-Logger::Logger() : logLevel_(LogLevel::DEBUG), isOutputFileSet_(false) {} // 默认等级为DEBUG，输出文件未设置
+Logger::Logger() : logLevel_(LogLevel::DEBUG), isOutputFileSet_(false) {}
 
 Logger::~Logger() {
     if (outputFile_.is_open()) {
@@ -26,22 +26,20 @@ void Logger::setOutputFile(const std::string& filename) {
 
 std::string Logger::logLevelToString(LogLevel level) {
     switch (level) {
-        case LogLevel::DEBUG:   return "DEBUG   ";   // DEBUG补齐3个空格
-        case LogLevel::INFO:    return "INFO    ";   // INFO补齐2个空格
-        case LogLevel::WARNING:  return "WARNING ";   // WARNING补齐1个空格
-        case LogLevel::ERROR:    return "ERROR   ";   // ERROR补齐3个空格
-        case LogLevel::CRITICAL: return "CRITICAL";    // CRITICAL不补齐
-        default:                return "UNKNOWN  ";   // 默认情况
+        case LogLevel::DEBUG:   return "DEBUG   ";
+        case LogLevel::INFO:    return "INFO    ";
+        case LogLevel::WARNING:  return "WARNING ";
+        case LogLevel::ERROR:    return "ERROR   ";
+        case LogLevel::CRITICAL: return "CRITICAL";
+        default:                return "UNKNOWN  ";
     }
 }
 
 std::string Logger::getCurrentTime() {
     auto now = std::chrono::system_clock::now();
     std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-
     std::tm local_tm;
-    localtime_s(&local_tm, &now_time); // 用于安全地获取本地时间
-
+    localtime_s(&local_tm, &now_time);
     char buffer[20]; // yyyy-mm-dd hh:mm:ss
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &local_tm);
     return std::string(buffer);
@@ -65,39 +63,62 @@ std::string Logger::colorize(const std::string& message, LogLevel level, bool is
 void Logger::log(LogLevel level, const std::string& message) {
     std::lock_guard<std::mutex> lock(mutex_);
     if (level >= logLevel_) {
-        std::string levelStr = colorize(logLevelToString(level), level); // 日志等级使用颜色
-        std::string currentTime = colorize(getCurrentTime(), level, true); // 时间使用颜色
-        std::string messageWithColor = colorize(message, level); // 日志消息使用与等级相同的颜色
+        std::string levelStr = colorize(logLevelToString(level), level);
+        std::string currentTime = colorize(getCurrentTime(), level, true);
+        std::string messageWithColor = colorize(message, level);
 
-        // 构建不带颜色的完整日志消息用于文件
         std::string fullMessageWithoutColor = "[" + logLevelToString(level) + "][" + getCurrentTime() + "] - " + message;
 
-        // 输出到控制台
-        std::cout << "[" << levelStr << "][" << currentTime << "] - " << messageWithColor << std::endl; // 输出到控制台
+        std::cout << "[" << levelStr << "][" << currentTime << "] - " << messageWithColor << std::endl;
 
-        // 如果设置了输出文件，才输出到文件
         if (isOutputFileSet_ && outputFile_.is_open()) {
-            outputFile_ << fullMessageWithoutColor << std::endl; // 输出到文件
+            outputFile_ << fullMessageWithoutColor << std::endl;
         }
     }
 }
 
-void Logger::debug(const std::string& message) {
-    log(LogLevel::DEBUG, message);
+// 添加格式化日志函数
+void Logger::debug(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), format, args); // 使用vsnprintf格式化字符串
+    va_end(args);
+    log(LogLevel::DEBUG, buffer);
 }
 
-void Logger::info(const std::string& message) {
-    log(LogLevel::INFO, message);
+void Logger::info(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    log(LogLevel::INFO, buffer);
 }
 
-void Logger::warning(const std::string& message) {
-    log(LogLevel::WARNING, message);
+void Logger::warning(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    log(LogLevel::WARNING, buffer);
 }
 
-void Logger::error(const std::string& message) {
-    log(LogLevel::ERROR, message);
+void Logger::error(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    log(LogLevel::ERROR, buffer);
 }
 
-void Logger::critical(const std::string& message) {
-    log(LogLevel::CRITICAL, message);
+void Logger::critical(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    log(LogLevel::CRITICAL, buffer);
 }

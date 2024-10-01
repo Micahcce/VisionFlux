@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QFont>
+#include <QFile>
 
 extern "C" {
 #include "libavformat/avformat.h"
@@ -25,10 +26,11 @@ public:
     explicit PlayList(QWidget *parent = nullptr);
 
     QString getVideoPath();
+    void addVideoItem(const QString &title, const QString &duration, const QString &status);
 
 private:
+    //提取缩略图
     void extractThumbnail(const char* videoFilePath, const char* outputImagePath);
-    void addVideoItem(const QString &title, const QString &duration, const QString &status, const QString &thumbnailPath);
 };
 
 #endif // PLAYLIST_H

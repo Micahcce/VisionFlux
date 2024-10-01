@@ -299,6 +299,14 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/functional \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/refwrap.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qdir.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
  C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayList.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
@@ -328,6 +336,8 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avformat.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \
@@ -539,6 +549,9 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/allocator.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/codecvt.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/unique_ptr.h \
+ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
+ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
+ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/swresample.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version_major.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version.h \

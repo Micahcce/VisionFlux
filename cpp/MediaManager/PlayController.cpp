@@ -12,7 +12,7 @@ void PlayController::startPlay(std::string filePath)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    std::cerr << "ready play: " << filePath << std::endl;
+    logger.debug("ready play: %s", filePath.data());
     m_mediaManager->decodeToPlay(filePath.data());
     m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isStarted = true;

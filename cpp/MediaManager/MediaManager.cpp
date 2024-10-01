@@ -30,7 +30,7 @@ MediaManager::MediaManager()
 
 #endif
     m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
-    std::cout << "avformat_version : " << avformat_version() << std::endl;
+    logger.debug("avformat_version :%d", avformat_version());
 }
 
 MediaManager::~MediaManager()
@@ -47,12 +47,12 @@ AVFormatContext* MediaManager::getMediaInfo(const char* filePath)
     //2.打开文件
     int ret = avformat_open_input(&formatCtx, filePath, nullptr, nullptr);
     if(ret < 0)
-        std::cerr << "Error occurred in avformat_open_input";
+        logger.error("Error occurred in avformat_open_input");
 
     //3.上下文获取流信息
     ret = avformat_find_stream_info(formatCtx, nullptr);
     if(ret < 0)
-        std::cerr << "Error occurred in avformat_find_stream_info";
+        logger.error("Error occurred in avformat_find_stream_info");
 
     return formatCtx;
 }
@@ -68,21 +68,21 @@ void MediaManager::decodeToPlay(const char* filePath)
     //2.打开文件
     ret = avformat_open_input(&m_pFormatCtx, filePath, nullptr, nullptr);
     if(ret < 0)
-        std::cerr << "Error occurred in avformat_open_input";
+        logger.error("Error occurred in avformat_open_input");
 
     //3.上下文获取流信息
     ret = avformat_find_stream_info(m_pFormatCtx, nullptr);
     if(ret < 0)
-        std::cerr << "Error occurred in avformat_find_stream_info";
+        logger.error("Error occurred in avformat_find_stream_info");
 
     //4.查找视频流和音频流
     m_videoIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(m_videoIndex < 0)
-        std::cerr << "Error occurred in av_find_best_stream";
+        logger.error("Error occurred in av_find_best_stream");
 
     m_audioIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
     if(m_audioIndex < 0)
-        std::cerr << "Error occurred in av_find_best_stream";
+        logger.error("Error occurred in av_find_best_stream");
 
     //5.获取视频数据
     av_dump_format(m_pFormatCtx, -1, nullptr, 0);
@@ -94,26 +94,26 @@ void MediaManager::decodeToPlay(const char* filePath)
     //7.解码器上下文获取参数
     ret = avcodec_parameters_to_context(m_pCodecCtx_video, m_pFormatCtx->streams[m_videoIndex]->codecpar);
     if(ret < 0)
-        std::cerr << "Error occurred in avcodec_parameters_to_context";
+        logger.error("Error occurred in avcodec_parameters_to_context");
 
     ret = avcodec_parameters_to_context(m_pCodecCtx_audio, m_pFormatCtx->streams[m_audioIndex]->codecpar);
     if(ret < 0)
-        std::cerr << "Error occurred in avcodec_parameters_to_context";
+        logger.error("Error occurred in avcodec_parameters_to_context");
 
     //8.查找解码器
     m_pCodec_video = avcodec_find_decoder(m_pCodecCtx_video->codec_id);
     m_pCodec_audio = avcodec_find_decoder(m_pCodecCtx_audio->codec_id);
     if(!(m_pCodec_video || m_pCodecCtx_audio))
-        std::cerr << "Error occurred in avcodec_find_decoder";
+        logger.error("Error occurred in avcodec_find_decoder");
 
     //9.打开解码器并绑定上下文
     ret = avcodec_open2(m_pCodecCtx_video, m_pCodec_video, nullptr);
     if(ret < 0)
-        std::cerr << "Error occurred in avcodec_open2";
+        logger.error("Error occurred in avcodec_open2");
 
     ret = avcodec_open2(m_pCodecCtx_audio, m_pCodec_audio, nullptr);
     if(ret < 0)
-        std::cerr << "Error occurred in avcodec_open2";
+        logger.error("Error occurred in avcodec_open2");
 
     //10.保存视频宽高比
     m_aspectRatio = static_cast<float>(m_pCodecCtx_video->width) / static_cast<float>(m_pCodecCtx_video->height);
@@ -248,7 +248,7 @@ int MediaManager::thread_media_decode(void *data)
                 if(ret < 0)
                 {
                     if(ret == AVERROR_EOF)
-                        std::clog << "Media playback finished." << std::endl;  // 视频解码结束
+                        logger.info("Media playback finished.");  // 视频解码结束
                     break;
                 }
 
@@ -271,7 +271,7 @@ int MediaManager::thread_media_decode(void *data)
                 if(ret < 0)
                 {
                     if(ret == AVERROR_EOF)
-                        std::clog << "Media playback finished." << std::endl;  // 音频解码结束
+                        logger.info("Media playback finished.");  // 音频解码结束
                     break;
                 }
 
@@ -300,7 +300,7 @@ void MediaManager::delayMs(int ms)
 
 void MediaManager::close()
 {
-    std::cerr << "wait." << std::endl;
+    logger.error("wait.");
     m_thread_quit = true;
     if(m_frameQueue)
         m_frameQueue->signalExit();
@@ -308,7 +308,7 @@ void MediaManager::close()
     //安全退出
     while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
     {
-        std::cerr << "waitting thread exit." << std::endl;
+        logger.debug("waitting thread exit.");
         delayMs(20);
     }
 
@@ -363,7 +363,7 @@ void MediaManager::close()
 
     //安全退出标志
     m_thread_safe_exited = true;
-    std::clog << "all thread exit." << std::endl;
+    logger.debug("all thread exit.");
 }
 
 //视频播放线程
@@ -414,7 +414,7 @@ int MediaManager::thread_video_display(void* data)
         if (pThis->m_renderCallback)
             pThis->m_renderCallback(pThis->m_frameRGB, pThis->m_pCodecCtx_video->width, pThis->m_pCodecCtx_video->height, pThis->m_aspectRatio);
         else
-            std::cerr << "Render callback not set";
+            logger.error("Render callback not set");
 #endif
 
         //延时控制
@@ -453,7 +453,7 @@ int MediaManager::thread_audio_display(void *data)
         ret = swr_convert(pThis->m_swrCtx, &pThis->m_pAudioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
         if(ret < 0)
         {
-            std::cerr <<  "Error while converting\n";
+            logger.error("Error while converting\n");
             break;
         }
 
@@ -484,7 +484,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
             av_usleep(delayDuration);
         }
     }
-    std::cerr << "Current PTS: " << currentPTS << ", Last PTS: " << m_lastPTS << std::endl;
+    logger.debug("Current PTS: %ld, Last PTS: %ld", currentPTS, m_lastPTS);
 
     m_lastPTS = currentPTS;
 //    delayMs(40);

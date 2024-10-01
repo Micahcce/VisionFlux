@@ -103,6 +103,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTimer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
@@ -124,8 +125,12 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatastream.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdir.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -173,6 +178,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qtextstream.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qtimer.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qtypeinfo.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qvariant.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qvarlengtharray.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qvector.h \
@@ -207,6 +213,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qwindowdefs.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qwindowdefs_win.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QLabel \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
@@ -223,6 +230,8 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
@@ -320,6 +329,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
@@ -359,6 +369,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstddef \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
@@ -399,6 +410,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -571,6 +583,7 @@ CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cp
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_algobase.h \
@@ -593,6 +606,7 @@ CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cp
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cerrno \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/chrono \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdlib \
@@ -624,6 +638,7 @@ CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cp
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/new \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -648,6 +663,7 @@ CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cp
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/messages_members.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/time_members.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/stdarg.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/stddef.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/stdint.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw.h \
@@ -657,6 +673,7 @@ CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cp
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_print_push.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_secapi.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stat64.h \
+  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_timeval.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/corecrt_startup.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/crtdefs.h \
@@ -678,6 +695,7 @@ CMakeFiles/MediaManager.dir/Logger.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cp
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sec_api/wchar_s.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/signal.h \
+  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdarg.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stddef.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdint.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdio.h \
@@ -794,6 +812,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
@@ -819,10 +838,12 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatastream.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdir.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -924,6 +945,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetworkglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QLabel \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
@@ -943,6 +965,8 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
@@ -1041,6 +1065,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
@@ -1080,6 +1105,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstddef \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
@@ -1120,6 +1146,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -1410,6 +1437,7 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj: C:/Users/13055/Desktop/VisionF
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
@@ -1444,6 +1472,7 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj: C:/Users/13055/Desktop/VisionF
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdlib \
@@ -1480,6 +1509,7 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj: C:/Users/13055/Desktop/VisionF
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -1704,6 +1734,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
@@ -1729,10 +1760,12 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatastream.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdir.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -1834,6 +1867,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetworkglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QLabel \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
@@ -1853,6 +1887,8 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
@@ -1951,6 +1987,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
@@ -1990,6 +2027,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstddef \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
@@ -2030,6 +2068,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -2321,6 +2360,7 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: C:/Users/13055/Desktop/Visio
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
@@ -2355,6 +2395,7 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: C:/Users/13055/Desktop/Visio
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdlib \
@@ -2391,6 +2432,7 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: C:/Users/13055/Desktop/Visio
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -2546,8 +2588,10 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/swscale.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version_major.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qalgorithms.h \
@@ -2564,6 +2608,8 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatastream.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -2673,6 +2719,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/algorithm \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/array \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/atomic \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/backward/auto_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/backward/binders.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/algorithmfwd.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/alloc_traits.h \
@@ -2685,6 +2732,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/basic_string.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/basic_string.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/char_traits.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/codecvt.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/concept_check.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/cpp_type_traits.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/cxxabi_forced.h \
@@ -2692,6 +2740,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/exception.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/exception_defines.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/exception_ptr.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/fstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/functexcept.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/functional_hash.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/hash_bytes.h \
@@ -2701,8 +2750,11 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/list.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_classes.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_classes.tcc \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_conv.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets.tcc \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets_nonio.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets_nonio.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/localefwd.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/memoryfwd.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/move.h \
@@ -2715,8 +2767,13 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/ptr_traits.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/range_access.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/refwrap.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_algo.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_algobase.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_bvector.h \
@@ -2731,6 +2788,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_multimap.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_numeric.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_pair.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_raw_storage_iter.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_relops.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_tempbuf.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_tree.h \
@@ -2741,6 +2799,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/streambuf_iterator.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stringfwd.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/uniform_int_dist.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/unique_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/uses_allocator.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/vector.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cctype \
@@ -2748,6 +2807,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/chrono \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstddef \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
@@ -2761,12 +2821,15 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/aligned_buffer.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/alloc_traits.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/atomicity.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/concurrence.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/new_allocator.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/numeric_traits.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/string_conversions.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/type_traits.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/fstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/functional \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/initializer_list \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iomanip \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ios \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iosfwd \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iostream \
@@ -2774,12 +2837,16 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iterator \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/limits \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/list \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/locale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/map \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/math.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/memory \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/mutex \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/new \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/numeric \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -2791,8 +2858,10 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/utility \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/vector \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/atomic_word.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++allocator.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++locale.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/cpu_defines.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/ctype_base.h \
@@ -2800,7 +2869,9 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/error_constants.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/gthr-default.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/gthr.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/messages_members.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/time_members.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/stdarg.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/stddef.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/stdint.h \
@@ -3276,6 +3347,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
@@ -3301,10 +3373,12 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatastream.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdir.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -3406,6 +3480,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetworkglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QLabel \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
@@ -3425,6 +3500,8 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractspinbox.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
   D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
@@ -3523,6 +3600,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_atomic.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
@@ -3562,6 +3640,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/clocale \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/condition_variable \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstddef \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdint \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdio \
@@ -3602,6 +3681,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ostream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio \
+  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h \
   D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/streambuf \
@@ -3913,11 +3993,11 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/sws
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qiterator.h:
 
-C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version.h:
+D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_off_t.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stddef.h:
 
-D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_off_t.h:
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswscale/version.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_gamecontroller.h:
 
@@ -3939,6 +4019,8 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qcontiguouscache.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/qregion.h:
 
+D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h:
+
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/functional_hash.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_hints.h:
@@ -3946,6 +4028,8 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_hints.h:
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_cpuinfo.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_haptic.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/qdir.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_endian.h:
 
@@ -4051,9 +4135,9 @@ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_timeval.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_touch.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/atomic_base.h:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sys/timeb.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/atomic_base.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_video.h:
 
@@ -4064,8 +4148,6 @@ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlayoutitem.h:
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/avxintrin.h:
-
-D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdarg.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h:
 
@@ -4094,6 +4176,8 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h:
 D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/streambuf.tcc:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/QTimer:
 
@@ -4142,6 +4226,16 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qelapsedtimer.h:
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/istream.tcc:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qeventloop.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/limits:
 
@@ -4193,9 +4287,11 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/initializer
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qobjectdefs.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_pair.h:
-
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qobjectdefs_impl.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_pair.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qpair.h:
 
@@ -4214,8 +4310,6 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qrefcount.h:
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/exception:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qregexp.h:
-
-D:/Qt/5.12.12/mingw73_64/include/QtCore/qregularexpression.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qset.h:
 
@@ -4266,6 +4360,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/avx2intrin.h:
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared_ptr_base.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qtypeinfo.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/tuple:
 
@@ -4341,6 +4437,10 @@ D:/Qt/5.12.12/mingw73_64/include/QtGui/qwindowdefs.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/qwindowdefs_win.h:
 
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio:
+
+D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog:
+
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget:
@@ -4365,8 +4465,6 @@ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemdelegate.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/math.h:
 
-D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h:
-
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractscrollarea.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractslider.h:
@@ -4376,6 +4474,8 @@ D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qapplication.h:
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/vector.tcc:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qstyleoption.h:
 
@@ -4561,6 +4661,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/shared
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/clzerointrin.h:
 
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc:
+
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/lzcntintrin.h:
@@ -4615,6 +4717,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/chrono:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cmath:
 
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg:
+
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cwchar:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/debug/assertions.h:
@@ -4647,8 +4751,6 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/map:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/memory:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio:
-
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/thread:
@@ -4663,19 +4765,17 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/xsaveintrin.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/atomic_word.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++allocator.h:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdint.h:
 
-D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdio.h:
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++allocator.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++io.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/cpu_defines.h:
+D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sdks/_mingw_directx.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/vadefs.h:
 
-D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sdks/_mingw_directx.h:
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/cpu_defines.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/ctype_base.h:
 
@@ -4691,9 +4791,9 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/fxsrintrin.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sec_api/string_s.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/ia32intrin.h:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdlib.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/ia32intrin.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/immintrin.h:
 
@@ -4729,8 +4829,6 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/QVariant:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/xtestintrin.h:
 
-D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/string.h:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_print_pop.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_print_push.h:
@@ -4761,6 +4859,12 @@ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sec_api/wchar_s.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/signal.h:
 
+D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdarg.h:
+
+D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdio.h:
+
+D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/string.h:
+
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/swprintf.inl:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sys/types.h:
@@ -4785,13 +4889,7 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/QCoreApplication:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer:
 
-D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h:
-
-D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h:
-
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qmetaobject.h:
-
-D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/QResizeEvent:
 

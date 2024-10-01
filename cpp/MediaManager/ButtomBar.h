@@ -13,6 +13,7 @@
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QApplication>
+#include <QFileDialog>
 #include "PlayList.h"
 #include "PlayController.h"
 
@@ -34,10 +35,17 @@ public:
 
 public slots:
     void slotPlayVideo();
+    void slotAddFile();
+    void slotVolumeChanged();
     void slotUpdateProgress();
     bool slotVideoDoubleClicked();
 
+protected:
+    // 事件过滤器用于监听鼠标进入和离开事件
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private:
+
     QString timeFormatting(int secs);       //秒数格式化为hh:mm:ss
     PlayController* m_playController;
     PlayList* m_playList;
@@ -47,6 +55,9 @@ private:
     QLabel* m_totalTime;
 
     QPushButton* m_playBtn;
+    QPushButton* m_volumeBtn;
+    QSlider* m_volumeSlider;
+    QPushButton* m_addFileBtn;
 
 
     QTimer* m_sliderTimer;        //进度条定时器 1000ms

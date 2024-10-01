@@ -6,6 +6,7 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(60);
 
+//////////上排//////////
     m_currentTime = new QLabel(this);
     m_currentTime->setText("00:00:00");
     m_timeSlider = new QSlider(Qt::Horizontal, this);
@@ -22,15 +23,46 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     hBox->addWidget(m_timeSlider);
     hBox->addWidget(m_totalTime);
 
+//////////下排//////////
+    //播放
     m_playBtn = new QPushButton(this);
     m_playBtn->setFixedSize(30, 30);
     QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
     m_playBtn->setIcon(playIcon);
     connect(m_playBtn, &QPushButton::clicked, this, &ButtomBar::slotPlayVideo);
 
+    //音量
+    m_volumeBtn = new QPushButton(this);
+    m_volumeBtn->setFixedSize(30, 30);
+    QIcon volumeIcon = QApplication::style()->standardIcon(QStyle::SP_MediaVolume);
+    m_volumeBtn->setIcon(volumeIcon);
+    connect(m_volumeBtn, &QPushButton::clicked, this, &ButtomBar::slotVolumeChanged);
+
+    m_volumeSlider = new QSlider(Qt::Vertical, this);
+    m_volumeSlider->setRange(0, 100);
+    m_volumeSlider->setValue(50); // 设置默认音量
+    m_volumeSlider->setVisible(false);
+    m_volumeSlider->setFixedSize(30, 100); // 设置滑块大小
+
+    m_volumeBtn->installEventFilter(this);   // 监听鼠标进入和离开事件
+    m_volumeSlider->installEventFilter(this); // 监听鼠标进入和离开事件
+
+    //添加文件
+    m_addFileBtn = new QPushButton(this);
+    m_addFileBtn->setFixedSize(30, 30);
+    QIcon addIcon = QApplication::style()->standardIcon(QStyle::SP_FileDialogStart);
+    m_addFileBtn->setIcon(addIcon);
+    connect(m_addFileBtn, &QPushButton::clicked, this, &ButtomBar::slotAddFile);
+
+    QHBoxLayout* hBox2 = new QHBoxLayout;
+    hBox2->addWidget(m_playBtn);
+    hBox2->addWidget(m_volumeBtn);
+    hBox2->addWidget(m_addFileBtn);
+
+    //垂直布局
     QVBoxLayout* vBox = new QVBoxLayout;
     vBox->addLayout(hBox);
-    vBox->addWidget(m_playBtn);
+    vBox->addLayout(hBox2);
 
     this->setLayout(vBox);
 }
@@ -80,6 +112,37 @@ bool ButtomBar::slotVideoDoubleClicked()
     return true;
 }
 
+bool ButtomBar::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_volumeBtn)
+    {
+        if (event->type() == QEvent::Enter)
+        {
+            logger.debug("btn enter");
+            return true;
+        }
+        else if (event->type() == QEvent::Leave)
+        {
+            logger.debug("btn leave");
+            return true;
+        }
+    }
+    else if (obj == m_volumeSlider)
+    {
+        if (event->type() == QEvent::Enter)
+        {
+            logger.debug("slider enter");
+            return true;
+        }
+        else if (event->type() == QEvent::Leave)
+        {
+            logger.debug("slider leave");
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
 void ButtomBar::slotPlayVideo()
 {
     if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
@@ -123,6 +186,19 @@ void ButtomBar::slotPlayVideo()
             }
         }
     }
+}
+
+void ButtomBar::slotAddFile()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav");
+    if(filePath == "")
+        return;
+    m_playList->addVideoItem(filePath, "10", "...");
+}
+
+void ButtomBar::slotVolumeChanged()
+{
+
 }
 
 void ButtomBar::slotUpdateProgress()
