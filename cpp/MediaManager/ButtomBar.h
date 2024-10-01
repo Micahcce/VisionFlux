@@ -46,7 +46,6 @@ protected:
 
 private:
 
-    QString timeFormatting(int secs);       //秒数格式化为hh:mm:ss
     PlayController* m_playController;
     PlayList* m_playList;
 

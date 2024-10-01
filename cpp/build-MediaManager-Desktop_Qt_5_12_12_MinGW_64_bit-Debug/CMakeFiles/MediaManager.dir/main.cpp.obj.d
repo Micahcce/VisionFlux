@@ -558,6 +558,10 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QMainWindow \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qmainwindow.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/QMediaPlayer \

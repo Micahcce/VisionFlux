@@ -339,6 +339,10 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qfont.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
+ D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avformat.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/avutil.h \

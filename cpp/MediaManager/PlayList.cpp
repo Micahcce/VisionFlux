@@ -8,7 +8,6 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
         // 添加视频项
         addVideoItem("C:\\Users\\13055\\Desktop\\output.mp4", "00:07", "未观看");
         addVideoItem("C:\\Users\\13055\\Desktop\\aki.mp4", "00:10", "未观看");
-
     }
 }
 
@@ -167,6 +166,7 @@ void PlayList::extractThumbnail(const char* videoFilePath, const char* outputIma
 
                     // 使用QImage保存图像
                     QImage image((const uchar*)buffer, codecCtx->width, codecCtx->height, QImage::Format_RGB32);
+
                     if (image.save(outputImagePath))
                     {
                         succeed = true;
@@ -203,8 +203,10 @@ void PlayList::addVideoItem(const QString &title, const QString &duration, const
     QListWidgetItem *item = new QListWidgetItem();
     item->setSizeHint(QSize(0, 100)); // 设置每个项的大小
 
-    QWidget *itemWidget = new QWidget();
-    QHBoxLayout *itemLayout = new QHBoxLayout(itemWidget);
+    QWidget *itemWidget = new QWidget(this);
+    QHBoxLayout *hBox = new QHBoxLayout;
+    QHBoxLayout *hBox2 = new QHBoxLayout;
+    QVBoxLayout *vBox = new QVBoxLayout;
 
     // 缩略图名称
     QString outputImagePath = title;
@@ -228,11 +230,15 @@ void PlayList::addVideoItem(const QString &title, const QString &duration, const
     QLabel *statusLabel = new QLabel(status);
 
     // 设置布局
-    itemLayout->addWidget(thumbnail);
-    itemLayout->addWidget(titleLabel);
-    itemLayout->addWidget(durationLabel);
-    itemLayout->addWidget(statusLabel);
-    itemWidget->setLayout(itemLayout);
+    hBox->addWidget(durationLabel);
+    hBox->addWidget(statusLabel);
+    vBox->addSpacing(25);
+    vBox->addWidget(titleLabel);
+    vBox->addLayout(hBox);
+    vBox->addSpacing(25);
+    hBox2->addWidget(thumbnail);
+    hBox2->addLayout(vBox);
+    itemWidget->setLayout(hBox2);
 
     this->addItem(item);
     this->setItemWidget(item, itemWidget);

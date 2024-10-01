@@ -31,6 +31,9 @@ public:
     //获取视频时长（秒）
     int getMediaDuration(std::string filePath);
 
+    //格式化时长（hh:mm:ss）
+    std::string timeFormatting(int secs);
+
     //传递渲染回调
     void setRenderCallback(MediaManager::RenderCallback callback){m_mediaManager->setRenderCallback(std::move(callback));}
 

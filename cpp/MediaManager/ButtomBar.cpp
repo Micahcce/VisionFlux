@@ -92,7 +92,7 @@ bool ButtomBar::slotVideoDoubleClicked()
 
     //获取时长
     int totalTime = m_playController->getMediaDuration(videoPath.toStdString());
-    QString totalTimeStr = timeFormatting(totalTime);
+    QString totalTimeStr = QString::fromStdString(m_playController->timeFormatting(totalTime));
 
     // 设置相关控件
     m_timeSlider->setRange(0, totalTime);
@@ -212,13 +212,15 @@ void ButtomBar::slotUpdateProgress()
 
     //当前时长增加
     int currentTime = m_timeSlider->value();
-    QString currentTimeStr = timeFormatting(currentTime);
+    QString currentTimeStr = QString::fromStdString(m_playController->timeFormatting(currentTime));
     m_currentTime->setText(currentTimeStr);
 
     //播放完成
     if(currentTime == m_timeSlider->maximum())
     {
         m_playController->endPlay();
+        QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
+        m_playBtn->setIcon(playIcon);
     }
 
     //开启误差计时器
@@ -230,19 +232,4 @@ void ButtomBar::slotUpdateProgress()
         m_needRectify = false;
         m_sliderTimer->start(1000);
     }
-}
-
-QString ButtomBar::timeFormatting(int secs)
-{
-    // 计算小时、分钟、秒
-    int hours = secs / 3600;
-    int minutes = (secs % 3600) / 60;
-    int seconds = secs % 60;
-
-    QString totalTimeStr = QString("%1:%2:%3")
-                            .arg(hours, 2, 10, QChar('0'))   // 小时，两位数字
-                            .arg(minutes, 2, 10, QChar('0')) // 分钟，两位数字
-                            .arg(seconds, 2, 10, QChar('0'));   // 秒，两位数字
-
-    return totalTimeStr;
 }

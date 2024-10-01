@@ -185,6 +185,7 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qbrush.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcolor.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcursor.h \
@@ -198,14 +199,17 @@ CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj: C:/Users/13055/Desktop/VisionFlux
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qkeysequence.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qmatrix.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpaintdevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainterpath.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpalette.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixelformat.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixmap.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpolygon.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qregion.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgb.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgba64.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtgui-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtguiglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtransform.h \
@@ -899,6 +903,7 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QResizeEvent \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qbrush.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcolor.h \
@@ -914,14 +919,17 @@ CMakeFiles/MediaManager.dir/MainWindow.cpp.obj: C:/Users/13055/Desktop/VisionFlu
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qkeysequence.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qmatrix.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpaintdevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainterpath.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpalette.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixelformat.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixmap.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpolygon.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qregion.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgb.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgba64.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtgui-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtguiglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
@@ -1821,6 +1829,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QResizeEvent \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qbrush.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcolor.h \
@@ -1836,14 +1845,17 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qkeysequence.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qmatrix.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpaintdevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainterpath.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpalette.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixelformat.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixmap.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpolygon.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qregion.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgb.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgba64.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtgui-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtguiglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
@@ -2662,6 +2674,7 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qbrush.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcolor.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcursor.h \
@@ -2673,14 +2686,17 @@ CMakeFiles/MediaManager.dir/PlayList.cpp.obj: C:/Users/13055/Desktop/VisionFlux/
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qkeysequence.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qmatrix.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpaintdevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainterpath.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpalette.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixelformat.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixmap.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpolygon.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qregion.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgb.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgba64.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtgui-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtguiglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtransform.h \
@@ -3434,6 +3450,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QFont \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/QResizeEvent \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qbrush.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qcolor.h \
@@ -3449,14 +3466,17 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qkeysequence.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qmatrix.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpaintdevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainterpath.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpalette.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixelformat.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixmap.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qpolygon.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qregion.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgb.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qrgba64.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtgui-config.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtguiglobal.h \
   D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
@@ -4025,6 +4045,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/functi
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_hints.h:
 
+D:/Qt/5.12.12/mingw73_64/include/QtGui/qtextoption.h:
+
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_cpuinfo.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_haptic.h:
@@ -4185,6 +4207,8 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qarraydata.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qatomic.h:
 
+D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainter.h:
+
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qbasicatomic.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qbasictimer.h:
@@ -4237,9 +4261,9 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qabstractitemview.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/limits:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/setjmp.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/limits:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h:
 
@@ -4381,6 +4405,12 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qversiontagging.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/QImage:
 
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/shaintrin.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtGui/QPainter:
+
 D:/Qt/5.12.12/mingw73_64/include/QtGui/qbrush.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/qcolor.h:
@@ -4418,6 +4448,10 @@ D:/Qt/5.12.12/mingw73_64/include/QtGui/qpainterpath.h:
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/psdk_inc/intrin-impl.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/qpalette.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/prfchwintrin.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtGui/qpen.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtGui/qpixmap.h:
 
@@ -4625,10 +4659,6 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_conv.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets.h:
-
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/shaintrin.h:
-
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets.tcc:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/locale_facets_nonio.h:
@@ -4665,9 +4695,9 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstrea
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_abs.h:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/lzcntintrin.h:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/lzcntintrin.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h:
 
@@ -4804,8 +4834,6 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/mm_malloc.h:
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/mwaitxintrin.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/pkuintrin.h:
-
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/prfchwintrin.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/rtmintrin.h:
 
