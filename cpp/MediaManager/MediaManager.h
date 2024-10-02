@@ -46,9 +46,26 @@ public:
     };
 
     //线程函数
-    static int thread_media_decode(void* data);
-    static int thread_video_display(void* data);
-    static int thread_audio_display(void* data);
+    int thread_media_decode();
+    int thread_video_display();
+    int thread_audio_display();
+
+    // 静态包装函数，因为SDL线程不支持使用成员函数
+    static int decodeThreadEntry(void* ptr)
+    {
+        MediaManager* mediaManager = static_cast<MediaManager*>(ptr);
+        return mediaManager->thread_media_decode();
+    }
+    static int videoThreadEntry(void* ptr)
+    {
+        MediaManager* mediaManager = static_cast<MediaManager*>(ptr);
+        return mediaManager->thread_media_decode();
+    }
+    static int audioThreadEntry(void* ptr)
+    {
+        MediaManager* mediaManager = static_cast<MediaManager*>(ptr);
+        return mediaManager->thread_media_decode();
+    }
 
     //线程状态
     bool getThreadSafeExited() {return m_thread_safe_exited;}

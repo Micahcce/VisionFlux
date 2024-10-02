@@ -83,7 +83,7 @@ bool ButtomBar::slotVideoDoubleClicked()
     }
     else if(videoPath == "")
     {
-        std::cerr << "video path get failed." << std::endl;
+        logger.error("video path get failed.");
         return false;
     }
 

@@ -26,11 +26,11 @@ MediaManager::MediaManager()
       m_thread_audio_exited(true),
       m_lastPTS(0.0)
 {
-#if !USE_SDL
-
-#endif
     m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
     logger.debug("avformat_version :%d", avformat_version());
+#if USE_SDL
+
+#endif
 }
 
 MediaManager::~MediaManager()
@@ -154,15 +154,23 @@ void MediaManager::decodeToPlay(const char* filePath)
     m_sdlPlayer->initAudioDevice(m_pAudioParams);
 
 //////////创建解码线程//////////
+    m_lastPTS = 0.0;
+    m_thread_quit = false;
+    m_thread_pause = false;
+    m_thread_safe_exited = false;
+    m_thread_decode_exited = false;
+    m_thread_video_exited = false;
+    m_thread_audio_exited = false;
 
-#if USE_SDL
     if(m_RGBMode)
         frameYuvToRgb();
+
+#if USE_SDL
     m_sdlPlayer->initVideoDevice(m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_RGBMode);
 
-    SDL_CreateThread(thread_media_decode, NULL, this);
-    SDL_CreateThread(thread_video_display, NULL, this);
-    SDL_CreateThread(thread_audio_display, NULL, this);
+    SDL_CreateThread(decodeThreadEntry, NULL, this);
+    SDL_CreateThread(videoThreadEntry, NULL, this);
+    SDL_CreateThread(audioThreadEntry, NULL, this);
 
     SDL_Event event;                    //定义事件
     while(true)
@@ -191,33 +199,19 @@ void MediaManager::decodeToPlay(const char* filePath)
         }
     }
 #else
-    m_lastPTS = 0.0;
-    m_thread_quit = false;
-    m_thread_pause = false;
-    m_thread_safe_exited = false;
-    m_thread_decode_exited = false;
-    m_thread_video_exited = false;
-    m_thread_audio_exited = false;
-    frameYuvToRgb();
-    SDL_CreateThread(thread_media_decode, NULL, this);
-    SDL_CreateThread(thread_video_display, NULL, this);
-    SDL_CreateThread(thread_audio_display, NULL, this);
-
-    //std::thread无法配合SDL_Event使用
-//    std::thread m_decodeThread(thread_media_decode, this);
-//    std::thread m_videoThread(thread_video_display, this);
-//    std::thread m_audioThread(thread_audio_display, this);
-//    m_decodeThread.join();
-//    m_videoThread.join();
-//    m_audioThread.join();
+    std::thread m_decodeThread(&MediaManager::thread_media_decode, this);
+    std::thread m_videoThread(&MediaManager::thread_video_display, this);
+    std::thread m_audioThread(&MediaManager::thread_audio_display, this);
+    m_decodeThread.detach();
+    m_videoThread.detach();
+    m_audioThread.detach();
 #endif
 }
 
 
 //视频解码线程
-int MediaManager::thread_media_decode(void *data)
+int MediaManager::thread_media_decode()
 {
-    MediaManager* pThis = (MediaManager*) data;
     int ret;
 
     AVPacket* packet = av_packet_alloc();
@@ -225,25 +219,25 @@ int MediaManager::thread_media_decode(void *data)
     int64_t start_time = av_gettime();
 
     //解码
-    while(pThis->m_thread_quit == false)
+    while(m_thread_quit == false)
     {
-        if(pThis->m_thread_pause)
+        if(m_thread_pause)
         {
-            pThis->delayMs(10);
+            delayMs(10);
             start_time += 10*1000;
             continue;
         }
 
-        if(av_read_frame(pThis->m_pFormatCtx, packet) < 0)
+        if(av_read_frame(m_pFormatCtx, packet) < 0)
             break;
 
-        if(packet->stream_index == pThis->m_videoIndex)
+        if(packet->stream_index == m_videoIndex)
         {
-            avcodec_send_packet(pThis->m_pCodecCtx_video, packet);
+            avcodec_send_packet(m_pCodecCtx_video, packet);
 
             while(1)
             {
-                ret = avcodec_receive_frame(pThis->m_pCodecCtx_video, frame);
+                ret = avcodec_receive_frame(m_pCodecCtx_video, frame);
 
                 if(ret < 0)
                 {
@@ -252,21 +246,21 @@ int MediaManager::thread_media_decode(void *data)
                     break;
                 }
 
-                while(pThis->m_frameQueue->getVideoFrameCount() >= MAX_NODE_NUMBER && !pThis->m_thread_quit)
-                    pThis->delayMs(10);
+                while(m_frameQueue->getVideoFrameCount() >= MAX_NODE_NUMBER && !m_thread_quit)
+                    delayMs(10);
 
-                pThis->m_frameQueue->pushVideoFrame(frame);
+                m_frameQueue->pushVideoFrame(frame);
 
                 av_frame_unref(frame);
             }
         }
-        else if(packet->stream_index == pThis->m_audioIndex)
+        else if(packet->stream_index == m_audioIndex)
         {
-            avcodec_send_packet(pThis->m_pCodecCtx_audio, packet);
+            avcodec_send_packet(m_pCodecCtx_audio, packet);
 
             while(1)
             {
-                ret = avcodec_receive_frame(pThis->m_pCodecCtx_audio, frame);
+                ret = avcodec_receive_frame(m_pCodecCtx_audio, frame);
 
                 if(ret < 0)
                 {
@@ -275,10 +269,10 @@ int MediaManager::thread_media_decode(void *data)
                     break;
                 }
 
-                while(pThis->m_frameQueue->getAudioFrameCount() >= MAX_NODE_NUMBER && !pThis->m_thread_quit)
-                    pThis->delayMs(10);
+                while(m_frameQueue->getAudioFrameCount() >= MAX_NODE_NUMBER && !m_thread_quit)
+                    delayMs(10);
 
-                pThis->m_frameQueue->pushAudioFrame(frame);
+                m_frameQueue->pushAudioFrame(frame);
 
                 av_frame_unref(frame);
             }
@@ -288,7 +282,7 @@ int MediaManager::thread_media_decode(void *data)
 
     av_frame_free(&frame);
     av_packet_free(&packet);
-    pThis->m_thread_decode_exited = true;
+    m_thread_decode_exited = true;
 
     return 0;
 }
@@ -367,107 +361,104 @@ void MediaManager::close()
 }
 
 //视频播放线程
-int MediaManager::thread_video_display(void* data)
+int MediaManager::thread_video_display()
 {
-    MediaManager* pThis = (MediaManager*) data;
-
     //渲染
     AVFrame* frame = av_frame_alloc();
     int64_t start_time = av_gettime();              //获取从公元1970年1月1日0时0分0秒开始的微秒值
 
-    while(pThis->m_thread_quit == false)
+    while(m_thread_quit == false)
     {
-        if(pThis->m_thread_pause)
+        if(m_thread_pause)
         {
-            pThis->delayMs(10);
+            delayMs(10);
             start_time += 10*1000;
             continue;
         }
 
-        frame = pThis->m_frameQueue->popVideoFrame();
+        frame = m_frameQueue->popVideoFrame();
         if(!frame)
             continue;
 
         //渲染
 #if USE_SDL
-    if(pThis->m_RGBMode)
+    if(m_RGBMode)
     {
-        sws_scale(pThis->m_pSwsCtx,
+        sws_scale(m_pSwsCtx,
                   (const unsigned char* const*)frame->data,
                   frame->linesize, 0,
-                  pThis->m_pCodecCtx_video->height,
-                  pThis->m_frameRGB->data,
-                  pThis->m_frameRGB->linesize);
-        pThis->m_sdlPlayer->renderFrameRGB(pThis->m_frameRGB);
+                  m_pCodecCtx_video->height,
+                  m_frameRGB->data,
+                  m_frameRGB->linesize);
+        m_sdlPlayer->renderFrameRGB(m_frameRGB);
     }
     else
-        pThis->m_sdlPlayer->renderFrame(frame);
+        m_sdlPlayer->renderFrame(frame);
 #else
-        sws_scale(pThis->m_pSwsCtx,
+        sws_scale(m_pSwsCtx,
                   (const unsigned char* const*)frame->data,
                   frame->linesize, 0,
-                  pThis->m_pCodecCtx_video->height,
-                  pThis->m_frameRGB->data,
-                  pThis->m_frameRGB->linesize);
+                  m_pCodecCtx_video->height,
+                  m_frameRGB->data,
+                  m_frameRGB->linesize);
 
         // 调用回调函数，通知 GUI 渲染
-        if (pThis->m_renderCallback)
-            pThis->m_renderCallback(pThis->m_frameRGB, pThis->m_pCodecCtx_video->width, pThis->m_pCodecCtx_video->height, pThis->m_aspectRatio);
+        if (m_renderCallback)
+            m_renderCallback(m_frameRGB, m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
         else
             logger.error("Render callback not set");
 #endif
 
         //延时控制
-        pThis->videoDelayControl(frame);
+        videoDelayControl(frame);
 
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
-    pThis->m_thread_video_exited = true;
+    m_thread_video_exited = true;
 
     return 0;
 }
 
 
 //音频播放线程
-int MediaManager::thread_audio_display(void *data)
+int MediaManager::thread_audio_display()
 {
-    MediaManager* pThis = (MediaManager*) data;
     int ret;
 
     //渲染
     AVFrame* frame = av_frame_alloc();
 
-    while(pThis->m_thread_quit == false)
+    while(m_thread_quit == false)
     {
-        if(pThis->m_thread_pause)
+        if(m_thread_pause)
         {
-            pThis->delayMs(10);
+            delayMs(10);
             continue;
         }
 
-        frame = pThis->m_frameQueue->popAudioFrame();
+        frame = m_frameQueue->popAudioFrame();
         if(!frame)
             continue;
 
-        ret = swr_convert(pThis->m_swrCtx, &pThis->m_pAudioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
+        ret = swr_convert(m_swrCtx, &m_pAudioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
         if(ret < 0)
         {
             logger.error("Error while converting\n");
             break;
         }
 
-        while(pThis->m_sdlPlayer->m_audioLen > 0)
-            pThis->delayMs(1);
+        while(m_sdlPlayer->m_audioLen > 0)
+            delayMs(1);
 
-        pThis->m_sdlPlayer->m_audioChunk = (unsigned char *)pThis->m_pAudioParams->outBuff;
-        pThis->m_sdlPlayer->m_audioPos = pThis->m_sdlPlayer->m_audioChunk;
-        pThis->m_sdlPlayer->m_audioLen = pThis->m_pAudioParams->out_buffer_size;
+        m_sdlPlayer->m_audioChunk = (unsigned char *)m_pAudioParams->outBuff;
+        m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
+        m_sdlPlayer->m_audioLen = m_pAudioParams->out_buffer_size;
 
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
-    pThis->m_thread_audio_exited = true;
+    m_thread_audio_exited = true;
 
     return 0;
 }
