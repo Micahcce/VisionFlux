@@ -24,9 +24,11 @@ MediaManager::MediaManager()
       m_thread_decode_exited(true),
       m_thread_video_exited(true),
       m_thread_audio_exited(true),
-      m_lastPTS(0.0)
+      m_videoLastPTS(0.0),
+      m_audioLastPTS(0.0)
 {
     m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
+//    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
 #if USE_SDL
 
@@ -154,7 +156,8 @@ void MediaManager::decodeToPlay(const char* filePath)
     m_sdlPlayer->initAudioDevice(m_pAudioParams);
 
 //////////创建解码线程//////////
-    m_lastPTS = 0.0;
+    m_videoLastPTS = 0.0;
+    m_audioLastPTS = 0.0;
     m_thread_quit = false;
     m_thread_pause = false;
     m_thread_safe_exited = false;
@@ -294,7 +297,7 @@ void MediaManager::delayMs(int ms)
 
 void MediaManager::close()
 {
-    logger.error("wait.");
+    logger.debug("wait.");
     m_thread_quit = true;
     if(m_frameQueue)
         m_frameQueue->signalExit();
@@ -357,7 +360,7 @@ void MediaManager::close()
 
     //安全退出标志
     m_thread_safe_exited = true;
-    logger.debug("all thread exit.");
+    logger.info("all thread exit.");
 }
 
 //视频播放线程
@@ -451,6 +454,8 @@ int MediaManager::thread_audio_display()
         while(m_sdlPlayer->m_audioLen > 0)
             delayMs(1);
 
+        audioDelayControl(frame);
+
         m_sdlPlayer->m_audioChunk = (unsigned char *)m_pAudioParams->outBuff;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
         m_sdlPlayer->m_audioLen = m_pAudioParams->out_buffer_size;
@@ -465,20 +470,42 @@ int MediaManager::thread_audio_display()
 
 void MediaManager::videoDelayControl(AVFrame* frame)
 {
-    //视频按pts渲染
-    double currentPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
-    if (m_lastPTS != 0.0)
+    double currentVideoPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
+
+    // 获取当前音频PTS
+    double currentAudioPTS = m_audioLastPTS;
+
+    // 判断视频是否超前于音频，如果超前则等待
+    if (currentVideoPTS > currentAudioPTS)
     {
-        double delayDuration = currentPTS - m_lastPTS;
-        if (delayDuration > 0.0 && delayDuration < AV_TIME_BASE && m_thread_quit == false)
+        double delayDuration = currentVideoPTS - currentAudioPTS;
+        if (delayDuration > 0.0 && m_thread_quit == false)
         {
-            av_usleep(delayDuration);
+            av_usleep(delayDuration * 1000000); // 延时
         }
     }
-    logger.debug("Current PTS: %ld, Last PTS: %ld", currentPTS, m_lastPTS);
+    logger.debug("Current Video PTS: %f, Last PTS: %f", currentVideoPTS, m_videoLastPTS);
 
-    m_lastPTS = currentPTS;
-//    delayMs(40);
+    // 记录当前视频PTS
+    m_videoLastPTS = currentVideoPTS;
+}
+
+void MediaManager::audioDelayControl(AVFrame *frame)
+{
+    //音频按pts渲染
+    double currentAudioPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_audioIndex]->time_base);
+    if (m_audioLastPTS != 0.0)
+    {
+        double delayDuration = currentAudioPTS - m_audioLastPTS;
+        if (delayDuration > 0.0 && delayDuration < AV_TIME_BASE && m_thread_quit == false)
+        {
+            av_usleep(delayDuration); // 微秒延时
+        }
+    }
+    logger.debug("Current Audio PTS: %f, Last PTS: %f", currentAudioPTS, m_audioLastPTS);
+
+    // 记录当前音频PTS
+    m_audioLastPTS = currentAudioPTS;
 }
 
 void MediaManager::frameYuvToRgb()

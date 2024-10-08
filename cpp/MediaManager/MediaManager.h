@@ -83,6 +83,7 @@ public:
 
 private:
     void videoDelayControl(AVFrame* frame);
+    void audioDelayControl(AVFrame* frame);
     void frameYuvToRgb();
 
     void delayMs(int ms);
@@ -122,7 +123,8 @@ private:
     bool m_thread_audio_exited;
 
     //计时相关
-    double m_lastPTS;
+    double m_videoLastPTS;
+    double m_audioLastPTS;
 };
 
 #endif // MEDIAMANAGER_H
