@@ -36,14 +36,11 @@ public:
 public slots:
     void slotPlayVideo();
     void slotAddFile();
+    void slotChangeSpeed();
     void slotVolumeChanged();
     void slotUpdateProgress();
     bool slotVideoDoubleClicked();
     void slotSliderReleased();
-
-protected:
-    // 事件过滤器用于监听鼠标进入和离开事件
-    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
 
@@ -55,6 +52,9 @@ private:
     QLabel* m_totalTime;
 
     QPushButton* m_playBtn;
+    QVector<float> m_playbackSpeeds; // 存储播放速率
+    int speedIndex;
+    QPushButton* m_changeSpeedBtn;
     QPushButton* m_volumeBtn;
     QSlider* m_volumeSlider;
     QPushButton* m_addFileBtn;

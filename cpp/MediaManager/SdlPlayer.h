@@ -46,6 +46,8 @@ public:
     void renderFrame(const AVFrame* frame);
     void renderFrameRGB(const AVFrame* frameRGB);
     void resize(int width, int height, bool RGBMode);
+    void setVolume(int volume);
+    void audioChangeSpeed(float speedFactor);
 
     unsigned int m_audioLen = 0;          //音频数据块的长度
     unsigned char *m_audioChunk = NULL;   //指向新获取的音频数据块的指针，目前多余
@@ -56,6 +58,9 @@ private:
     SDL_Renderer* m_renderer;  // SDL渲染器
     SDL_Texture* m_texture;    // SDL纹理
     SDL_Rect m_rect;           // SDL矩形
+
+    SDL_AudioSpec m_wantSpec;
+    int m_volume;              //音量
 };
 
 

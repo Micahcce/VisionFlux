@@ -14,6 +14,7 @@ void PlayController::startPlay(std::string filePath)
     }
     logger.debug("ready play: %s", filePath.data());
     m_mediaManager->decodeToPlay(filePath.data());
+    m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
     m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isStarted = true;
     m_mediaInfo->isPlaying = true;
@@ -46,6 +47,22 @@ void PlayController::changePlayProcess(int timeSecs)
     m_mediaManager->setThreadPause(true);
     m_mediaManager->seekMedia(timeSecs);
     m_mediaManager->setThreadPause(false);
+}
+
+void PlayController::changePlaySpeed(float speedFactor)
+{
+    if(m_mediaInfo->mediaName == "")
+        return;
+    m_mediaInfo->speed = speedFactor;
+    m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
+}
+
+void PlayController::changeVolume(int volume)
+{
+    if(m_mediaInfo->mediaName == "")
+        return;
+    m_mediaInfo->volume = volume;
+    m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
 int PlayController::getMediaDuration(std::string filePath)

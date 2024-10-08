@@ -1,7 +1,7 @@
 #include "SdlPlayer.h"
 
 // 构造函数
-SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr)
+SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr),m_volume(100)
 {
 }
 
@@ -62,17 +62,16 @@ bool SdlPlayer::initAudioDevice(AudioParams* audioParams)
 {
     ///   SDL
     //配置音频播放结构体SDL_AudioSpec，和SwrContext的音频重采样参数保持一致
-    SDL_AudioSpec wantSpec;
-    wantSpec.freq = audioParams->out_sample_rate;        //48000/1024=46.875帧
-    wantSpec.format = AUDIO_FORMAT_MAP[audioParams->out_sample_fmt];
-    wantSpec.channels = audioParams->out_channels;
-    wantSpec.silence = 0;
-    wantSpec.samples = audioParams->out_nb_samples;
-    wantSpec.callback = fill_audio;                     //回调函数
-    wantSpec.userdata = this;
+    m_wantSpec.freq = audioParams->out_sample_rate;        //48000/1024=46.875帧
+    m_wantSpec.format = AUDIO_FORMAT_MAP[audioParams->out_sample_fmt];
+    m_wantSpec.channels = audioParams->out_channels;
+    m_wantSpec.silence = 0;
+    m_wantSpec.samples = audioParams->out_nb_samples;
+    m_wantSpec.callback = fill_audio;                     //回调函数
+    m_wantSpec.userdata = this;
 
     //打开音频设备
-    if(SDL_OpenAudio(&wantSpec, NULL) < 0)
+    if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
     {
         std::cerr << "Error occurred in SDL_OpenAudio" << std::endl;
         SDL_Quit();
@@ -137,6 +136,30 @@ void SdlPlayer::resize(int width, int height, bool RGBMode)
 }
 
 
+void SdlPlayer::setVolume(int volume)
+{
+    if (volume < 0) volume = 0;
+    if (volume > 100) volume = 100;
+    m_volume = volume;
+}
+
+void SdlPlayer::audioChangeSpeed(float speedFactor)
+{
+    //通过修改采样率实现变速
+    SDL_CloseAudio();
+    m_wantSpec.freq = m_wantSpec.freq * speedFactor;
+
+    //打开音频设备
+    if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
+    {
+        std::cerr << "Error occurred in SDL_OpenAudio" << std::endl;
+        SDL_Quit();
+    }
+
+    //开始播放
+    SDL_PauseAudio(0);
+}
+
 //回调函数
 void SdlPlayer::fill_audio(void *udata, Uint8 *stream, int len)
 {
@@ -147,7 +170,7 @@ void SdlPlayer::fill_audio(void *udata, Uint8 *stream, int len)
 
     len = (len > pThis->m_audioLen ? pThis->m_audioLen : len);
 
-    SDL_MixAudio(stream, pThis->m_audioPos, len, SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream, pThis->m_audioPos, len, pThis->m_volume);
 
     pThis->m_audioPos += len;
     pThis->m_audioLen -= len;

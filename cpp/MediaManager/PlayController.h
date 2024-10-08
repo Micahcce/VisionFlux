@@ -11,6 +11,8 @@ public:
     bool isStarted = false;
     bool isPlaying = false;
 
+    float speed = 1.0;
+    int volume = 100;
     std::string mediaName = "";
 };
 
@@ -30,6 +32,10 @@ public:
 
     //修改播放进度
     void changePlayProcess(int timeSecs);
+    //修改播放速度
+    void changePlaySpeed(float speedFactor);
+    //修改音量
+    void changeVolume(int volume);
 
     //获取视频时长（秒）
     int getMediaDuration(std::string filePath);
