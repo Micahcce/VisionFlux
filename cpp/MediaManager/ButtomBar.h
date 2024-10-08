@@ -39,6 +39,7 @@ public slots:
     void slotVolumeChanged();
     void slotUpdateProgress();
     bool slotVideoDoubleClicked();
+    void slotSliderReleased();
 
 protected:
     // 事件过滤器用于监听鼠标进入和离开事件

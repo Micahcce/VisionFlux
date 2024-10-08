@@ -41,6 +41,13 @@ void PlayController::endPlay()
     m_mediaInfo->isPlaying = false;
 }
 
+void PlayController::changePlayProcess(int timeSecs)
+{
+    m_mediaManager->setThreadPause(true);
+    m_mediaManager->seekMedia(timeSecs);
+    m_mediaManager->setThreadPause(false);
+}
+
 int PlayController::getMediaDuration(std::string filePath)
 {
     AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath.data());

@@ -80,11 +80,11 @@ void MediaManager::decodeToPlay(const char* filePath)
     //4.查找视频流和音频流
     m_videoIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(m_videoIndex < 0)
-        logger.error("Error occurred in av_find_best_stream");
+        logger.error("Error occurred in video av_find_best_stream");
 
     m_audioIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
     if(m_audioIndex < 0)
-        logger.error("Error occurred in av_find_best_stream");
+        logger.error("Error occurred in audio av_find_best_stream");
 
     //5.获取视频数据
     av_dump_format(m_pFormatCtx, -1, nullptr, 0);
@@ -211,6 +211,52 @@ void MediaManager::decodeToPlay(const char* filePath)
 #endif
 }
 
+void MediaManager::seekMedia(int timeSecs)
+{
+    m_frameQueue->clear();
+
+    //根据视频帧来seek，因为音频帧的解码不需要I帧，跳转后可能会影响到视频帧的解码
+    AVRational time_base = m_pFormatCtx->streams[m_videoIndex]->time_base;
+    logger.debug("time_base.num: %d", time_base.num);
+    logger.debug("time_base.den: %d", time_base.den);
+
+    // 将目标时间转换为PTS
+    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // 将时间转换为PTS
+    logger.info("seek PTS: %d", targetPTS);
+
+    av_seek_frame(m_pFormatCtx, m_videoIndex, targetPTS, AVSEEK_FLAG_BACKWARD); //指定位置没有I帧的话会向前查找
+    avcodec_flush_buffers(m_pCodecCtx_video);
+    avcodec_flush_buffers(m_pCodecCtx_audio);
+
+    AVPacket* packet = av_packet_alloc();
+    AVFrame* frame = av_frame_alloc();
+    bool throwing = true;
+
+    //丢弃多余帧
+    while (throwing)
+    {
+        if (av_read_frame(m_pFormatCtx, packet) < 0)
+            break; // 没有更多的帧
+
+        if (packet->stream_index == m_videoIndex)
+        {
+            avcodec_send_packet(m_pCodecCtx_video, packet);
+            while (avcodec_receive_frame(m_pCodecCtx_video, frame) >= 0)
+            {
+                if (frame->pts >= targetPTS)
+                {
+                    // 找到目标帧
+                    throwing = false;
+                    break;
+                }
+            }
+        }
+        av_packet_unref(packet);
+    }
+    av_frame_free(&frame);
+    av_packet_free(&packet);
+}
+
 
 //视频解码线程
 int MediaManager::thread_media_decode()
@@ -219,7 +265,6 @@ int MediaManager::thread_media_decode()
 
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
-    int64_t start_time = av_gettime();
 
     //解码
     while(m_thread_quit == false)
@@ -227,7 +272,6 @@ int MediaManager::thread_media_decode()
         if(m_thread_pause)
         {
             delayMs(10);
-            start_time += 10*1000;
             continue;
         }
 
@@ -368,14 +412,12 @@ int MediaManager::thread_video_display()
 {
     //渲染
     AVFrame* frame = av_frame_alloc();
-    int64_t start_time = av_gettime();              //获取从公元1970年1月1日0时0分0秒开始的微秒值
 
     while(m_thread_quit == false)
     {
         if(m_thread_pause)
         {
             delayMs(10);
-            start_time += 10*1000;
             continue;
         }
 
@@ -484,7 +526,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
             av_usleep(delayDuration * 1000000); // 延时
         }
     }
-    logger.debug("Current Video PTS: %f, Last PTS: %f", currentVideoPTS, m_videoLastPTS);
+//    logger.debug("Current Video PTS: %f, Last PTS: %f", currentVideoPTS, m_videoLastPTS);
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;
@@ -502,7 +544,7 @@ void MediaManager::audioDelayControl(AVFrame *frame)
             av_usleep(delayDuration); // 微秒延时
         }
     }
-    logger.debug("Current Audio PTS: %f, Last PTS: %f", currentAudioPTS, m_audioLastPTS);
+//    logger.debug("Current Audio PTS: %f, Last PTS: %f", currentAudioPTS, m_audioLastPTS);
 
     // 记录当前音频PTS
     m_audioLastPTS = currentAudioPTS;

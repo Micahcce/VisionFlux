@@ -22,7 +22,6 @@ set(PROJECT_SOURCES
     MediaManager.h
     MediaManager.cpp
     FrameQueue.h
-    Log.h
     Logger.h
     Logger.cpp
     MainWindow.h

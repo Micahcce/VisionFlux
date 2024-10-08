@@ -82,7 +82,6 @@ public:
     int getAudioFrameCount() { return audioFrames.size(); }
     int getVideoFrameCount() { return videoFrames.size(); }
 
-private:
     void clear()
     {
         std::unique_lock<std::mutex> lock(mutex);
@@ -95,6 +94,8 @@ private:
             videoFrames.pop();
         }
     }
+
+private:
 
     std::queue<AVFrame*> audioFrames; // Queue for audio frames
     std::queue<AVFrame*> videoFrames; // Queue for video frames

@@ -11,6 +11,7 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent)
     m_currentTime->setText("00:00:00");
     m_timeSlider = new QSlider(Qt::Horizontal, this);
     m_timeSlider->setValue(0);
+    connect(m_timeSlider, &QSlider::sliderReleased, this, &ButtomBar::slotSliderReleased);
     m_totalTime = new QLabel(this);
     m_totalTime->setText("00:00:00");
 
@@ -112,6 +113,21 @@ bool ButtomBar::slotVideoDoubleClicked()
     return true;
 }
 
+void ButtomBar::slotSliderReleased()
+{
+    logger.debug("slider value: %d", m_timeSlider->value());
+    //修改当前时长
+    int currentTime = m_timeSlider->value();
+    QString currentTimeStr = QString::fromStdString(m_playController->timeFormatting(currentTime));
+    m_currentTime->setText(currentTimeStr);
+
+    //修改进度
+    m_sliderTimer->stop();
+    m_playController->changePlayProcess(m_timeSlider->value());
+    m_sliderTimer->start(1000);
+    m_elapsedTimer->start();
+}
+
 bool ButtomBar::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == m_volumeBtn)
@@ -193,7 +209,10 @@ void ButtomBar::slotAddFile()
     QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav");
     if(filePath == "")
         return;
-    m_playList->addVideoItem(filePath, "10", "...");
+
+    int duration = m_playController->getMediaDuration(filePath.toStdString());
+    QString timetotalStr = QString::fromStdString(m_playController->timeFormatting(duration));
+    m_playList->addVideoItem(filePath, timetotalStr, "未观看");
 }
 
 void ButtomBar::slotVolumeChanged()

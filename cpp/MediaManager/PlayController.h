@@ -28,6 +28,9 @@ public:
     //结束播放
     void endPlay();
 
+    //修改播放进度
+    void changePlayProcess(int timeSecs);
+
     //获取视频时长（秒）
     int getMediaDuration(std::string filePath);
 

@@ -8,6 +8,7 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
         // 添加视频项
         addVideoItem("C:\\Users\\13055\\Desktop\\output.mp4", "00:07", "未观看");
         addVideoItem("C:\\Users\\13055\\Desktop\\aki.mp4", "00:10", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\animation.mp4", "00:20", "未观看");
     }
 }
 

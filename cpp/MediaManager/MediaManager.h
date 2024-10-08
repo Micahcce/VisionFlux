@@ -38,6 +38,9 @@ public:
     //拉流保存
     //推流
 
+    //修改进度
+    void seekMedia(int timeSecs);
+
     //最大音频帧
     enum
     {
@@ -85,7 +88,6 @@ private:
     void videoDelayControl(AVFrame* frame);
     void audioDelayControl(AVFrame* frame);
     void frameYuvToRgb();
-
     void delayMs(int ms);
 
     RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
