@@ -217,8 +217,12 @@ void PlayList::addVideoItem(const QString &title, const QString &duration, const
         outputImagePath += ".png";
 
     // 不存在则创建
-    if(QFile::exists(outputImagePath) == false)
-        extractThumbnail(title.toStdString().data(), outputImagePath.toStdString().data());
+    QString fileExtension = title.section('.', -1); // 取最后一个点后面的部分
+    if(fileExtension != "mp3")                      //音频文件无需创建缩略图
+    {
+        if(QFile::exists(outputImagePath) == false)
+            extractThumbnail(title.toStdString().data(), outputImagePath.toStdString().data());
+    }
 
     // 添加封面图像
     QLabel *thumbnail = new QLabel();

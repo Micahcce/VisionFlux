@@ -14,8 +14,15 @@ void PlayController::startPlay(std::string filePath)
     }
     logger.debug("ready play: %s", filePath.data());
     m_mediaManager->decodeToPlay(filePath.data());
-    m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
-    m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
+
+    //是否有音频流
+    if(m_mediaManager->getAudioIndex() >= 0)
+        m_mediaInfo->hasAudioStream = true;
+    if(m_mediaInfo->hasAudioStream)
+    {
+        m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
+        m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
+    }
     m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isStarted = true;
     m_mediaInfo->isPlaying = true;
@@ -41,6 +48,7 @@ void PlayController::endPlay()
     m_mediaInfo->mediaName = "";
     m_mediaInfo->isStarted = false;
     m_mediaInfo->isPlaying = false;
+    m_mediaInfo->hasAudioStream = false;
 }
 
 void PlayController::changePlayProgress(int timeSecs)
@@ -54,12 +62,18 @@ void PlayController::changePlaySpeed(float speedFactor)
 {
     if(m_mediaInfo->mediaName == "")
         return;
-    m_mediaInfo->speed = speedFactor;
-    m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
+
+    if(m_mediaInfo->hasAudioStream)
+    {
+        m_mediaInfo->speed = speedFactor;
+        m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
+    }
 }
 
 void PlayController::changeVolume(int volume)
 {
+    if(!m_mediaInfo->hasAudioStream)
+        return;
     if(m_mediaInfo->mediaName == "")
         return;
     m_mediaInfo->volume = volume;

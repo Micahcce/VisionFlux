@@ -6,10 +6,11 @@
 
 class MediaPlayInfo
 {
-    //仅用作判断，不用于传参
+    //播放信息
 public:
     bool isStarted = false;
     bool isPlaying = false;
+    bool hasAudioStream = false;
 
     float speed = 1.0;
     int volume = 100;

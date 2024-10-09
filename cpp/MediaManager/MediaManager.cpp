@@ -80,82 +80,17 @@ void MediaManager::decodeToPlay(const char* filePath)
     //4.查找视频流和音频流
     m_videoIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(m_videoIndex < 0)
-        logger.error("Error occurred in video av_find_best_stream");
+        logger.warning("Not found video stream");
 
     m_audioIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
     if(m_audioIndex < 0)
-        logger.error("Error occurred in audio av_find_best_stream");
+        logger.warning("Not found audio stream");
 
     //5.获取视频数据
     av_dump_format(m_pFormatCtx, -1, nullptr, 0);
 
-    //6.创建音视频解码器上下文
-    m_pCodecCtx_video = avcodec_alloc_context3(nullptr);
-    m_pCodecCtx_audio = avcodec_alloc_context3(nullptr);
 
-    //7.解码器上下文获取参数
-    ret = avcodec_parameters_to_context(m_pCodecCtx_video, m_pFormatCtx->streams[m_videoIndex]->codecpar);
-    if(ret < 0)
-        logger.error("Error occurred in avcodec_parameters_to_context");
-
-    ret = avcodec_parameters_to_context(m_pCodecCtx_audio, m_pFormatCtx->streams[m_audioIndex]->codecpar);
-    if(ret < 0)
-        logger.error("Error occurred in avcodec_parameters_to_context");
-
-    //8.查找解码器
-    m_pCodec_video = avcodec_find_decoder(m_pCodecCtx_video->codec_id);
-    m_pCodec_audio = avcodec_find_decoder(m_pCodecCtx_audio->codec_id);
-    if(!(m_pCodec_video || m_pCodecCtx_audio))
-        logger.error("Error occurred in avcodec_find_decoder");
-
-    //9.打开解码器并绑定上下文
-    ret = avcodec_open2(m_pCodecCtx_video, m_pCodec_video, nullptr);
-    if(ret < 0)
-        logger.error("Error occurred in avcodec_open2");
-
-    ret = avcodec_open2(m_pCodecCtx_audio, m_pCodec_audio, nullptr);
-    if(ret < 0)
-        logger.error("Error occurred in avcodec_open2");
-
-    //10.保存视频宽高比
-    m_aspectRatio = static_cast<float>(m_pCodecCtx_video->width) / static_cast<float>(m_pCodecCtx_video->height);
-
-//////////音频//////////
-    m_pAudioParams = new AudioParams;
-    //1.设置音频播放采样参数
-    m_pAudioParams->out_sample_rate = m_pCodecCtx_audio->sample_rate;           //采样率    48000
-    m_pAudioParams->out_channels =    m_pCodecCtx_audio->ch_layout.nb_channels; //通道数    2
-    m_pAudioParams->out_nb_samples =  m_pCodecCtx_audio->frame_size;            //单个通道中的样本数  1024
-    m_pAudioParams->out_sample_fmt =  AV_SAMPLE_FMT_FLT;                        //声音格式  SDL仅支持部分音频格式
-
-    //7.依据参数计算输出缓冲区大小
-    m_pAudioParams->out_buffer_size = av_samples_get_buffer_size(NULL, m_pAudioParams->out_channels, m_pAudioParams->out_nb_samples, m_pAudioParams->out_sample_fmt, 1);
-
-    //8.创建音频数据缓冲区
-    m_pAudioParams->outBuff = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_pAudioParams->out_channels);
-
-    //9.创建重采样上下文
-    m_swrCtx = swr_alloc();
-
-    //10.分配重采样的上下文信息
-    swr_alloc_set_opts2(&m_swrCtx,
-                           &m_pCodecCtx_audio->ch_layout,             /*out*/
-                           m_pAudioParams->out_sample_fmt,                    /*out*///fltp->slt
-                           m_pAudioParams->out_sample_rate,                   /*out*/
-                           &m_pCodecCtx_audio->ch_layout,               /*in*/
-                           m_pCodecCtx_audio->sample_fmt,               /*in*/
-                           m_pCodecCtx_audio->sample_rate,              /*in*/
-                           0,
-                           NULL);
-
-    //11.swr上下文初始化
-    swr_init(m_swrCtx);
-
-    //开启音频设备
-    m_sdlPlayer = new SdlPlayer;
-    m_sdlPlayer->initAudioDevice(m_pAudioParams);
-
-//////////创建解码线程//////////
+    // 相关变量初始化
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
     m_thread_quit = false;
@@ -165,8 +100,39 @@ void MediaManager::decodeToPlay(const char* filePath)
     m_thread_video_exited = false;
     m_thread_audio_exited = false;
 
-    if(m_RGBMode)
-        frameYuvToRgb();
+    if(m_videoIndex < 0)
+        m_thread_video_exited = true;
+    if(m_audioIndex < 0)
+        m_thread_audio_exited = true;
+
+    // 视频流
+    if(m_videoIndex >= 0)
+    {
+        initVideoCodec();
+
+        m_aspectRatio = static_cast<float>(m_pCodecCtx_video->width) / static_cast<float>(m_pCodecCtx_video->height);
+
+        if(m_RGBMode)
+            frameYuvToRgb();
+
+        std::thread m_videoThread(&MediaManager::thread_video_display, this);
+        m_videoThread.detach();
+    }
+
+    // 音频流
+    if(m_audioIndex >= 0)
+    {
+        initAudioCodec();
+        initAudioDevice();
+
+        std::thread m_audioThread(&MediaManager::thread_audio_display, this);
+        m_audioThread.detach();
+    }
+
+    //解码线程
+    std::thread m_decodeThread(&MediaManager::thread_media_decode, this);
+    m_decodeThread.detach();
+
 
 #if USE_SDL
     m_sdlPlayer->initVideoDevice(m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_RGBMode);
@@ -201,13 +167,6 @@ void MediaManager::decodeToPlay(const char* filePath)
             }
         }
     }
-#else
-    std::thread m_decodeThread(&MediaManager::thread_media_decode, this);
-    std::thread m_videoThread(&MediaManager::thread_video_display, this);
-    std::thread m_audioThread(&MediaManager::thread_audio_display, this);
-    m_decodeThread.detach();
-    m_videoThread.detach();
-    m_audioThread.detach();
 #endif
 }
 
@@ -262,6 +221,14 @@ void MediaManager::seekMedia(int timeSecs)
     av_packet_free(&packet);
 
     logger.info("seek complete");
+}
+
+float MediaManager::getCurrentProgress()
+{
+    if(m_audioIndex >= 0)
+        return m_audioLastPTS;
+    else
+        return m_videoLastPTS;
 }
 
 
@@ -417,6 +384,81 @@ void MediaManager::close()
     logger.info("all thread exit.");
 }
 
+void MediaManager::initVideoCodec()
+{
+    int ret = 0;
+    //创建音视频解码器上下文
+    m_pCodecCtx_video = avcodec_alloc_context3(nullptr);
+    //解码器上下文获取参数
+    ret = avcodec_parameters_to_context(m_pCodecCtx_video, m_pFormatCtx->streams[m_videoIndex]->codecpar);
+    if(ret < 0)
+        logger.error("Error occurred in avcodec_parameters_to_context");
+    //查找解码器
+    m_pCodec_video = avcodec_find_decoder(m_pCodecCtx_video->codec_id);
+    if(!m_pCodec_video)
+        logger.error("Error occurred in avcodec_find_decoder");
+    //打开解码器并绑定上下文
+    ret = avcodec_open2(m_pCodecCtx_video, m_pCodec_video, nullptr);
+    if(ret < 0)
+        logger.error("Error occurred in avcodec_open2");
+}
+
+void MediaManager::initAudioCodec()
+{
+    int ret = 0;
+    m_pCodecCtx_audio = avcodec_alloc_context3(nullptr);
+
+    ret = avcodec_parameters_to_context(m_pCodecCtx_audio, m_pFormatCtx->streams[m_audioIndex]->codecpar);
+    if(ret < 0)
+        logger.error("Error occurred in avcodec_parameters_to_context");
+
+    m_pCodec_audio = avcodec_find_decoder(m_pCodecCtx_audio->codec_id);
+    if(!m_pCodec_audio)
+        logger.error("Error occurred in avcodec_find_decoder");
+
+    ret = avcodec_open2(m_pCodecCtx_audio, m_pCodec_audio, nullptr);
+    if(ret < 0)
+        logger.error("Error occurred in avcodec_open2");
+}
+
+void MediaManager::initAudioDevice()
+{
+    ///////音频设备初始化///////
+    m_pAudioParams = new AudioParams;
+    //设置音频播放采样参数
+    m_pAudioParams->out_sample_rate = m_pCodecCtx_audio->sample_rate;           //采样率    48000
+    m_pAudioParams->out_channels =    m_pCodecCtx_audio->ch_layout.nb_channels; //通道数    2
+    m_pAudioParams->out_nb_samples =  m_pCodecCtx_audio->frame_size;            //单个通道中的样本数  1024
+    m_pAudioParams->out_sample_fmt =  AV_SAMPLE_FMT_FLT;                        //声音格式  SDL仅支持部分音频格式
+
+    //依据参数计算输出缓冲区大小
+    m_pAudioParams->out_buffer_size = av_samples_get_buffer_size(NULL, m_pAudioParams->out_channels, m_pAudioParams->out_nb_samples, m_pAudioParams->out_sample_fmt, 1);
+
+    //创建音频数据缓冲区
+    m_pAudioParams->outBuff = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_pAudioParams->out_channels);
+
+    //创建重采样上下文
+    m_swrCtx = swr_alloc();
+
+    //分配重采样的上下文信息
+    swr_alloc_set_opts2(&m_swrCtx,
+                           &m_pCodecCtx_audio->ch_layout,             /*out*/
+                           m_pAudioParams->out_sample_fmt,                    /*out*///fltp->slt
+                           m_pAudioParams->out_sample_rate,                   /*out*/
+                           &m_pCodecCtx_audio->ch_layout,               /*in*/
+                           m_pCodecCtx_audio->sample_fmt,               /*in*/
+                           m_pCodecCtx_audio->sample_rate,              /*in*/
+                           0,
+                           NULL);
+
+    //swr上下文初始化
+    swr_init(m_swrCtx);
+
+    //开启音频设备
+    m_sdlPlayer = new SdlPlayer;
+    m_sdlPlayer->initAudioDevice(m_pAudioParams);
+}
+
 //视频播放线程
 int MediaManager::thread_video_display()
 {
@@ -525,16 +567,29 @@ void MediaManager::videoDelayControl(AVFrame* frame)
 {
     double currentVideoPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
 
-    // 获取当前音频PTS
-    double currentAudioPTS = m_audioLastPTS;
-
-    // 判断视频是否超前于音频，如果超前则等待
-    if (currentVideoPTS > currentAudioPTS)
+    //有音频时向音频流同步，无音频流则按PTS播放
+    if(m_audioIndex >= 0)
     {
-        double delayDuration = currentVideoPTS - currentAudioPTS;
-        if (delayDuration > 0.0 && m_thread_quit == false)
+        // 判断视频是否超前于音频，如果超前则等待
+        if (currentVideoPTS > m_audioLastPTS && m_audioLastPTS != 0.0)
         {
-            av_usleep(delayDuration);   // 微秒延时
+            double delayDuration = currentVideoPTS - m_audioLastPTS;
+            if (delayDuration > 0.0 && m_thread_quit == false)
+            {
+                av_usleep(delayDuration);   // 微秒延时
+            }
+        }
+    }
+    else
+    {
+        //视频按pts渲染
+        if (m_videoLastPTS != 0.0)
+        {
+            double delayDuration = currentVideoPTS - m_videoLastPTS;
+            if (delayDuration > 0.0 && m_thread_quit == false)
+            {
+                av_usleep(delayDuration * AV_TIME_BASE); // 微秒延时
+            }
         }
     }
 //    logger.debug("Current Video PTS: %f, Last PTS: %f", currentVideoPTS, m_videoLastPTS);
@@ -550,7 +605,7 @@ void MediaManager::audioDelayControl(AVFrame *frame)
     if (m_audioLastPTS != 0.0)
     {
         double delayDuration = currentAudioPTS - m_audioLastPTS;
-        if (delayDuration > 0.0 && delayDuration < AV_TIME_BASE && m_thread_quit == false)
+        if (delayDuration > 0.0 && m_thread_quit == false)
         {
             av_usleep(delayDuration); // 微秒延时
         }

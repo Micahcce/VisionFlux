@@ -42,7 +42,10 @@ public:
     void seekMedia(int timeSecs);
 
     //获取当前进度
-    float getCurrentProgress() {return m_audioLastPTS;}
+    float getCurrentProgress();
+
+    //获取音频流索引
+    int getAudioIndex() {return m_audioIndex;}
 
     //最大音频帧
     enum
@@ -50,6 +53,29 @@ public:
         MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
         MAX_NODE_NUMBER = 20
     };
+
+    //线程状态
+    bool getThreadSafeExited() {return m_thread_safe_exited;}
+    void setThreadQuit(bool status) {m_thread_quit = status;}
+    void setThreadPause(bool status) {m_thread_pause = status;}
+
+    //关闭线程与回收资源
+    void close();
+
+    //设置渲染回调函数
+    using RenderCallback = std::function<void(AVFrame*, int, int, float)>;
+    void setRenderCallback(RenderCallback callback) {std::move(m_renderCallback) = callback;}
+
+    SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
+
+private:
+    void initVideoCodec();
+    void initAudioCodec();
+    void initAudioDevice();
+    void videoDelayControl(AVFrame* frame);
+    void audioDelayControl(AVFrame* frame);
+    void frameYuvToRgb();
+    void delayMs(int ms);
 
     //线程函数
     int thread_media_decode();
@@ -73,32 +99,13 @@ public:
         return mediaManager->thread_media_decode();
     }
 
-    //线程状态
-    bool getThreadSafeExited() {return m_thread_safe_exited;}
-    void setThreadQuit(bool status) {m_thread_quit = status;}
-    void setThreadPause(bool status) {m_thread_pause = status;}
-
-    //关闭线程与回收资源
-    void close();
-
-    //设置渲染回调函数
-    using RenderCallback = std::function<void(AVFrame*, int, int, float)>;
-    void setRenderCallback(RenderCallback callback) {std::move(m_renderCallback) = callback;}
-
-    SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
-
-private:
-    void videoDelayControl(AVFrame* frame);
-    void audioDelayControl(AVFrame* frame);
-    void frameYuvToRgb();
-    void delayMs(int ms);
 
     RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
 
     FrameQueue* m_frameQueue;
     SdlPlayer* m_sdlPlayer;
 
-    //媒体数据相关
+    //媒体数据相关，其中Index同时用于音视频流是否存在的判断
     AVFormatContext* m_pFormatCtx;
     int m_videoIndex = -1;
     int m_audioIndex = -1;
@@ -127,7 +134,7 @@ private:
     bool m_thread_video_exited;
     bool m_thread_audio_exited;
 
-    //计时相关
+    //最后一帧的PTS，已转换为秒数
     double m_videoLastPTS;
     double m_audioLastPTS;
 };

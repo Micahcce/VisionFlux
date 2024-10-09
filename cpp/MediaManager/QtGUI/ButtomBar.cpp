@@ -165,7 +165,7 @@ void ButtomBar::slotPlayVideo()
 
 void ButtomBar::slotAddFile()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav");
+    QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav *.mp3");
     if(filePath == "")
         return;
 
