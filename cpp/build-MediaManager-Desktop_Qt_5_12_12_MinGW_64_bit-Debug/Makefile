@@ -141,30 +141,6 @@ MediaManager_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager_autogen.dir\build.make CMakeFiles/MediaManager_autogen.dir/build
 .PHONY : MediaManager_autogen/fast
 
-ButtomBar.obj: ButtomBar.cpp.obj
-.PHONY : ButtomBar.obj
-
-# target to build an object file
-ButtomBar.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.obj
-.PHONY : ButtomBar.cpp.obj
-
-ButtomBar.i: ButtomBar.cpp.i
-.PHONY : ButtomBar.i
-
-# target to preprocess a source file
-ButtomBar.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.i
-.PHONY : ButtomBar.cpp.i
-
-ButtomBar.s: ButtomBar.cpp.s
-.PHONY : ButtomBar.s
-
-# target to generate assembly for a file
-ButtomBar.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/ButtomBar.cpp.s
-.PHONY : ButtomBar.cpp.s
-
 Logger.obj: Logger.cpp.obj
 .PHONY : Logger.obj
 
@@ -188,30 +164,6 @@ Logger.s: Logger.cpp.s
 Logger.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/Logger.cpp.s
 .PHONY : Logger.cpp.s
-
-MainWindow.obj: MainWindow.cpp.obj
-.PHONY : MainWindow.obj
-
-# target to build an object file
-MainWindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/MainWindow.cpp.obj
-.PHONY : MainWindow.cpp.obj
-
-MainWindow.i: MainWindow.cpp.i
-.PHONY : MainWindow.i
-
-# target to preprocess a source file
-MainWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/MainWindow.cpp.i
-.PHONY : MainWindow.cpp.i
-
-MainWindow.s: MainWindow.cpp.s
-.PHONY : MainWindow.s
-
-# target to generate assembly for a file
-MainWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/MainWindow.cpp.s
-.PHONY : MainWindow.cpp.s
 
 MediaManager.obj: MediaManager.cpp.obj
 .PHONY : MediaManager.obj
@@ -285,29 +237,77 @@ PlayController.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayController.cpp.s
 .PHONY : PlayController.cpp.s
 
-PlayList.obj: PlayList.cpp.obj
-.PHONY : PlayList.obj
+QtGUI/ButtomBar.obj: QtGUI/ButtomBar.cpp.obj
+.PHONY : QtGUI/ButtomBar.obj
 
 # target to build an object file
-PlayList.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayList.cpp.obj
-.PHONY : PlayList.cpp.obj
+QtGUI/ButtomBar.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.obj
+.PHONY : QtGUI/ButtomBar.cpp.obj
 
-PlayList.i: PlayList.cpp.i
-.PHONY : PlayList.i
+QtGUI/ButtomBar.i: QtGUI/ButtomBar.cpp.i
+.PHONY : QtGUI/ButtomBar.i
 
 # target to preprocess a source file
-PlayList.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayList.cpp.i
-.PHONY : PlayList.cpp.i
+QtGUI/ButtomBar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.i
+.PHONY : QtGUI/ButtomBar.cpp.i
 
-PlayList.s: PlayList.cpp.s
-.PHONY : PlayList.s
+QtGUI/ButtomBar.s: QtGUI/ButtomBar.cpp.s
+.PHONY : QtGUI/ButtomBar.s
 
 # target to generate assembly for a file
-PlayList.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/PlayList.cpp.s
-.PHONY : PlayList.cpp.s
+QtGUI/ButtomBar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.s
+.PHONY : QtGUI/ButtomBar.cpp.s
+
+QtGUI/MainWindow.obj: QtGUI/MainWindow.cpp.obj
+.PHONY : QtGUI/MainWindow.obj
+
+# target to build an object file
+QtGUI/MainWindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.obj
+.PHONY : QtGUI/MainWindow.cpp.obj
+
+QtGUI/MainWindow.i: QtGUI/MainWindow.cpp.i
+.PHONY : QtGUI/MainWindow.i
+
+# target to preprocess a source file
+QtGUI/MainWindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.i
+.PHONY : QtGUI/MainWindow.cpp.i
+
+QtGUI/MainWindow.s: QtGUI/MainWindow.cpp.s
+.PHONY : QtGUI/MainWindow.s
+
+# target to generate assembly for a file
+QtGUI/MainWindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.s
+.PHONY : QtGUI/MainWindow.cpp.s
+
+QtGUI/PlayList.obj: QtGUI/PlayList.cpp.obj
+.PHONY : QtGUI/PlayList.obj
+
+# target to build an object file
+QtGUI/PlayList.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.obj
+.PHONY : QtGUI/PlayList.cpp.obj
+
+QtGUI/PlayList.i: QtGUI/PlayList.cpp.i
+.PHONY : QtGUI/PlayList.i
+
+# target to preprocess a source file
+QtGUI/PlayList.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.i
+.PHONY : QtGUI/PlayList.cpp.i
+
+QtGUI/PlayList.s: QtGUI/PlayList.cpp.s
+.PHONY : QtGUI/PlayList.s
+
+# target to generate assembly for a file
+QtGUI/PlayList.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.s
+.PHONY : QtGUI/PlayList.cpp.s
 
 SdlPlayer.obj: SdlPlayer.cpp.obj
 .PHONY : SdlPlayer.obj
@@ -367,15 +367,9 @@ help:
 	@echo ... rebuild_cache
 	@echo ... MediaManager_autogen
 	@echo ... MediaManager
-	@echo ... ButtomBar.obj
-	@echo ... ButtomBar.i
-	@echo ... ButtomBar.s
 	@echo ... Logger.obj
 	@echo ... Logger.i
 	@echo ... Logger.s
-	@echo ... MainWindow.obj
-	@echo ... MainWindow.i
-	@echo ... MainWindow.s
 	@echo ... MediaManager.obj
 	@echo ... MediaManager.i
 	@echo ... MediaManager.s
@@ -385,9 +379,15 @@ help:
 	@echo ... PlayController.obj
 	@echo ... PlayController.i
 	@echo ... PlayController.s
-	@echo ... PlayList.obj
-	@echo ... PlayList.i
-	@echo ... PlayList.s
+	@echo ... QtGUI/ButtomBar.obj
+	@echo ... QtGUI/ButtomBar.i
+	@echo ... QtGUI/ButtomBar.s
+	@echo ... QtGUI/MainWindow.obj
+	@echo ... QtGUI/MainWindow.i
+	@echo ... QtGUI/MainWindow.s
+	@echo ... QtGUI/PlayList.obj
+	@echo ... QtGUI/PlayList.i
+	@echo ... QtGUI/PlayList.s
 	@echo ... SdlPlayer.obj
 	@echo ... SdlPlayer.i
 	@echo ... SdlPlayer.s

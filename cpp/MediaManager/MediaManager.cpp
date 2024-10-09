@@ -534,7 +534,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
         double delayDuration = currentVideoPTS - currentAudioPTS;
         if (delayDuration > 0.0 && m_thread_quit == false)
         {
-            av_usleep(delayDuration * 1000000); // 延时
+            av_usleep(delayDuration);   // 微秒延时
         }
     }
 //    logger.debug("Current Video PTS: %f, Last PTS: %f", currentVideoPTS, m_videoLastPTS);

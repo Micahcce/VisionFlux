@@ -21,19 +21,20 @@ set(PROJECT_SOURCES
     main.cpp
     MediaManager.h
     MediaManager.cpp
+    PlayController.h
+    PlayController.cpp
     FrameQueue.h
     Logger.h
     Logger.cpp
-    MainWindow.h
-    MainWindow.cpp
     SdlPlayer.h
     SdlPlayer.cpp
-    ButtomBar.h
-    ButtomBar.cpp
-    PlayList.h
-    PlayList.cpp
-    PlayController.h
-    PlayController.cpp
+
+    QtGUI/MainWindow.h
+    QtGUI/MainWindow.cpp
+    QtGUI/ButtomBar.h
+    QtGUI/ButtomBar.cpp
+    QtGUI/PlayList.h
+    QtGUI/PlayList.cpp
 )
 
 # 创建可执行文件，并指定输出目录为项目的根目录

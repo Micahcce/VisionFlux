@@ -1,6 +1,6 @@
 CMakeFiles/MediaManager.dir/main.cpp.obj: \
  C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\main.cpp \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MainWindow.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\QtGUI/MainWindow.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iostream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
@@ -127,8 +127,8 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/ostream.tcc \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/istream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/istream.tcc \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayController.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MediaManager.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/map \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_tree.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ext/aligned_buffer.h \
@@ -167,7 +167,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/atomic \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/functional \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_function.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\FrameQueue.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/mutex \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_mutex.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue \
@@ -231,7 +231,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/version.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_desc.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\SdlPlayer.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_main.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_stdinc.h \
@@ -346,7 +346,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_version.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_locale.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_misc.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\Logger.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/fstream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/codecvt.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
@@ -385,7 +385,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/imgutils.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/pixdesc.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/time.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\ButtomBar.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\QtGUI/ButtomBar.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -527,7 +527,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\PlayList.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\QtGUI/PlayList.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \

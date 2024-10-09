@@ -1,7 +1,7 @@
 CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\mocs_compilation.cpp \
- C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\EWIEGA46WW/moc_ButtomBar.cpp \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\LTFMYGGEGO/moc_ButtomBar.cpp \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iostream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
@@ -308,7 +308,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qurl.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QListWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qlistview.h \
@@ -562,9 +562,9 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libswresample/version_major.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavutil/time.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\EWIEGA46WW/moc_MainWindow.cpp \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.h \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h \
+ C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\LTFMYGGEGO/moc_MainWindow.cpp \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QMainWindow \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qmainwindow.h \
  D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/QMediaPlayer \
@@ -601,5 +601,5 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/5.12.12/mingw73_64/include/QtGui/qtouchdevice.h \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
  D:/Qt/5.12.12/mingw73_64/include/QtWidgets/qtabwidget.h \
- C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\EWIEGA46WW/moc_PlayList.cpp \
- C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h
+ C:\Users\13055\Desktop\VisionFlux\cpp\build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug\MediaManager_autogen\LTFMYGGEGO/moc_PlayList.cpp \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h

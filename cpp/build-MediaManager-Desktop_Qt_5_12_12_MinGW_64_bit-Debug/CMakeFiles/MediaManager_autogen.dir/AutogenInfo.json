@@ -79,12 +79,6 @@
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.h",
-			"MU",
-			"EWIEGA46WW/moc_ButtomBar.cpp",
-			null
-		],
-		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h",
 			"MU",
 			"EWIEGA46WW/moc_FrameQueue.cpp",
@@ -94,12 +88,6 @@
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h",
 			"MU",
 			"EWIEGA46WW/moc_Logger.cpp",
-			null
-		],
-		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.h",
-			"MU",
-			"EWIEGA46WW/moc_MainWindow.cpp",
 			null
 		],
 		[
@@ -115,9 +103,21 @@
 			null
 		],
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.h",
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h",
 			"MU",
-			"EWIEGA46WW/moc_PlayList.cpp",
+			"LTFMYGGEGO/moc_ButtomBar.cpp",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.h",
+			"MU",
+			"LTFMYGGEGO/moc_MainWindow.cpp",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h",
+			"MU",
+			"LTFMYGGEGO/moc_PlayList.cpp",
 			null
 		],
 		[
@@ -192,17 +192,7 @@
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/ButtomBar.cpp",
-			"MU",
-			null
-		],
-		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MainWindow.cpp",
 			"MU",
 			null
 		],
@@ -217,7 +207,17 @@
 			null
 		],
 		[
-			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayList.cpp",
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.cpp",
 			"MU",
 			null
 		],
