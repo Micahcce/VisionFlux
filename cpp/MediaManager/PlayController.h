@@ -31,7 +31,7 @@ public:
     void endPlay();
 
     //修改播放进度
-    void changePlayProcess(int timeSecs);
+    void changePlayProgress(int timeSecs);
     //修改播放速度
     void changePlaySpeed(float speedFactor);
     //修改音量
@@ -39,6 +39,8 @@ public:
 
     //获取视频时长（秒）
     int getMediaDuration(std::string filePath);
+    //获取当前播放进度
+    float getPlayProgress();
 
     //格式化时长（hh:mm:ss）
     std::string timeFormatting(int secs);

@@ -41,6 +41,9 @@ public:
     //修改进度
     void seekMedia(int timeSecs);
 
+    //获取当前进度
+    float getCurrentProgress() {return m_audioLastPTS;}
+
     //最大音频帧
     enum
     {

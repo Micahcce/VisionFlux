@@ -40,6 +40,7 @@ public slots:
     void slotVolumeChanged();
     void slotUpdateProgress();
     bool slotVideoDoubleClicked();
+    void slotSliderPressed();
     void slotSliderReleased();
 
 private:
@@ -59,12 +60,7 @@ private:
     QSlider* m_volumeSlider;
     QPushButton* m_addFileBtn;
 
-
-    QTimer* m_sliderTimer;        //进度条定时器 1000ms
-    QElapsedTimer* m_elapsedTimer;//校准定时器
-    qint64 m_elapsedTime;         //已经经过的时间
-    bool m_needRectify = false;
-
+    QTimer* m_sliderTimer;        //进度条定时器
 };
 
 #endif // BUTTOMBAR_H

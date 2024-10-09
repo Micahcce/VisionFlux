@@ -15,6 +15,7 @@ void PlayController::startPlay(std::string filePath)
     logger.debug("ready play: %s", filePath.data());
     m_mediaManager->decodeToPlay(filePath.data());
     m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
+    m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
     m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isStarted = true;
     m_mediaInfo->isPlaying = true;
@@ -42,7 +43,7 @@ void PlayController::endPlay()
     m_mediaInfo->isPlaying = false;
 }
 
-void PlayController::changePlayProcess(int timeSecs)
+void PlayController::changePlayProgress(int timeSecs)
 {
     m_mediaManager->setThreadPause(true);
     m_mediaManager->seekMedia(timeSecs);
@@ -68,14 +69,18 @@ void PlayController::changeVolume(int volume)
 int PlayController::getMediaDuration(std::string filePath)
 {
     AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath.data());
-    if (!formatCtx) {
+    if (!formatCtx)
         return 0; // 如果无法获取格式上下文，返回默认值
-    }
     int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
     avformat_close_input(&formatCtx);        // 释放资源
     int secs = duration / AV_TIME_BASE;      // 将微秒转换为秒
 
     return secs;
+}
+
+float PlayController::getPlayProgress()
+{
+    return m_mediaManager->getCurrentProgress();
 }
 
 

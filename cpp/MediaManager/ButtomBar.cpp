@@ -11,13 +11,13 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_currentTime->setText("00:00:00");
     m_timeSlider = new QSlider(Qt::Horizontal, this);
     m_timeSlider->setValue(0);
+    connect(m_timeSlider, &QSlider::sliderPressed, this, &ButtomBar::slotSliderPressed);
     connect(m_timeSlider, &QSlider::sliderReleased, this, &ButtomBar::slotSliderReleased);
     m_totalTime = new QLabel(this);
     m_totalTime->setText("00:00:00");
 
     m_sliderTimer = new QTimer(this);
     connect(m_sliderTimer, &QTimer::timeout, this, &ButtomBar::slotUpdateProgress);
-    m_elapsedTimer = new QElapsedTimer;
 
     QHBoxLayout* hBox = new QHBoxLayout;
     hBox->addWidget(m_currentTime);
@@ -112,25 +112,27 @@ bool ButtomBar::slotVideoDoubleClicked()
     m_playController->startPlay(videoPath.toStdString());
 
     //定时器启动
-    m_sliderTimer->start(1000);
-    m_elapsedTimer->start();
+    m_sliderTimer->start(200);
 
     return true;
 }
 
+void ButtomBar::slotSliderPressed()
+{
+    m_sliderTimer->stop();
+}
+
 void ButtomBar::slotSliderReleased()
 {
-    logger.debug("slider value: %d", m_timeSlider->value());
+    logger.info("slider value: %d", m_timeSlider->value());
     //修改当前时长
     int currentTime = m_timeSlider->value();
     QString currentTimeStr = QString::fromStdString(m_playController->timeFormatting(currentTime));
     m_currentTime->setText(currentTimeStr);
 
     //修改进度
-    m_sliderTimer->stop();
-    m_playController->changePlayProcess(m_timeSlider->value());
-    m_sliderTimer->start(1000);
-    m_elapsedTimer->start();
+    m_playController->changePlayProgress(currentTime);
+    m_sliderTimer->start(200);
 }
 
 void ButtomBar::slotPlayVideo()
@@ -149,12 +151,6 @@ void ButtomBar::slotPlayVideo()
 
             QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
             m_playBtn->setIcon(playIcon);
-
-            // 记录误差时间
-            m_elapsedTime = m_elapsedTimer->elapsed();
-            m_needRectify = true;
-
-            m_sliderTimer->stop();
         }
         else
         {
@@ -163,17 +159,6 @@ void ButtomBar::slotPlayVideo()
 
             QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
             m_playBtn->setIcon(playIcon);
-
-            if(m_needRectify)           // 校正误差时间
-            {
-                int remainingTime = 1000 - m_elapsedTime % 1000;  // 计算剩余时间
-                m_sliderTimer->start(remainingTime);              // 重新启动定时器，剩余时间作为间隔
-            }
-            else
-            {
-                m_sliderTimer->start(1000);
-                m_elapsedTimer->start();
-            }
         }
     }
 }
@@ -210,33 +195,25 @@ void ButtomBar::slotVolumeChanged()
 
 void ButtomBar::slotUpdateProgress()
 {
-    //进度条增加
-    int currentValue = m_timeSlider->value();
-    if (currentValue < m_timeSlider->maximum())
+    logger.debug("%f", m_playController->getPlayProgress());
+    int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress() + 0.2);  //增加0.2s冗余时间，缓解进度条走不满的问题
+
+    //进度条更新
+    if (currentPlayProgress <= m_timeSlider->maximum())
     {
-        m_timeSlider->setValue(currentValue + 1);
+        m_timeSlider->setValue(currentPlayProgress);
     }
 
     //当前时长增加
-    int currentTime = m_timeSlider->value();
-    QString currentTimeStr = QString::fromStdString(m_playController->timeFormatting(currentTime));
+    QString currentTimeStr = QString::fromStdString(m_playController->timeFormatting(currentPlayProgress));
     m_currentTime->setText(currentTimeStr);
 
     //播放完成
-    if(currentTime == m_timeSlider->maximum())
+    if(currentPlayProgress == m_timeSlider->maximum())
     {
         m_playController->endPlay();
+        m_sliderTimer->stop();
         QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
         m_playBtn->setIcon(playIcon);
-    }
-
-    //开启误差计时器
-    m_elapsedTimer->start();
-
-    //校正完成，恢复定时间隔
-    if(m_needRectify)
-    {
-        m_needRectify = false;
-        m_sliderTimer->start(1000);
     }
 }

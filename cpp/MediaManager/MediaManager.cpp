@@ -224,7 +224,12 @@ void MediaManager::seekMedia(int timeSecs)
     int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // 将时间转换为PTS
     logger.info("seek PTS: %d", targetPTS);
 
-    av_seek_frame(m_pFormatCtx, m_videoIndex, targetPTS, AVSEEK_FLAG_BACKWARD); //指定位置没有I帧的话会向前查找
+    // 使用 AVSEEK_FLAG_BACKWARD 来确保向前查找最近的 I 帧
+    if (av_seek_frame(m_pFormatCtx, m_videoIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
+    {
+        logger.error("Error seeking to position.");
+        return;
+    }
     avcodec_flush_buffers(m_pCodecCtx_video);
     avcodec_flush_buffers(m_pCodecCtx_audio);
 
@@ -255,6 +260,8 @@ void MediaManager::seekMedia(int timeSecs)
     }
     av_frame_free(&frame);
     av_packet_free(&packet);
+
+    logger.info("seek complete");
 }
 
 
@@ -354,6 +361,9 @@ void MediaManager::close()
     }
 
     //清理资源，注意顺序避免崩溃
+    m_videoLastPTS = 0.0;
+    m_audioLastPTS = 0.0;
+
     if (m_pSwsCtx)
     {
         sws_freeContext(m_pSwsCtx);
@@ -498,6 +508,7 @@ int MediaManager::thread_audio_display()
 
         audioDelayControl(frame);
 
+        //音频填充参数
         m_sdlPlayer->m_audioChunk = (unsigned char *)m_pAudioParams->outBuff;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
         m_sdlPlayer->m_audioLen = m_pAudioParams->out_buffer_size;
