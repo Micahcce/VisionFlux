@@ -10,9 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     //设置回调
     m_playController->setRenderCallback(
-                [this](AVFrame* frameRGB, int width, int height, float aspectRatio)
+                [this](uint8_t* data, int width, int height, float aspectRatio)
     {
-        renderFrameRGB(frameRGB, width, height, aspectRatio);  // 渲染帧的回调
+        renderFrameRGB(data, width, height, aspectRatio);  // 渲染帧的回调
     });
 
     //播放窗口
@@ -75,9 +75,9 @@ MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::renderFrameRGB(AVFrame *frameRGB, int width, int height, float aspectRatio)
+void MainWindow::renderFrameRGB(uint8_t *data, int width, int height, float aspectRatio)
 {
-    QImage img((uchar*)frameRGB->data[0], width, height, QImage::Format_RGB32);
+    QImage img((uchar*)data, width, height, QImage::Format_RGB32);
     m_videoView->setPixmap(QPixmap::fromImage(img));
 }
 

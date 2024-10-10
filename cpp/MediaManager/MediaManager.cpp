@@ -558,7 +558,7 @@ int MediaManager::thread_video_display()
 
         // 调用回调函数，通知 GUI 渲染
         if (m_renderCallback)
-            m_renderCallback(m_frameRGB, m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
+            m_renderCallback(m_frameRGB->data[0], m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
         else
             logger.error("Render callback not set");
 #endif

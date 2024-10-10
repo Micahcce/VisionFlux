@@ -45,11 +45,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 
 # 设置库的包含目录（包含头文件）
-include_directories(${PROJECT_SOURCE_DIR}/FFmpeg/include
+include_directories(
+    ${PROJECT_SOURCE_DIR}/FFmpeg/include
     ${PROJECT_SOURCE_DIR}/SDL/include)
 
 # 设置库目录（包含.lib文件）
-link_directories(${PROJECT_SOURCE_DIR}/FFmpeg/lib
+link_directories(
+    ${PROJECT_SOURCE_DIR}/FFmpeg/lib
     ${PROJECT_SOURCE_DIR}/SDL/lib)
 
 # 添加库到目标（例如 avformat, avcodec 等）

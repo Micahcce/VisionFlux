@@ -6,11 +6,11 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
     //Debug
     {
         // 添加视频项
-        addVideoItem("C:\\Users\\13055\\Desktop\\output.mp4", "00:07", "未观看");
-        addVideoItem("C:\\Users\\13055\\Desktop\\aki.mp4", "00:10", "未观看");
-        addVideoItem("C:\\Users\\13055\\Desktop\\animation.mp4", "00:20", "未观看");
-        addVideoItem("C:\\Users\\13055\\Desktop\\camel.mp4", "00:19", "未观看");
-        addVideoItem("C:\\Users\\13055\\Desktop\\out.mp3", "05:00", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\media\\output.mp4", "00:07", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\media\\aki.mp4", "00:10", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\media\\animation.mp4", "00:20", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\media\\camel.mp4", "00:19", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\media\\out.mp3", "05:00", "未观看");
     }
 }
 
@@ -193,6 +193,13 @@ void PlayList::extractThumbnail(const char* videoFilePath, const char* outputIma
 
 void PlayList::addVideoItem(const QString &title, const QString &duration, const QString &status)
 {
+    if(QFile::exists(title) == false)
+    {
+        logger.error("media file is not exist");
+        return;
+    }
+
+    //创建item
     QListWidgetItem *item = new QListWidgetItem();
     item->setSizeHint(QSize(0, 100)); // 设置每个项的大小
 
@@ -210,7 +217,7 @@ void PlayList::addVideoItem(const QString &title, const QString &duration, const
 
     // 不存在则创建
     QString fileExtension = title.section('.', -1); // 取最后一个点后面的部分
-    if(fileExtension != "mp3")                      //音频文件无需创建缩略图
+    if(fileExtension != "mp3")                      // 音频文件无需创建缩略图
     {
         if(QFile::exists(outputImagePath) == false)
             extractThumbnail(title.toStdString().data(), outputImagePath.toStdString().data());

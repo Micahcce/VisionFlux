@@ -31,6 +31,7 @@ public:
 
     //获取数据
     AVFormatContext* getMediaInfo(const char* filePath);
+
     //解码播放
     void decodeToPlay(const char* filePath);
     //转码保存
@@ -65,8 +66,8 @@ public:
     void close();
 
     //设置渲染回调函数
-    using RenderCallback = std::function<void(AVFrame*, int, int, float)>;
-    void setRenderCallback(RenderCallback callback) {std::move(m_renderCallback) = callback;}
+    using RenderCallback = std::function<void(uint8_t*, int, int, float)>;
+    void setRenderCallback(RenderCallback callback) {m_renderCallback = std::move(callback);}
 
     SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
 

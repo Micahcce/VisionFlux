@@ -38,7 +38,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void renderFrameRGB(AVFrame *frameRGB, int width, int height, float aspectRatio);
+    void renderFrameRGB(uint8_t *data, int width, int height, float aspectRatio);
 
 private:
     PlayController* m_playController;
