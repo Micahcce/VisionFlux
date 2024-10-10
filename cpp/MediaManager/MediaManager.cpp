@@ -170,7 +170,7 @@ void MediaManager::decodeToPlay(const char* filePath)
 #endif
 }
 
-void MediaManager::seekMedia(int timeSecs)
+void MediaManager::seekFrameByVideoStream(int timeSecs)
 {
     m_frameQueue->clear();
 
@@ -190,7 +190,8 @@ void MediaManager::seekMedia(int timeSecs)
         return;
     }
     avcodec_flush_buffers(m_pCodecCtx_video);
-    avcodec_flush_buffers(m_pCodecCtx_audio);
+    if(m_audioIndex >= 0)
+        avcodec_flush_buffers(m_pCodecCtx_audio);
 
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
@@ -206,6 +207,60 @@ void MediaManager::seekMedia(int timeSecs)
         {
             avcodec_send_packet(m_pCodecCtx_video, packet);
             while (avcodec_receive_frame(m_pCodecCtx_video, frame) >= 0)
+            {
+                if (frame->pts >= targetPTS)
+                {
+                    // 找到目标帧
+                    throwing = false;
+                    break;
+                }
+            }
+        }
+        av_packet_unref(packet);
+    }
+    av_frame_free(&frame);
+    av_packet_free(&packet);
+
+    logger.info("seek complete");
+}
+
+void MediaManager::seekFrameByAudioStream(int timeSecs)
+{
+    m_frameQueue->clear();
+
+    AVRational time_base = m_pFormatCtx->streams[m_audioIndex]->time_base;
+    logger.debug("time_base.num: %d", time_base.num);
+    logger.debug("time_base.den: %d", time_base.den);
+
+    // 将目标时间转换为PTS
+    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // 将时间转换为PTS
+    logger.info("seek PTS: %d", targetPTS);
+
+    // 使用 AVSEEK_FLAG_BACKWARD 从当前位置向后查找最近的同步点，不使用该标志则会向前查找
+    if (av_seek_frame(m_pFormatCtx, m_audioIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
+    {
+        logger.error("Error seeking to position.");
+        return;
+    }
+
+    if(m_videoIndex >= 0)
+        avcodec_flush_buffers(m_pCodecCtx_video);
+    avcodec_flush_buffers(m_pCodecCtx_audio);
+
+    AVPacket* packet = av_packet_alloc();
+    AVFrame* frame = av_frame_alloc();
+    bool throwing = true;
+
+    //丢弃多余帧
+    while (throwing)
+    {
+        if (av_read_frame(m_pFormatCtx, packet) < 0)
+            break; // 没有更多的帧
+
+        if (packet->stream_index == m_audioIndex)
+        {
+            avcodec_send_packet(m_pCodecCtx_audio, packet);
+            while (avcodec_receive_frame(m_pCodecCtx_audio, frame) >= 0)
             {
                 if (frame->pts >= targetPTS)
                 {
@@ -328,9 +383,6 @@ void MediaManager::close()
     }
 
     //清理资源，注意顺序避免崩溃
-    m_videoLastPTS = 0.0;
-    m_audioLastPTS = 0.0;
-
     if (m_pSwsCtx)
     {
         sws_freeContext(m_pSwsCtx);
@@ -378,6 +430,11 @@ void MediaManager::close()
         avformat_close_input(&m_pFormatCtx);
         m_pFormatCtx = nullptr;
     }
+
+    m_videoLastPTS = 0.0;
+    m_audioLastPTS = 0.0;
+    m_videoIndex = -1;
+    m_audioIndex = -1;
 
     //安全退出标志
     m_thread_safe_exited = true;
@@ -586,6 +643,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
         if (m_videoLastPTS != 0.0)
         {
             double delayDuration = currentVideoPTS - m_videoLastPTS;
+            logger.debug("%f", delayDuration);
             if (delayDuration > 0.0 && m_thread_quit == false)
             {
                 av_usleep(delayDuration * AV_TIME_BASE); // 微秒延时

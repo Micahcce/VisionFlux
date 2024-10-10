@@ -11,6 +11,7 @@ public:
     bool isStarted = false;
     bool isPlaying = false;
     bool hasAudioStream = false;
+    bool hasVideoStream = false;
 
     float speed = 1.0;
     int volume = 100;

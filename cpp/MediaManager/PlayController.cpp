@@ -18,6 +18,8 @@ void PlayController::startPlay(std::string filePath)
     //是否有音频流
     if(m_mediaManager->getAudioIndex() >= 0)
         m_mediaInfo->hasAudioStream = true;
+    if(m_mediaManager->getVideoIndex() >= 0)
+        m_mediaInfo->hasVideoStream = true;
     if(m_mediaInfo->hasAudioStream)
     {
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
@@ -49,12 +51,16 @@ void PlayController::endPlay()
     m_mediaInfo->isStarted = false;
     m_mediaInfo->isPlaying = false;
     m_mediaInfo->hasAudioStream = false;
+    m_mediaInfo->hasVideoStream = false;
 }
 
 void PlayController::changePlayProgress(int timeSecs)
 {
     m_mediaManager->setThreadPause(true);
-    m_mediaManager->seekMedia(timeSecs);
+    if(m_mediaInfo->hasVideoStream == true)
+        m_mediaManager->seekFrameByVideoStream(timeSecs);
+    else
+        m_mediaManager->seekFrameByAudioStream(timeSecs);
     m_mediaManager->setThreadPause(false);
 }
 
@@ -63,21 +69,23 @@ void PlayController::changePlaySpeed(float speedFactor)
     if(m_mediaInfo->mediaName == "")
         return;
 
+    m_mediaInfo->speed = speedFactor;
+
     if(m_mediaInfo->hasAudioStream)
-    {
-        m_mediaInfo->speed = speedFactor;
         m_mediaManager->getSdlPlayer()->audioChangeSpeed(m_mediaInfo->speed);
-    }
+    else
+        ;//待完成：单视频流变速逻辑
 }
 
 void PlayController::changeVolume(int volume)
 {
-    if(!m_mediaInfo->hasAudioStream)
-        return;
     if(m_mediaInfo->mediaName == "")
         return;
+
     m_mediaInfo->volume = volume;
-    m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
+
+    if(m_mediaInfo->hasAudioStream)
+        m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
 int PlayController::getMediaDuration(std::string filePath)

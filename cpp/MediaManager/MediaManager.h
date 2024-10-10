@@ -39,13 +39,15 @@ public:
     //推流
 
     //修改进度
-    void seekMedia(int timeSecs);
+    void seekFrameByVideoStream(int timeSecs);
+    void seekFrameByAudioStream(int timeSecs);
 
     //获取当前进度
     float getCurrentProgress();
 
-    //获取音频流索引
+    //获取流索引
     int getAudioIndex() {return m_audioIndex;}
+    int getVideoIndex() {return m_videoIndex;}
 
     //最大音频帧
     enum

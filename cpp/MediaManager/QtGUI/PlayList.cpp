@@ -9,6 +9,8 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
         addVideoItem("C:\\Users\\13055\\Desktop\\output.mp4", "00:07", "未观看");
         addVideoItem("C:\\Users\\13055\\Desktop\\aki.mp4", "00:10", "未观看");
         addVideoItem("C:\\Users\\13055\\Desktop\\animation.mp4", "00:20", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\camel.mp4", "00:19", "未观看");
+        addVideoItem("C:\\Users\\13055\\Desktop\\out.mp3", "05:00", "未观看");
     }
 }
 
@@ -104,23 +106,10 @@ void PlayList::extractThumbnail(const char* videoFilePath, const char* outputIma
     AVFrame* frame = av_frame_alloc();
     AVFrame* frameRGB = av_frame_alloc();
 
-    if (!frameRGB || !packet || !frame) {
-        logger.error("Could not allocate frame or packet.");
-        av_frame_free(&frameRGB);
-        av_frame_free(&frame);
-        av_packet_free(&packet);
-        avcodec_free_context(&codecCtx);
-        avformat_close_input(&formatCtx);
-        return;
-    }
-
     // 设置输出图像的参数
     int numBytes = av_image_get_buffer_size(AV_PIX_FMT_RGB32, codecCtx->width, codecCtx->height, 1);
     uint8_t* buffer = (uint8_t*)av_malloc(numBytes * sizeof(uint8_t));
     av_image_fill_arrays(frameRGB->data, frameRGB->linesize, buffer, AV_PIX_FMT_RGB32, codecCtx->width, codecCtx->height, 1);
-
-    // 提取第1、2、3秒的帧
-    bool succeed = false;
 
     // 初始化swsCtx（假设codecCtx的参数在整个过程中保持不变）
     SwsContext* swsCtx = sws_getContext(
@@ -140,6 +129,9 @@ void PlayList::extractThumbnail(const char* videoFilePath, const char* outputIma
         avformat_close_input(&formatCtx);
         return;
     }
+
+    // 提取第1、2、3秒的帧
+    bool succeed = false;
 
     for (int i = 0; i < 3 && !succeed; i++)
     {  // 成功保存后结束循环
