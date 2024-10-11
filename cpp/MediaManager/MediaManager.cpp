@@ -651,7 +651,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
             }
         }
     }
-    logger.info("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
+    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;

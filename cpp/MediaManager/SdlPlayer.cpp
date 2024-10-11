@@ -1,7 +1,8 @@
 #include "SdlPlayer.h"
 
 // 构造函数
-SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr),m_volume(100)
+SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr),
+    m_volume(100), m_raw_sample_rate(0)
 {
 }
 
@@ -69,6 +70,9 @@ bool SdlPlayer::initAudioDevice(AudioParams* audioParams)
     m_wantSpec.samples = audioParams->out_nb_samples;
     m_wantSpec.callback = fill_audio;                     //回调函数
     m_wantSpec.userdata = this;
+
+    //保存原始采样率用于变速
+    m_raw_sample_rate = audioParams->out_sample_rate;
 
     //打开音频设备
     if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
@@ -147,7 +151,7 @@ void SdlPlayer::audioChangeSpeed(float speedFactor)
 {
     //通过修改采样率实现变速
     SDL_CloseAudio();
-    m_wantSpec.freq = m_wantSpec.freq * speedFactor;
+    m_wantSpec.freq = m_raw_sample_rate * speedFactor;
 
     //打开音频设备
     if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)

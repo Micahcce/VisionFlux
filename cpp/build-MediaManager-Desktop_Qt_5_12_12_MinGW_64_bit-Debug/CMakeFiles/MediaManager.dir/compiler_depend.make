@@ -650,6 +650,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
@@ -1572,6 +1573,7 @@ CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.obj: C:/Users/13055/Desktop/Visi
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTimer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
@@ -2106,6 +2108,7 @@ CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.obj: C:/Users/13055/Desktop/Vis
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
@@ -2604,6 +2607,7 @@ CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.obj: C:/Users/13055/Desktop/Visio
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qalgorithms.h \
@@ -2622,6 +2626,7 @@ CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.obj: C:/Users/13055/Desktop/Visio
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h \
@@ -3364,6 +3369,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile \
+  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QString \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime \
@@ -4209,8 +4215,6 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_mutex.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/new:
 
-D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog:
-
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/ratio:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdexcept:
@@ -4224,6 +4228,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/stdlib.h:
 D:/Qt/5.12.12/mingw73_64/include/QtCore/qlist.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/string:
+
+D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/PlayController.h:
 
@@ -4892,6 +4898,8 @@ D:/Qt/5.12.12/mingw73_64/include/QtMultimedia/qtmultimediaglobal.h:
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.cpp:
 
 D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkconfiguration.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout:
 

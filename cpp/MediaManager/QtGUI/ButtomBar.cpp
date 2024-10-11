@@ -124,6 +124,12 @@ void ButtomBar::slotSliderPressed()
 
 void ButtomBar::slotSliderReleased()
 {
+    if(m_playController->getMediaPlayInfo()->mediaName == "")
+    {
+        logger.warning("No media is currently playing.");
+        return;
+    }
+
     logger.info("slider value: %d", m_timeSlider->value());
     //修改当前时长
     int currentTime = m_timeSlider->value();

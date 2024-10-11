@@ -223,10 +223,22 @@ void PlayList::addVideoItem(const QString &title, const QString &duration, const
             extractThumbnail(title.toStdString().data(), outputImagePath.toStdString().data());
     }
 
-    // 添加封面图像
+    // 添加封面图像，无封面则填充文件名
     QLabel *thumbnail = new QLabel();
-    QPixmap pixmap(outputImagePath);
-    thumbnail->setPixmap(pixmap.scaled(80, 60, Qt::KeepAspectRatio)); // 调整封面图像大小
+    thumbnail->setFixedSize(80, 60);
+    if(QFile::exists(outputImagePath) == true)
+    {
+        QPixmap pixmap(outputImagePath);
+        thumbnail->setPixmap(pixmap.scaled(80, 60, Qt::KeepAspectRatio)); // 调整封面图像大小
+    }
+    else
+    {
+        QFileInfo fileInfo(title);
+        QString fileName = fileInfo.fileName();
+        thumbnail->setAlignment(Qt::AlignCenter);
+        thumbnail->setText(fileName);
+    }
+
 
     // 添加标题和其他信息
     QLabel *titleLabel = new QLabel(title);

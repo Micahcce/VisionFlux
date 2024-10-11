@@ -12,6 +12,7 @@
 #include <QFont>
 #include <QFile>
 #include <QPainter>
+#include <QFileInfo>
 
 extern "C" {
 #include "libavformat/avformat.h"

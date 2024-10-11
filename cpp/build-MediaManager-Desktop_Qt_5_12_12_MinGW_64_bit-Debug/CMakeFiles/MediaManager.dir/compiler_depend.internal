@@ -653,6 +653,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime
@@ -1577,6 +1578,7 @@ CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.obj
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QTimer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h
@@ -2112,6 +2114,7 @@ CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.obj
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime
@@ -2611,6 +2614,7 @@ CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qabstractitemmodel.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qalgorithms.h
@@ -2629,6 +2633,7 @@ CMakeFiles/MediaManager.dir/QtGUI/PlayList.cpp.obj
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qdebug.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfile.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qfiledevice.h
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/qfileinfo.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qflags.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qgenericatomic.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/qglobal.h
@@ -3373,6 +3378,7 @@ CMakeFiles/MediaManager.dir/main.cpp.obj
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDebug
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QElapsedTimer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QFile
+ D:/Qt/5.12.12/mingw73_64/include/QtCore/QFileInfo
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QSharedDataPointer
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QString
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QTime
