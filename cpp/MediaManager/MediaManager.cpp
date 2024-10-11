@@ -602,12 +602,14 @@ int MediaManager::thread_audio_display()
             break;
         }
 
+        // 音频PTS计算
+        m_audioLastPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_audioIndex]->time_base);
+
+        // 等待SDL音频播放器完成当前的音频数据处理和输出
         while(m_sdlPlayer->m_audioLen > 0)
             delayMs(1);
 
-        audioDelayControl(frame);
-
-        //音频填充参数
+        // 音频填充参数
         m_sdlPlayer->m_audioChunk = (unsigned char *)m_pAudioParams->outBuff;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
         m_sdlPlayer->m_audioLen = m_pAudioParams->out_buffer_size;
@@ -633,7 +635,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
             double delayDuration = currentVideoPTS - m_audioLastPTS;
             if (delayDuration > 0.0 && m_thread_quit == false)
             {
-                av_usleep(delayDuration);   // 微秒延时
+                av_usleep(delayDuration * AV_TIME_BASE);   // 微秒延时
             }
         }
     }
@@ -643,35 +645,16 @@ void MediaManager::videoDelayControl(AVFrame* frame)
         if (m_videoLastPTS != 0.0)
         {
             double delayDuration = currentVideoPTS - m_videoLastPTS;
-            logger.debug("%f", delayDuration);
             if (delayDuration > 0.0 && m_thread_quit == false)
             {
                 av_usleep(delayDuration * AV_TIME_BASE); // 微秒延时
             }
         }
     }
-//    logger.debug("Current Video PTS: %f, Last PTS: %f", currentVideoPTS, m_videoLastPTS);
+    logger.info("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;
-}
-
-void MediaManager::audioDelayControl(AVFrame *frame)
-{
-    //音频按pts渲染
-    double currentAudioPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_audioIndex]->time_base);
-    if (m_audioLastPTS != 0.0)
-    {
-        double delayDuration = currentAudioPTS - m_audioLastPTS;
-        if (delayDuration > 0.0 && m_thread_quit == false)
-        {
-            av_usleep(delayDuration); // 微秒延时
-        }
-    }
-//    logger.debug("Current Audio PTS: %f, Last PTS: %f", currentAudioPTS, m_audioLastPTS);
-
-    // 记录当前音频PTS
-    m_audioLastPTS = currentAudioPTS;
 }
 
 void MediaManager::frameYuvToRgb()

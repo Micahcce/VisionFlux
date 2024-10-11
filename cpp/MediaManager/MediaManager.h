@@ -54,7 +54,7 @@ public:
     enum
     {
         MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
-        MAX_NODE_NUMBER = 20
+        MAX_NODE_NUMBER = 50
     };
 
     //线程状态
@@ -76,7 +76,6 @@ private:
     void initAudioCodec();
     void initAudioDevice();
     void videoDelayControl(AVFrame* frame);
-    void audioDelayControl(AVFrame* frame);
     void frameYuvToRgb();
     void delayMs(int ms);
 
