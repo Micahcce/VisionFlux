@@ -47,12 +47,16 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # 设置库的包含目录（包含头文件）
 include_directories(
     ${PROJECT_SOURCE_DIR}/FFmpeg/include
-    ${PROJECT_SOURCE_DIR}/SDL/include)
+    ${PROJECT_SOURCE_DIR}/SDL/include
+    ${PROJECT_SOURCE_DIR}/SoundTouch/include
+)
 
 # 设置库目录（包含.lib文件）
 link_directories(
     ${PROJECT_SOURCE_DIR}/FFmpeg/lib
-    ${PROJECT_SOURCE_DIR}/SDL/lib)
+    ${PROJECT_SOURCE_DIR}/SDL/lib
+    ${PROJECT_SOURCE_DIR}/SoundTouch/lib
+)
 
 # 添加库到目标（例如 avformat, avcodec 等）
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -68,6 +72,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2.lib
     ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2main.lib
     ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2test.lib
+
+    ${PROJECT_SOURCE_DIR}/SoundTouch/lib/libSoundTouch.a
 
     Qt5::Core
     Qt5::Widgets

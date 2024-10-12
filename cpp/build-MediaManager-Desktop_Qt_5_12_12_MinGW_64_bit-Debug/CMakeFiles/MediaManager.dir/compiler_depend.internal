@@ -274,6 +274,10 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_video.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h
@@ -501,6 +505,7 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stat64.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stdarg.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_timeval.h
+ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/corecrt_startup.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/crtdefs.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/ctype.h
@@ -645,6 +650,10 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h
  C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/MediaManager_autogen/LTFMYGGEGO/moc_ButtomBar.cpp
  C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/MediaManager_autogen/LTFMYGGEGO/moc_MainWindow.cpp
  C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/MediaManager_autogen/LTFMYGGEGO/moc_PlayList.cpp
@@ -1203,6 +1212,10 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_video.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h
@@ -1431,6 +1444,7 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stat64.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stdarg.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_timeval.h
+ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/corecrt_startup.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/crtdefs.h
  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/ctype.h
@@ -1572,6 +1586,10 @@ CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h
  D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime
@@ -2106,6 +2124,10 @@ CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h
@@ -3370,6 +3392,10 @@ CMakeFiles/MediaManager.dir/main.cpp.obj
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.h
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h

@@ -11,6 +11,7 @@
 #include "FrameQueue.h"
 #include "SdlPlayer.h"
 #include "Logger.h"
+#include <SoundTouch.h>
 
 extern "C"
 {
@@ -39,6 +40,7 @@ public:
     //拉流保存
     //推流
 
+
     //修改进度
     void seekFrameByVideoStream(int timeSecs);
     void seekFrameByAudioStream(int timeSecs);
@@ -49,6 +51,9 @@ public:
     //获取流索引
     int getAudioIndex() {return m_audioIndex;}
     int getVideoIndex() {return m_videoIndex;}
+
+    //变速
+    void audioChangeSpeed(float speedFactor);
 
     //最大音频帧
     enum
@@ -106,6 +111,7 @@ private:
 
     FrameQueue* m_frameQueue;
     SdlPlayer* m_sdlPlayer;
+    soundtouch::SoundTouch* m_soundTouch;
 
     //媒体数据相关，其中Index同时用于音视频流是否存在的判断
     AVFormatContext* m_pFormatCtx;
@@ -123,6 +129,7 @@ private:
     //音频变量
     AudioParams* m_pAudioParams;
     SwrContext *m_swrCtx;
+    float m_speedFactor;
 
     //视频转换变量
     AVFrame *m_frameRGB;

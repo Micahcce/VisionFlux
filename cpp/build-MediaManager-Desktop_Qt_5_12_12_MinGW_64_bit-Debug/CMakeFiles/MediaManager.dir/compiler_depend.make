@@ -272,6 +272,10 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj: C:/Users/13055/Desktop/VisionF
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_video.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h \
@@ -499,6 +503,7 @@ CMakeFiles/MediaManager.dir/MediaManager.cpp.obj: C:/Users/13055/Desktop/VisionF
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stat64.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_timeval.h \
+  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/corecrt_startup.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/crtdefs.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/ctype.h \
@@ -642,6 +647,10 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: Media
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
   MediaManager_autogen/LTFMYGGEGO/moc_ButtomBar.cpp \
   MediaManager_autogen/LTFMYGGEGO/moc_MainWindow.cpp \
   MediaManager_autogen/LTFMYGGEGO/moc_PlayList.cpp \
@@ -1199,6 +1208,10 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: C:/Users/13055/Desktop/Visio
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_video.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h \
@@ -1427,6 +1440,7 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: C:/Users/13055/Desktop/Visio
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stat64.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/_timeval.h \
+  D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/corecrt_startup.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/crtdefs.h \
   D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/ctype.h \
@@ -1567,6 +1581,10 @@ CMakeFiles/MediaManager.dir/QtGUI/ButtomBar.cpp.obj: C:/Users/13055/Desktop/Visi
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h \
   D:/Qt/5.12.12/mingw73_64/include/QtCore/QDateTime \
@@ -2100,6 +2118,10 @@ CMakeFiles/MediaManager.dir/QtGUI/MainWindow.cpp.obj: C:/Users/13055/Desktop/Vis
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h \
@@ -3361,6 +3383,10 @@ CMakeFiles/MediaManager.dir/main.cpp.obj: C:/Users/13055/Desktop/VisionFlux/cpp/
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SdlPlayer.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/ButtomBar.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.h \
   C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.h \
@@ -4055,13 +4081,15 @@ D:/Qt/5.12.12/mingw73_64/include/QtCore/qnumeric.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/ostream_insert.h:
 
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h:
+
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/defs.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/refwrap.h:
 
-D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetworkglobal.h:
-
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_function.h:
+
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/stl_raw_storage_iter.h:
 
@@ -4093,9 +4121,9 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/queue:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cerrno:
 
-D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/chrono:
-
 D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h:
+
+D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/chrono:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg:
 
@@ -4263,6 +4291,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdint.h:
 
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h:
+
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32/bits/c++config.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/QString:
@@ -4393,8 +4423,6 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/std_fu
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/sec_api/wchar_s.h:
 
-D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkrequest.h:
-
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/signal.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/stdlib.h:
@@ -4503,8 +4531,6 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_atomic.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL.h:
 
-D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication:
-
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_assert.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/SDL_audio.h:
@@ -4610,6 +4636,8 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/begin_code.h:
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/include/close_code.h:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/avxintrin.h:
+
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.h:
 
@@ -4730,6 +4758,8 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/xsavecintrin.h:
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/xtestintrin.h:
 
 D:/Qt/5.12.12/mingw73_64/include/QtCore/QVariant:
+
+D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h:
 
 D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/inttypes.h:
 
@@ -4899,6 +4929,12 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/PlayList.cpp:
 
 D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkconfiguration.h:
 
+D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qnetworkrequest.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtNetwork/qtnetworkglobal.h:
+
+D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QApplication:
+
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QFileDialog:
 
 D:/Qt/5.12.12/mingw73_64/include/QtWidgets/QHBoxLayout:
@@ -4964,8 +5000,6 @@ D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/unifor
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstddef:
 
 D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/iterator:
-
-D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h:
 
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/QtGUI/MainWindow.cpp:
 

@@ -239,6 +239,7 @@ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: C:/Users/13
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/lib/SDL2.lib
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/lib/SDL2main.lib
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SDL/lib/SDL2test.lib
+C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/lib/libSoundTouch.a
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: D:/Qt/5.12.12/mingw73_64/lib/libQt5Widgetsd.a
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: D:/Qt/5.12.12/mingw73_64/lib/libQt5Multimediad.a
 C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/MediaManager.exe: D:/Qt/5.12.12/mingw73_64/lib/libQt5Guid.a

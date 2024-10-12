@@ -2,7 +2,7 @@
 
 // 构造函数
 SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr),
-    m_volume(100), m_raw_sample_rate(0)
+    m_volume(100), m_raw_nb_samples(0)
 {
 }
 
@@ -72,7 +72,7 @@ bool SdlPlayer::initAudioDevice(AudioParams* audioParams)
     m_wantSpec.userdata = this;
 
     //保存原始采样率用于变速
-    m_raw_sample_rate = audioParams->out_sample_rate;
+    m_raw_nb_samples = audioParams->out_nb_samples;
 
     //打开音频设备
     if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
@@ -149,9 +149,9 @@ void SdlPlayer::setVolume(int volume)
 
 void SdlPlayer::audioChangeSpeed(float speedFactor)
 {
-    //通过修改采样率实现变速
+    //需要修改每帧样本数
     SDL_CloseAudio();
-    m_wantSpec.freq = m_raw_sample_rate * speedFactor;
+    m_wantSpec.samples = m_raw_nb_samples / speedFactor;
 
     //打开音频设备
     if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)

@@ -60,7 +60,7 @@ private:
     SDL_Rect m_rect;           // SDL矩形
 
     SDL_AudioSpec m_wantSpec;
-    int m_raw_sample_rate;     //记录原始采样率
+    int m_raw_nb_samples;     //记录原始样本数
     int m_volume;              //音量
 };
 

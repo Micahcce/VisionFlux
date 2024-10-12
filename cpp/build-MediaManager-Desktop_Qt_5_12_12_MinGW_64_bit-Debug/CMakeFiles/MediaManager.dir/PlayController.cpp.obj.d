@@ -365,6 +365,11 @@ CMakeFiles/MediaManager.dir/PlayController.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
+ D:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include/assert.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/soundtouch_config.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavformat/avformat.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/codec_par.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FFmpeg/include/libavcodec/defs.h \

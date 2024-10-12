@@ -1,10 +1,13 @@
 #include "MediaManager.h"
 #define USE_SDL 0
 
+using namespace soundtouch;
+
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
       m_frameQueue(nullptr),
       m_sdlPlayer(nullptr),
+      m_soundTouch(nullptr),
       m_pFormatCtx(nullptr),
       m_videoIndex(-1),
       m_audioIndex(-1),
@@ -25,7 +28,8 @@ MediaManager::MediaManager()
       m_thread_video_exited(true),
       m_thread_audio_exited(true),
       m_videoLastPTS(0.0),
-      m_audioLastPTS(0.0)
+      m_audioLastPTS(0.0),
+      m_speedFactor(1.0)
 {
     m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
 //    logger.setLogLevel(LogLevel::INFO);
@@ -286,6 +290,14 @@ float MediaManager::getCurrentProgress()
         return m_videoLastPTS;
 }
 
+void MediaManager::audioChangeSpeed(float speedFactor)
+{
+    logger.info("change speed to %0.2f", speedFactor);
+
+    m_soundTouch->setTempo(speedFactor);
+    m_sdlPlayer->audioChangeSpeed(speedFactor);
+    m_speedFactor = speedFactor;
+}
 
 //视频解码线程
 int MediaManager::thread_media_decode()
@@ -395,6 +407,12 @@ void MediaManager::close()
         m_sdlPlayer = nullptr;
     }
 
+    if(m_soundTouch)
+    {
+        delete m_soundTouch;
+        m_soundTouch = nullptr;
+    }
+
     if (m_pAudioParams && m_pAudioParams->outBuff)
     {
         av_free(m_pAudioParams->outBuff);
@@ -488,9 +506,6 @@ void MediaManager::initAudioDevice()
     m_pAudioParams->out_nb_samples =  m_pCodecCtx_audio->frame_size;            //单个通道中的样本数  1024
     m_pAudioParams->out_sample_fmt =  AV_SAMPLE_FMT_FLT;                        //声音格式  SDL仅支持部分音频格式
 
-    //依据参数计算输出缓冲区大小
-    m_pAudioParams->out_buffer_size = av_samples_get_buffer_size(NULL, m_pAudioParams->out_channels, m_pAudioParams->out_nb_samples, m_pAudioParams->out_sample_fmt, 1);
-
     //创建音频数据缓冲区
     m_pAudioParams->outBuff = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_pAudioParams->out_channels);
 
@@ -510,6 +525,12 @@ void MediaManager::initAudioDevice()
 
     //swr上下文初始化
     swr_init(m_swrCtx);
+
+    // 初始化 SoundTouch 实例
+    m_soundTouch = new SoundTouch;
+    m_soundTouch->setSampleRate(m_pAudioParams->out_sample_rate);  // 设置采样率
+    m_soundTouch->setChannels(m_pAudioParams->out_channels);      // 设置通道数
+    m_soundTouch->setTempo(m_speedFactor);                       // 设置倍速播放
 
     //开启音频设备
     m_sdlPlayer = new SdlPlayer;
@@ -602,6 +623,13 @@ int MediaManager::thread_audio_display()
             break;
         }
 
+        // 将重采样后的音频数据传递给 SoundTouch 进行处理
+        m_soundTouch->putSamples((const float*)m_pAudioParams->outBuff, ret);
+
+        // 获取处理后的样本
+        int numSamplesProcessed = m_soundTouch->receiveSamples((float*)m_pAudioParams->outBuff, m_pAudioParams->out_nb_samples / m_speedFactor);
+//        logger.debug("putSamples = %d, numSamplesProcessed = %d", ret, numSamplesProcessed);
+
         // 音频PTS计算
         m_audioLastPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_audioIndex]->time_base);
 
@@ -612,7 +640,7 @@ int MediaManager::thread_audio_display()
         // 音频填充参数
         m_sdlPlayer->m_audioChunk = (unsigned char *)m_pAudioParams->outBuff;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
-        m_sdlPlayer->m_audioLen = m_pAudioParams->out_buffer_size;
+        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_pAudioParams->out_channels * sizeof(float);  // 处理后的数据长度
 
         av_frame_unref(frame);
     }
@@ -651,7 +679,7 @@ void MediaManager::videoDelayControl(AVFrame* frame)
             }
         }
     }
-    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
+//    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;
