@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\MediaManager.dir/objects.a
-D:\Qt\Tools\mingw730_64\bin\ar.exe qc CMakeFiles\MediaManager.dir/objects.a @CMakeFiles\MediaManager.dir\objects1.rsp
-D:\Qt\Tools\mingw730_64\bin\g++.exe -O3 -DNDEBUG -Wl,--whole-archive CMakeFiles\MediaManager.dir/objects.a -Wl,--no-whole-archive -o C:\Users\13055\Desktop\VisionFlux\cpp\MediaManager\MediaManager.exe -Wl,--out-implib,libMediaManager.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\MediaManager.dir\linkLibs.rsp
