@@ -36,6 +36,7 @@ public:
 public slots:
     void slotPlayVideo();
     void slotAddFile();
+    void debugAddFile(QString filePath);
     void slotChangeSpeed();
     void slotVolumeChanged();
     void slotUpdateProgress();

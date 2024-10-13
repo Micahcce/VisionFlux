@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MediaManager_autogen.dir/AutogenUsed.txt"
   "CMakeFiles/MediaManager_autogen.dir/ParseCache.txt"
   "MediaManager_autogen"
+  "CMakeFiles/MediaManager.dir/BmpAndWavAchieve.cpp.obj"
+  "CMakeFiles/MediaManager.dir/BmpAndWavAchieve.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/Logger.cpp.obj"
   "CMakeFiles/MediaManager.dir/Logger.cpp.obj.d"
   "CMakeFiles/MediaManager.dir/MediaManager.cpp.obj"

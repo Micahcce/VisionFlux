@@ -69,6 +69,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     //初始化窗口宽高比
     m_videoView->adjustSize();
+
+    //Debug
+    {
+        // 添加视频项
+        m_bottomBar->debugAddFile("C:\\Users\\13055\\Desktop\\media\\output.mp4");
+        m_bottomBar->debugAddFile("C:\\Users\\13055\\Desktop\\media\\aki.mp4");
+        m_bottomBar->debugAddFile("C:\\Users\\13055\\Desktop\\media\\animation.mp4");
+        m_bottomBar->debugAddFile("C:\\Users\\13055\\Desktop\\media\\camel.mp4");
+        m_bottomBar->debugAddFile("C:\\Users\\13055\\Desktop\\media\\out.mp3");
+    }
 }
 
 MainWindow::~MainWindow()

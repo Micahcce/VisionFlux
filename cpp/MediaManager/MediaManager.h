@@ -8,9 +8,11 @@
 #include <thread>
 #include <atomic>
 #include <functional>
+#include <memory>
 #include "FrameQueue.h"
 #include "SdlPlayer.h"
 #include "Logger.h"
+#include "BmpAndWavAchieve.h"
 #include <SoundTouch.h>
 
 extern "C"
@@ -54,6 +56,9 @@ public:
 
     //变速
     void audioChangeSpeed(float speedFactor);
+
+    //保存视频帧
+    bool saveFrameToBmp(std::string filePath, std::string outputPath, int sec);
 
     //最大音频帧
     enum

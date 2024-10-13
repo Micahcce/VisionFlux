@@ -171,13 +171,56 @@ void ButtomBar::slotPlayVideo()
 
 void ButtomBar::slotAddFile()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav *.mp3");
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav *.mp3");
     if(filePath == "")
         return;
 
     int duration = m_playController->getMediaDuration(filePath.toStdString());
     QString timetotalStr = QString::fromStdString(m_playController->timeFormatting(duration));
-    m_playList->addVideoItem(filePath, timetotalStr, "未观看");
+
+    // 创建缩略图，音频文件无需创建缩略图
+    QString fileExtension = filePath.section('.', -1); // 取最后一个点后面的部分
+    if(fileExtension != "mp3" && fileExtension != "wav")
+    {
+        QString thumbnailPath = filePath;
+
+        if(filePath.contains("."))
+            thumbnailPath = thumbnailPath.replace(QRegExp("\\.[^.]+$"), ".bmp");
+        else
+            thumbnailPath += ".bmp";
+
+        if(QFile::exists(thumbnailPath) == false)
+            m_playController->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);     //创建缩略图
+
+        m_playList->addVideoItem(thumbnailPath, filePath, timetotalStr, "未观看");
+    }
+    else
+        m_playList->addVideoItem("", filePath, timetotalStr, "未观看");
+}
+
+void ButtomBar::debugAddFile(QString filePath)
+{
+    int duration = m_playController->getMediaDuration(filePath.toStdString());
+    QString timetotalStr = QString::fromStdString(m_playController->timeFormatting(duration));
+
+    // 创建缩略图，音频文件无需创建缩略图
+    QString fileExtension = filePath.section('.', -1); // 取最后一个点后面的部分
+    if(fileExtension != "mp3" && fileExtension != "wav")
+    {
+        QString thumbnailPath = filePath;
+
+        if(filePath.contains("."))
+            thumbnailPath = thumbnailPath.replace(QRegExp("\\.[^.]+$"), ".bmp");
+        else
+            thumbnailPath += ".bmp";
+
+        if(QFile::exists(thumbnailPath) == false)
+            m_playController->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);     //创建缩略图
+
+        m_playList->addVideoItem(thumbnailPath, filePath, timetotalStr, "未观看");
+    }
+    else
+        m_playList->addVideoItem("", filePath, timetotalStr, "未观看");
 }
 
 void ButtomBar::slotChangeSpeed()

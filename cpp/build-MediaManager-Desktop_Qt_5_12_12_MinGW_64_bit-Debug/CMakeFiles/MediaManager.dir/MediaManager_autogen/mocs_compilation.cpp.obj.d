@@ -559,6 +559,7 @@ CMakeFiles/MediaManager.dir/MediaManager_autogen/mocs_compilation.cpp.obj: \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/sstream \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/bits/sstream.tcc \
  D:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/cstdarg \
+ C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/BmpAndWavAchieve.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/SoundTouch.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/FIFOSamplePipe.h \
  C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/SoundTouch/include/STTypes.h \

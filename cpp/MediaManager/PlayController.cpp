@@ -105,6 +105,14 @@ float PlayController::getPlayProgress()
     return m_mediaManager->getCurrentProgress();
 }
 
+bool PlayController::saveFrameToBmp(std::string filePath, std::string outputPath, int sec)
+{
+    if(m_mediaManager->saveFrameToBmp(filePath, outputPath, sec))
+        return true;
+    else
+        return false;
+}
+
 
 std::string PlayController::timeFormatting(int secs)
 {

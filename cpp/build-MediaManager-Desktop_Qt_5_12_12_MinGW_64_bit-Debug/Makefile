@@ -141,6 +141,30 @@ MediaManager_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager_autogen.dir\build.make CMakeFiles/MediaManager_autogen.dir/build
 .PHONY : MediaManager_autogen/fast
 
+BmpAndWavAchieve.obj: BmpAndWavAchieve.cpp.obj
+.PHONY : BmpAndWavAchieve.obj
+
+# target to build an object file
+BmpAndWavAchieve.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/BmpAndWavAchieve.cpp.obj
+.PHONY : BmpAndWavAchieve.cpp.obj
+
+BmpAndWavAchieve.i: BmpAndWavAchieve.cpp.i
+.PHONY : BmpAndWavAchieve.i
+
+# target to preprocess a source file
+BmpAndWavAchieve.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/BmpAndWavAchieve.cpp.i
+.PHONY : BmpAndWavAchieve.cpp.i
+
+BmpAndWavAchieve.s: BmpAndWavAchieve.cpp.s
+.PHONY : BmpAndWavAchieve.s
+
+# target to generate assembly for a file
+BmpAndWavAchieve.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MediaManager.dir\build.make CMakeFiles/MediaManager.dir/BmpAndWavAchieve.cpp.s
+.PHONY : BmpAndWavAchieve.cpp.s
+
 Logger.obj: Logger.cpp.obj
 .PHONY : Logger.obj
 
@@ -367,6 +391,9 @@ help:
 	@echo ... rebuild_cache
 	@echo ... MediaManager_autogen
 	@echo ... MediaManager
+	@echo ... BmpAndWavAchieve.obj
+	@echo ... BmpAndWavAchieve.i
+	@echo ... BmpAndWavAchieve.s
 	@echo ... Logger.obj
 	@echo ... Logger.i
 	@echo ... Logger.s

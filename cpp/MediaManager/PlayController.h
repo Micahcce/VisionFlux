@@ -43,6 +43,7 @@ public:
     int getMediaDuration(std::string filePath);
     //获取当前播放进度
     float getPlayProgress();
+    bool saveFrameToBmp(std::string filePath, std::string outputPath, int sec);
 
     //格式化时长（hh:mm:ss）
     std::string timeFormatting(int secs);

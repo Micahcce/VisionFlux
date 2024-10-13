@@ -28,6 +28,8 @@ set(PROJECT_SOURCES
     Logger.cpp
     SdlPlayer.h
     SdlPlayer.cpp
+    BmpAndWavAchieve.h
+    BmpAndWavAchieve.cpp
 
     QtGUI/MainWindow.h
     QtGUI/MainWindow.cpp

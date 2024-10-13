@@ -79,6 +79,12 @@
 	"HEADERS" : 
 	[
 		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/BmpAndWavAchieve.h",
+			"MU",
+			"EWIEGA46WW/moc_BmpAndWavAchieve.cpp",
+			null
+		],
+		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/FrameQueue.h",
 			"MU",
 			"EWIEGA46WW/moc_FrameQueue.cpp",
@@ -192,6 +198,11 @@
 	"SETTINGS_FILE" : "C:/Users/13055/Desktop/VisionFlux/cpp/build-MediaManager-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/CMakeFiles/MediaManager_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/BmpAndWavAchieve.cpp",
+			"MU",
+			null
+		],
 		[
 			"C:/Users/13055/Desktop/VisionFlux/cpp/MediaManager/Logger.cpp",
 			"MU",
