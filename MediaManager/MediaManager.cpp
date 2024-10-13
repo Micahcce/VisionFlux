@@ -45,13 +45,13 @@ MediaManager::~MediaManager()
 }
 
 
-AVFormatContext* MediaManager::getMediaInfo(const char* filePath)
+AVFormatContext* MediaManager::getMediaInfo(const std::string& filePath)
 {
     //1.创建上下文，注意使用后要释放
     AVFormatContext* formatCtx = avformat_alloc_context();
 
     //2.打开文件
-    int ret = avformat_open_input(&formatCtx, filePath, nullptr, nullptr);
+    int ret = avformat_open_input(&formatCtx, filePath.data(), nullptr, nullptr);
     if(ret < 0)
         logger.error("Error occurred in avformat_open_input");
 
@@ -63,7 +63,7 @@ AVFormatContext* MediaManager::getMediaInfo(const char* filePath)
     return formatCtx;
 }
 
-void MediaManager::decodeToPlay(const char* filePath)
+void MediaManager::decodeToPlay(const std::string& filePath)
 {
     m_frameQueue = new FrameQueue;
     int ret;
@@ -72,7 +72,7 @@ void MediaManager::decodeToPlay(const char* filePath)
     m_pFormatCtx = avformat_alloc_context();
 
     //2.打开文件
-    ret = avformat_open_input(&m_pFormatCtx, filePath, nullptr, nullptr);
+    ret = avformat_open_input(&m_pFormatCtx, filePath.data(), nullptr, nullptr);
     if(ret < 0)
         logger.error("Error occurred in avformat_open_input");
 
@@ -301,16 +301,9 @@ void MediaManager::audioChangeSpeed(float speedFactor)
 
 bool MediaManager::saveFrameToBmp(std::string filePath, std::string outputPath, int sec)
 {
-    AVFormatContext* formatCtx = getMediaInfo(filePath.data());
+    AVFormatContext* formatCtx = getMediaInfo(filePath);
 
-    int videoStreamIndex = -1;
-    for (int i = 0; i < formatCtx->nb_streams; i++) {
-        if (formatCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
-            videoStreamIndex = i;
-            break;
-        }
-    }
-
+    int videoStreamIndex = av_find_best_stream(formatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
     if (videoStreamIndex == -1) {
         logger.error("Could not find a video stream.");
         avformat_close_input(&formatCtx);

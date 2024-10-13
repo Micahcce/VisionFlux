@@ -5,6 +5,7 @@
 #include "PlayController.h"
 #include "ButtomBar.h"
 #include "PlayList.h"
+#include "ProcessPanel.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -16,15 +17,6 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QListWidget>
-
-
-extern "C"
-{
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
-#include "libavutil/imgutils.h"
-}
 
 
 class MainWindow : public QMainWindow
@@ -41,6 +33,7 @@ private:
     PlayController* m_playController;
     QLabel* m_videoView;
     PlayList* m_playList;
+    ProcessPanel* m_processPanel;
     ButtomBar* m_bottomBar;
 
     QString m_mediaDirPath;

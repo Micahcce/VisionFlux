@@ -33,10 +33,10 @@ public:
     ~MediaManager();
 
     //获取数据
-    AVFormatContext* getMediaInfo(const char* filePath);
+    AVFormatContext* getMediaInfo(const std::string& filePath);
 
     //解码播放
-    void decodeToPlay(const char* filePath);
+    void decodeToPlay(const std::string& filePath);
     //转码保存
     //拉流播放
     //拉流保存

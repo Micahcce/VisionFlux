@@ -4,8 +4,6 @@
 #include <iostream>
 #include <QListWidget>
 #include <QString>
-#include <QImage>
-#include <QDebug>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -15,12 +13,6 @@
 #include <QDir>
 #include <QDirIterator>
 
-extern "C" {
-#include "libavformat/avformat.h"
-#include "libavcodec/avcodec.h"
-#include "libswscale/swscale.h"
-#include "libavutil/imgutils.h"
-}
 
 class PlayList : public QListWidget
 {

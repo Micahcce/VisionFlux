@@ -13,7 +13,7 @@ void PlayController::startPlay(std::string filePath)
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     logger.debug("ready play: %s", filePath.data());
-    m_mediaManager->decodeToPlay(filePath.data());
+    m_mediaManager->decodeToPlay(filePath);
 
     //是否有音频流
     if(m_mediaManager->getAudioIndex() >= 0)
@@ -90,7 +90,7 @@ void PlayController::changeVolume(int volume)
 
 int PlayController::getMediaDuration(std::string filePath)
 {
-    AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath.data());
+    AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath);
     if (!formatCtx)
         return 0; // 如果无法获取格式上下文，返回默认值
     int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）

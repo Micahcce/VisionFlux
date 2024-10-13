@@ -16,12 +16,7 @@
 #include <QFileDialog>
 #include "PlayList.h"
 #include "PlayController.h"
-
-extern "C"
-{
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-}
+#include "ProcessPanel.h"
 
 
 class ButtomBar : public QWidget
@@ -32,6 +27,7 @@ public:
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
     void setPlayList(PlayList* playList);
+    void setProcessPanel(ProcessPanel* processPanel);
     void searchMediaFiles(const QString &directoryPath);
 
 public slots:
@@ -49,6 +45,7 @@ private:
 
     PlayController* m_playController;
     PlayList* m_playList;
+    ProcessPanel* m_processPanel;
 
     QLabel* m_currentTime;
     QSlider* m_timeSlider;

@@ -79,6 +79,11 @@ void ButtomBar::setPlayList(PlayList *playList)
     connect(m_playList, &QListWidget::itemDoubleClicked, this, &ButtomBar::slotVideoDoubleClicked);  //双击播放
 }
 
+void ButtomBar::setProcessPanel(ProcessPanel *processPanel)
+{
+    m_processPanel = processPanel;
+}
+
 void ButtomBar::searchMediaFiles(const QString &directoryPath)
 {
     // 定义要搜索的文件扩展名

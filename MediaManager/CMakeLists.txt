@@ -37,6 +37,8 @@ set(PROJECT_SOURCES
     QtGUI/ButtomBar.cpp
     QtGUI/PlayList.h
     QtGUI/PlayList.cpp
+    QtGUI/ProcessPanel.h
+    QtGUI/ProcessPanel.cpp
 )
 
 # 创建可执行文件，并指定输出目录为项目的根目录
