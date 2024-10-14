@@ -30,7 +30,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_playBtn->setFixedSize(30, 30);
     QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
     m_playBtn->setIcon(playIcon);
-    connect(m_playBtn, &QPushButton::clicked, this, &BottomBar::slotPlayMedia);
+    connect(m_playBtn, &QPushButton::clicked, this, &BottomBar::slotPlayAndPause);
 
     //倍速
     m_playbackSpeeds << 0.5 << 0.75 << 1 << 1.25 << 1.5 << 2;
@@ -76,7 +76,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 void BottomBar::setPlayList(PlayList *playList)
 {
     m_playList = playList;
-    connect(m_playList, &QListWidget::itemDoubleClicked, this, &BottomBar::slotVideoDoubleClicked);  //双击播放
+    connect(m_playList, &QListWidget::itemDoubleClicked, this, &BottomBar::slotStartPlayMedia);  //双击播放
 }
 
 void BottomBar::setProcessPanel(ProcessPanel *processPanel)
@@ -102,17 +102,17 @@ void BottomBar::searchMediaFiles(const QString &directoryPath)
     }
 }
 
-bool BottomBar::slotVideoDoubleClicked()
+bool BottomBar::slotStartPlayMedia()
 {
     //获取路径
-    QString videoPath = m_playList->getVideoPath();
-    if(videoPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
+    QString mediaPath = m_playList->getMediaPath();
+    if(mediaPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
     {
         return false;
     }
-    else if(videoPath == "")
+    else if(mediaPath == "")
     {
-        logger.error("video path get failed.");
+        logger.error("media path get failed.");
         return false;
     }
 
@@ -120,7 +120,7 @@ bool BottomBar::slotVideoDoubleClicked()
     m_playController->endPlay();
 
     //获取时长
-    int totalTime = m_playController->getMediaDuration(videoPath.toStdString());
+    int totalTime = m_playController->getMediaDuration(mediaPath.toStdString());
     QString totalTimeStr = QString::fromStdString(m_playController->timeFormatting(totalTime));
 
     // 设置相关控件
@@ -132,7 +132,7 @@ bool BottomBar::slotVideoDoubleClicked()
     m_playBtn->setIcon(playIcon);
 
     //开始播放
-    m_playController->startPlay(videoPath.toStdString());
+    m_playController->startPlay(mediaPath.toStdString());
 
     //定时器启动
     m_sliderTimer->start(200);
@@ -164,11 +164,11 @@ void BottomBar::slotSliderReleased()
     m_sliderTimer->start(200);
 }
 
-void BottomBar::slotPlayMedia()
+void BottomBar::slotPlayAndPause()
 {
     if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
     {
-        if(slotVideoDoubleClicked() == false)
+        if(slotStartPlayMedia() == false)
             return;
     }
     else

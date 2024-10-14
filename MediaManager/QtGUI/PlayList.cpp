@@ -6,7 +6,7 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
 {
 }
 
-QString PlayList::getVideoPath()
+QString PlayList::getMediaPath()
 {
     // 获取当前选中的 QListWidgetItem
     QListWidgetItem *currentItem = this->currentItem();
@@ -33,8 +33,8 @@ QString PlayList::getVideoPath()
     }
 
     // 获取标题文本，在第二个label
-    QString videoPath = labels[1]->text();
-    return videoPath;
+    QString mediaPath = labels[1]->text();
+    return mediaPath;
 }
 
 

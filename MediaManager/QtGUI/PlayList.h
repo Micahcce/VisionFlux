@@ -20,7 +20,7 @@ class PlayList : public QListWidget
 public:
     explicit PlayList(QWidget *parent = nullptr);
 
-    QString getVideoPath();
+    QString getMediaPath();
     void addMediaItem(const QString &thumbnailPath, const QString &title, const QString &duration, const QString &status);
 };
 

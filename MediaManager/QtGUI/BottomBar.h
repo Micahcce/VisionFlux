@@ -31,14 +31,14 @@ public:
     void searchMediaFiles(const QString &directoryPath);
 
 public slots:
-    void slotPlayMedia();
+    void slotPlayAndPause();
     void slotAddMediaFile();
     void slotChangeSpeed();
     void slotVolumeChanged();
 
 private slots:
     void slotUpdateProgress();
-    bool slotVideoDoubleClicked();
+    bool slotStartPlayMedia();
     void slotSliderPressed();
     void slotSliderReleased();
 
