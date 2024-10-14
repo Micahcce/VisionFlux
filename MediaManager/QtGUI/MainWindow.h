@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "PlayController.h"
-#include "ButtomBar.h"
+#include "BottomBar.h"
 #include "PlayList.h"
 #include "ProcessPanel.h"
 
@@ -34,7 +34,7 @@ private:
     QLabel* m_videoView;
     PlayList* m_playList;
     ProcessPanel* m_processPanel;
-    ButtomBar* m_bottomBar;
+    BottomBar* m_bottomBar;
 
     QString m_mediaDirPath;
 };

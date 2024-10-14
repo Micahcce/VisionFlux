@@ -1,5 +1,5 @@
-#ifndef BUTTOMBAR_H
-#define BUTTOMBAR_H
+#ifndef BOTTOMBAR_H
+#define BOTTOMBAR_H
 
 #include <iostream>
 #include <QWidget>
@@ -19,11 +19,11 @@
 #include "ProcessPanel.h"
 
 
-class ButtomBar : public QWidget
+class BottomBar : public QWidget
 {
     Q_OBJECT
 public:
-    ButtomBar(QWidget *parent = nullptr);
+    BottomBar(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
     void setPlayList(PlayList* playList);
@@ -31,10 +31,12 @@ public:
     void searchMediaFiles(const QString &directoryPath);
 
 public slots:
-    void slotPlayVideo();
+    void slotPlayMedia();
     void slotAddMediaFile();
     void slotChangeSpeed();
     void slotVolumeChanged();
+
+private slots:
     void slotUpdateProgress();
     bool slotVideoDoubleClicked();
     void slotSliderPressed();
@@ -62,4 +64,4 @@ private:
     QTimer* m_sliderTimer;        //进度条定时器
 };
 
-#endif // BUTTOMBAR_H
+#endif // BOTTOMBAR_H

@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     processPanelTab->setLayout(vBox2);
 
     //底栏
-    m_bottomBar = new ButtomBar(this);
+    m_bottomBar = new BottomBar(this);
     m_bottomBar->setPlayController(m_playController);       //传递MediaManager类
     m_bottomBar->setPlayList(m_playList);
     m_bottomBar->setProcessPanel(m_processPanel);

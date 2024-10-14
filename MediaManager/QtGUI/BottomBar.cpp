@@ -1,6 +1,6 @@
-#include "ButtomBar.h"
+#include "BottomBar.h"
 
-ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
+BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 {
     setStyleSheet("background-color:#DDEEDD;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -11,13 +11,13 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_currentTime->setText("00:00:00");
     m_timeSlider = new QSlider(Qt::Horizontal, this);
     m_timeSlider->setValue(0);
-    connect(m_timeSlider, &QSlider::sliderPressed, this, &ButtomBar::slotSliderPressed);
-    connect(m_timeSlider, &QSlider::sliderReleased, this, &ButtomBar::slotSliderReleased);
+    connect(m_timeSlider, &QSlider::sliderPressed, this, &BottomBar::slotSliderPressed);
+    connect(m_timeSlider, &QSlider::sliderReleased, this, &BottomBar::slotSliderReleased);
     m_totalTime = new QLabel(this);
     m_totalTime->setText("00:00:00");
 
     m_sliderTimer = new QTimer(this);
-    connect(m_sliderTimer, &QTimer::timeout, this, &ButtomBar::slotUpdateProgress);
+    connect(m_sliderTimer, &QTimer::timeout, this, &BottomBar::slotUpdateProgress);
 
     QHBoxLayout* hBox = new QHBoxLayout;
     hBox->addWidget(m_currentTime);
@@ -30,14 +30,14 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_playBtn->setFixedSize(30, 30);
     QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
     m_playBtn->setIcon(playIcon);
-    connect(m_playBtn, &QPushButton::clicked, this, &ButtomBar::slotPlayVideo);
+    connect(m_playBtn, &QPushButton::clicked, this, &BottomBar::slotPlayMedia);
 
     //倍速
     m_playbackSpeeds << 0.5 << 0.75 << 1 << 1.25 << 1.5 << 2;
     m_changeSpeedBtn = new QPushButton(this);
     m_changeSpeedBtn->setFixedSize(30, 30);
     m_changeSpeedBtn->setText("倍速");
-    connect(m_changeSpeedBtn, &QPushButton::clicked, this, &ButtomBar::slotChangeSpeed);
+    connect(m_changeSpeedBtn, &QPushButton::clicked, this, &BottomBar::slotChangeSpeed);
 
     //音量
     m_volumeBtn = new QPushButton(this);
@@ -49,14 +49,14 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_volumeSlider->setRange(0, 100);
     m_volumeSlider->setValue(100); // 设置默认音量
     m_volumeSlider->setFixedSize(100, 10); // 设置滑块大小
-    connect(m_volumeSlider, &QSlider::sliderMoved, this, &ButtomBar::slotVolumeChanged);
+    connect(m_volumeSlider, &QSlider::sliderMoved, this, &BottomBar::slotVolumeChanged);
 
     //添加文件
     m_addFileBtn = new QPushButton(this);
     m_addFileBtn->setFixedSize(30, 30);
     QIcon addIcon = QApplication::style()->standardIcon(QStyle::SP_FileDialogStart);
     m_addFileBtn->setIcon(addIcon);
-    connect(m_addFileBtn, &QPushButton::clicked, this, &ButtomBar::slotAddMediaFile);
+    connect(m_addFileBtn, &QPushButton::clicked, this, &BottomBar::slotAddMediaFile);
 
     QHBoxLayout* hBox2 = new QHBoxLayout;
     hBox2->addWidget(m_playBtn);
@@ -73,18 +73,18 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     this->setLayout(vBox);
 }
 
-void ButtomBar::setPlayList(PlayList *playList)
+void BottomBar::setPlayList(PlayList *playList)
 {
     m_playList = playList;
-    connect(m_playList, &QListWidget::itemDoubleClicked, this, &ButtomBar::slotVideoDoubleClicked);  //双击播放
+    connect(m_playList, &QListWidget::itemDoubleClicked, this, &BottomBar::slotVideoDoubleClicked);  //双击播放
 }
 
-void ButtomBar::setProcessPanel(ProcessPanel *processPanel)
+void BottomBar::setProcessPanel(ProcessPanel *processPanel)
 {
     m_processPanel = processPanel;
 }
 
-void ButtomBar::searchMediaFiles(const QString &directoryPath)
+void BottomBar::searchMediaFiles(const QString &directoryPath)
 {
     // 定义要搜索的文件扩展名
     QStringList filters;
@@ -102,7 +102,7 @@ void ButtomBar::searchMediaFiles(const QString &directoryPath)
     }
 }
 
-bool ButtomBar::slotVideoDoubleClicked()
+bool BottomBar::slotVideoDoubleClicked()
 {
     //获取路径
     QString videoPath = m_playList->getVideoPath();
@@ -140,12 +140,12 @@ bool ButtomBar::slotVideoDoubleClicked()
     return true;
 }
 
-void ButtomBar::slotSliderPressed()
+void BottomBar::slotSliderPressed()
 {
     m_sliderTimer->stop();
 }
 
-void ButtomBar::slotSliderReleased()
+void BottomBar::slotSliderReleased()
 {
     if(m_playController->getMediaPlayInfo()->mediaName == "")
     {
@@ -164,7 +164,7 @@ void ButtomBar::slotSliderReleased()
     m_sliderTimer->start(200);
 }
 
-void ButtomBar::slotPlayVideo()
+void BottomBar::slotPlayMedia()
 {
     if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
     {
@@ -192,7 +192,7 @@ void ButtomBar::slotPlayVideo()
     }
 }
 
-void ButtomBar::slotAddMediaFile()
+void BottomBar::slotAddMediaFile()
 {
     const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav *.mp3");
     if(filePath == "")
@@ -201,7 +201,7 @@ void ButtomBar::slotAddMediaFile()
     addMediaFile(filePath);
 }
 
-void ButtomBar::addMediaFile(QString filePath)
+void BottomBar::addMediaFile(QString filePath)
 {
     if(QFile::exists(filePath) == false)
     {
@@ -232,7 +232,7 @@ void ButtomBar::addMediaFile(QString filePath)
         m_playList->addMediaItem("", filePath, timetotalStr, "未观看");
 }
 
-void ButtomBar::slotChangeSpeed()
+void BottomBar::slotChangeSpeed()
 {
     // 获取下一个播放速率索引
     speedIndex = (speedIndex + 1) % m_playbackSpeeds.size();
@@ -246,12 +246,12 @@ void ButtomBar::slotChangeSpeed()
     m_playController->changePlaySpeed(speedFactor);
 }
 
-void ButtomBar::slotVolumeChanged()
+void BottomBar::slotVolumeChanged()
 {
     m_playController->changeVolume(m_volumeSlider->value());
 }
 
-void ButtomBar::slotUpdateProgress()
+void BottomBar::slotUpdateProgress()
 {
     logger.debug("progress: %f", m_playController->getPlayProgress());
     int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress() + 0.2);  //增加0.2s冗余时间，缓解进度条走不满的问题

@@ -33,8 +33,8 @@ set(PROJECT_SOURCES
 
     QtGUI/MainWindow.h
     QtGUI/MainWindow.cpp
-    QtGUI/ButtomBar.h
-    QtGUI/ButtomBar.cpp
+    QtGUI/BottomBar.h
+    QtGUI/BottomBar.cpp
     QtGUI/PlayList.h
     QtGUI/PlayList.cpp
     QtGUI/ProcessPanel.h
