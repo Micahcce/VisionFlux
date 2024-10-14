@@ -30,7 +30,7 @@ ButtomBar::ButtomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_playBtn->setFixedSize(30, 30);
     QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
     m_playBtn->setIcon(playIcon);
-    connect(m_playBtn, &QPushButton::clicked, this, &ButtomBar::slotPlayVideo);
+    connect(m_playBtn, &QPushButton::clicked, this, &ButtomBar::slotPlayMedia);
 
     //倍速
     m_playbackSpeeds << 0.5 << 0.75 << 1 << 1.25 << 1.5 << 2;
@@ -164,7 +164,7 @@ void ButtomBar::slotSliderReleased()
     m_sliderTimer->start(200);
 }
 
-void ButtomBar::slotPlayVideo()
+void ButtomBar::slotPlayMedia()
 {
     if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
     {
