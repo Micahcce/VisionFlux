@@ -79,11 +79,6 @@ void BottomBar::setPlayList(PlayList *playList)
     connect(m_playList, &QListWidget::itemDoubleClicked, this, &BottomBar::slotStartPlayMedia);  //双击播放
 }
 
-void BottomBar::setProcessPanel(ProcessPanel *processPanel)
-{
-    m_processPanel = processPanel;
-}
-
 bool BottomBar::slotStartPlayMedia()
 {
     //获取路径

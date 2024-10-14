@@ -54,19 +54,19 @@ MainWindow::MainWindow(QWidget *parent)
     //添加视频列表
     m_playList->searchMediaFiles(m_mediaDirPath);
 
-    //流处理面板
-    m_processPanel = new ProcessPanel(processPanelTab);
-    m_processPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    QVBoxLayout* vBox2 = new QVBoxLayout;
-    vBox2->addWidget(m_processPanel);
-    processPanelTab->setLayout(vBox2);
-
     //底栏
     m_bottomBar = new BottomBar(this);
     m_bottomBar->setPlayController(m_playController);
     m_bottomBar->setPlayList(m_playList);
-    m_bottomBar->setProcessPanel(m_processPanel);
+
+    //流处理面板
+    m_processPanel = new ProcessPanel(processPanelTab);
+    m_processPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_processPanel->setBottomBar(m_bottomBar);
+
+    QVBoxLayout* vBox2 = new QVBoxLayout;
+    vBox2->addWidget(m_processPanel);
+    processPanelTab->setLayout(vBox2);
 
     //布局管理器
     QVBoxLayout* vBox = new QVBoxLayout;

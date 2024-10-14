@@ -16,7 +16,6 @@
 #include <QFileDialog>
 #include "PlayList.h"
 #include "PlayController.h"
-#include "ProcessPanel.h"
 
 
 class BottomBar : public QWidget
@@ -27,24 +26,22 @@ public:
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
     void setPlayList(PlayList* playList);
-    void setProcessPanel(ProcessPanel* processPanel);
 
 public slots:
+    bool slotStartPlayMedia();
+
+private slots:
     void slotPlayAndPause();
     void slotAddMediaFile();
     void slotChangeSpeed();
     void slotVolumeChanged();
-
-private slots:
     void slotUpdateProgress();
-    bool slotStartPlayMedia();
     void slotSliderPressed();
     void slotSliderReleased();
 
 private:
     PlayController* m_playController;
     PlayList* m_playList;
-    ProcessPanel* m_processPanel;
 
     QLabel* m_currentTime;
     QSlider* m_timeSlider;
