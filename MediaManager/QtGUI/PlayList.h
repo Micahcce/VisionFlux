@@ -22,7 +22,6 @@ public:
     explicit PlayList(QWidget *parent = nullptr);
 
     void setBottomBar(BottomBar* bottomBar);
-    void setPlayController(PlayController* playController) {m_playController = playController;};
     QString getMediaPath();
     void searchMediaFiles(const QString &directoryPath);
 
@@ -34,7 +33,6 @@ private slots:
     void slotSetSelectedMediaPath();
 
 private:
-    PlayController* m_playController;
     BottomBar* m_bottomBar;
 };
 

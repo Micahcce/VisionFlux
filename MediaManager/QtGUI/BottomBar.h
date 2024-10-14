@@ -24,6 +24,7 @@ public:
     BottomBar(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
+    PlayController* getPlayController() {return m_playController;}
     bool startPlayMedia(QString mediaPath);
     void setSelectMediaPath(QString mediaPath) {m_selectedMediaPath = mediaPath;}
 

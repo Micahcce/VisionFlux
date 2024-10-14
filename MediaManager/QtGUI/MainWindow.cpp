@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
     m_videoView->show();
     m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
+    //底栏
+    m_bottomBar = new BottomBar(this);
+    m_bottomBar->setPlayController(m_playController);
+
     //侧边栏
     QTabWidget* sideBar = new QTabWidget(this);
     sideBar->setStyleSheet("background-color:#EEEEDD;");
@@ -42,22 +46,15 @@ MainWindow::MainWindow(QWidget *parent)
                   "QTabWidget:pane{border:0px; background-color:transparent}");
 
 
-    //底栏
-    m_bottomBar = new BottomBar(this);
-    m_bottomBar->setPlayController(m_playController);
-
     //播放列表
     m_playList = new PlayList(playListTab);
     m_playList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_playList->setPlayController(m_playController);
     m_playList->setBottomBar(m_bottomBar);
+    m_playList->searchMediaFiles(m_mediaDirPath);           //添加视频列表
 
     QVBoxLayout* vBox1 = new QVBoxLayout;
     vBox1->addWidget(m_playList);
     playListTab->setLayout(vBox1);
-
-    //添加视频列表
-    m_playList->searchMediaFiles(m_mediaDirPath);
 
     //流处理面板
     m_processPanel = new ProcessPanel(processPanelTab);

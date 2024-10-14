@@ -68,7 +68,7 @@ void PlayList::slotAddMediaItem(QString filePath)
 
         // 缩略图不存在则创建
         if(QFile::exists(thumbnailPath) == false)
-            m_playController->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);
+            m_bottomBar->getPlayController()->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);
 
         QPixmap pixmap(thumbnailPath);
         thumbnail->setPixmap(pixmap.scaled(80, 60, Qt::KeepAspectRatio)); // 调整封面图像大小
@@ -82,8 +82,8 @@ void PlayList::slotAddMediaItem(QString filePath)
     }
 
     //获取时长
-    int duration = m_playController->getMediaDuration(filePath.toStdString());
-    QString timetotalStr = QString::fromStdString(m_playController->timeFormatting(duration));
+    int duration = m_bottomBar->getPlayController()->getMediaDuration(filePath.toStdString());
+    QString timetotalStr = QString::fromStdString(m_bottomBar->getPlayController()->timeFormatting(duration));
 
     // 添加标题、时长和状态
     QLabel *titleLabel = new QLabel(filePath);
