@@ -13,7 +13,11 @@ void PlayController::startPlay(const std::string filePath)
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     logger.debug("ready play: %s", filePath.data());
-    m_mediaManager->decodeToPlay(filePath);
+    if(m_mediaManager->decodeToPlay(filePath) == false)
+    {
+        logger.error("media play failed.");
+        return;
+    }
 
     //是否有音频流
     if(m_mediaManager->getAudioIndex() >= 0)

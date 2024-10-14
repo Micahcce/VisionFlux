@@ -26,6 +26,6 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QWidget(parent)
 
 void ProcessPanel::slotLiveStreamPlay()
 {
-//    QString streamUrl = m_streamUrlEdit->text();
-    m_bottomBar->slotStartPlayMedia();
+    QString streamUrl = m_streamUrlEdit->text();
+    m_bottomBar->startPlayMedia(streamUrl);
 }

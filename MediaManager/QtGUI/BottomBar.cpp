@@ -1,6 +1,6 @@
 #include "BottomBar.h"
 
-BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
+BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2), m_selectedMediaPath("")
 {
     setStyleSheet("background-color:#DDEEDD;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -73,16 +73,8 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     this->setLayout(vBox);
 }
 
-void BottomBar::setPlayList(PlayList *playList)
+bool BottomBar::startPlayMedia(QString mediaPath)
 {
-    m_playList = playList;
-    connect(m_playList, &QListWidget::itemDoubleClicked, this, &BottomBar::slotStartPlayMedia);  //双击播放
-}
-
-bool BottomBar::slotStartPlayMedia()
-{
-    //获取路径
-    QString mediaPath = m_playList->getMediaPath();
     if(mediaPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
     {
         return false;
@@ -95,9 +87,15 @@ bool BottomBar::slotStartPlayMedia()
 
     //结束当前视频
     m_playController->endPlay();
+    m_sliderTimer->stop();
 
     //获取时长
     int totalTime = m_playController->getMediaDuration(mediaPath.toStdString());
+    if(totalTime == 0)
+    {
+        logger.error("getMediaDuration failed");
+        return false;
+    }
     QString totalTimeStr = QString::fromStdString(m_playController->timeFormatting(totalTime));
 
     // 设置相关控件
@@ -145,8 +143,9 @@ void BottomBar::slotPlayAndPause()
 {
     if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
     {
-        if(slotStartPlayMedia() == false)
-            return;
+        if(m_selectedMediaPath != "")
+            startPlayMedia(m_selectedMediaPath);
+        return;
     }
     else
     {
@@ -175,7 +174,7 @@ void BottomBar::slotAddMediaFile()
     if(filePath == "")
         return;
 
-    m_playList->addMediaFile(filePath);
+    emit sigAddMediaItem(filePath);
 }
 
 void BottomBar::slotChangeSpeed()

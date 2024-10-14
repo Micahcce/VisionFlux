@@ -6,6 +6,14 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
 {
 }
 
+void PlayList::setBottomBar(BottomBar *bottomBar)
+{
+    m_bottomBar = bottomBar;
+    connect(this, &QListWidget::itemDoubleClicked, this, &PlayList::slotStartPlayMedia);    //双击播放
+    connect(this, &QListWidget::itemClicked, this, &PlayList::slotSetSelectedMediaPath);    //设置选中项的文件地址
+    connect(m_bottomBar, &BottomBar::sigAddMediaItem, this, &PlayList::slotSetSelectedMediaPath);   //添加播放项
+}
+
 QString PlayList::getMediaPath()
 {
     // 获取当前选中的 QListWidgetItem
@@ -37,7 +45,7 @@ QString PlayList::getMediaPath()
     return mediaPath;
 }
 
-void PlayList::addMediaFile(QString filePath)
+void PlayList::slotAddMediaItem(QString filePath)
 {
     if(QFile::exists(filePath) == false)
     {
@@ -120,7 +128,19 @@ void PlayList::searchMediaFiles(const QString &directoryPath)
     while (it.hasNext())
     {
         QString filePath = it.next();
-        addMediaFile(filePath);
+        slotAddMediaItem(filePath);
         logger.info("Add media file: %s", filePath.toStdString().data());
     }
+}
+
+void PlayList::slotStartPlayMedia()
+{
+    QString mediaPath = getMediaPath();
+    m_bottomBar->startPlayMedia(mediaPath);
+}
+
+void PlayList::slotSetSelectedMediaPath()
+{
+    QString mediaPath = getMediaPath();
+    m_bottomBar->setSelectMediaPath(mediaPath);
 }

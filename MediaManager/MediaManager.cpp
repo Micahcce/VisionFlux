@@ -53,17 +53,25 @@ AVFormatContext* MediaManager::getMediaInfo(const std::string& filePath)
     //2.打开文件
     int ret = avformat_open_input(&formatCtx, filePath.data(), nullptr, nullptr);
     if(ret < 0)
+    {
         logger.error("Error occurred in avformat_open_input");
+        avformat_close_input(&m_pFormatCtx);
+        return nullptr;
+    }
 
     //3.上下文获取流信息
     ret = avformat_find_stream_info(formatCtx, nullptr);
     if(ret < 0)
+    {
         logger.error("Error occurred in avformat_find_stream_info");
+        avformat_close_input(&m_pFormatCtx);
+        return nullptr;
+    }
 
     return formatCtx;
 }
 
-void MediaManager::decodeToPlay(const std::string& filePath)
+bool MediaManager::decodeToPlay(const std::string& filePath)
 {
     m_frameQueue = new FrameQueue;
     int ret;
@@ -74,12 +82,20 @@ void MediaManager::decodeToPlay(const std::string& filePath)
     //2.打开文件
     ret = avformat_open_input(&m_pFormatCtx, filePath.data(), nullptr, nullptr);
     if(ret < 0)
+    {
         logger.error("Error occurred in avformat_open_input");
+        avformat_close_input(&m_pFormatCtx);
+        return false;
+    }
 
     //3.上下文获取流信息
     ret = avformat_find_stream_info(m_pFormatCtx, nullptr);
     if(ret < 0)
+    {
         logger.error("Error occurred in avformat_find_stream_info");
+        avformat_close_input(&m_pFormatCtx);
+        return false;
+    }
 
     //4.查找视频流和音频流
     m_videoIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
@@ -172,6 +188,7 @@ void MediaManager::decodeToPlay(const std::string& filePath)
         }
     }
 #endif
+    return true;
 }
 
 void MediaManager::seekFrameByVideoStream(int timeSecs)

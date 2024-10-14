@@ -14,7 +14,6 @@
 #include <QStyle>
 #include <QApplication>
 #include <QFileDialog>
-#include "PlayList.h"
 #include "PlayController.h"
 
 
@@ -25,10 +24,11 @@ public:
     BottomBar(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
-    void setPlayList(PlayList* playList);
+    bool startPlayMedia(QString mediaPath);
+    void setSelectMediaPath(QString mediaPath) {m_selectedMediaPath = mediaPath;}
 
-public slots:
-    bool slotStartPlayMedia();
+signals:
+    void sigAddMediaItem(QString filePath);
 
 private slots:
     void slotPlayAndPause();
@@ -41,7 +41,6 @@ private slots:
 
 private:
     PlayController* m_playController;
-    PlayList* m_playList;
 
     QLabel* m_currentTime;
     QSlider* m_timeSlider;
@@ -54,8 +53,9 @@ private:
     QPushButton* m_volumeBtn;
     QSlider* m_volumeSlider;
     QPushButton* m_addFileBtn;
-
     QTimer* m_sliderTimer;        //进度条定时器
+
+    QString m_selectedMediaPath;
 };
 
 #endif // BOTTOMBAR_H
