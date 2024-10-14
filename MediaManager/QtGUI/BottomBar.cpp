@@ -84,24 +84,6 @@ void BottomBar::setProcessPanel(ProcessPanel *processPanel)
     m_processPanel = processPanel;
 }
 
-void BottomBar::searchMediaFiles(const QString &directoryPath)
-{
-    // 定义要搜索的文件扩展名
-    QStringList filters;
-    filters << "*.mp3" << "*.mp4" << "*.wav";
-
-    // 创建 QDirIterator 以递归方式搜索文件
-    QDirIterator it(directoryPath, filters, QDir::Files, QDirIterator::Subdirectories);
-
-    // 迭代找到的文件
-    while (it.hasNext())
-    {
-        QString filePath = it.next();
-        addMediaFile(filePath);
-        logger.info("Add media file: %s", filePath.toStdString().data());
-    }
-}
-
 bool BottomBar::slotStartPlayMedia()
 {
     //获取路径
@@ -198,38 +180,7 @@ void BottomBar::slotAddMediaFile()
     if(filePath == "")
         return;
 
-    addMediaFile(filePath);
-}
-
-void BottomBar::addMediaFile(QString filePath)
-{
-    if(QFile::exists(filePath) == false)
-    {
-        logger.warning("the file is not exist: %s", filePath.toStdString().data());
-        return;
-    }
-
-    int duration = m_playController->getMediaDuration(filePath.toStdString());
-    QString timetotalStr = QString::fromStdString(m_playController->timeFormatting(duration));
-
-    // 创建缩略图，音频文件无需创建缩略图
-    QString fileExtension = filePath.section('.', -1); // 取最后一个点后面的部分
-    if(fileExtension != "mp3" && fileExtension != "wav")
-    {
-        QString thumbnailPath = filePath;
-
-        if(filePath.contains("."))
-            thumbnailPath = thumbnailPath.replace(QRegExp("\\.[^.]+$"), ".bmp");
-        else
-            thumbnailPath += ".bmp";
-
-        if(QFile::exists(thumbnailPath) == false)
-            m_playController->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);     //创建缩略图
-
-        m_playList->addMediaItem(thumbnailPath, filePath, timetotalStr, "未观看");
-    }
-    else
-        m_playList->addMediaItem("", filePath, timetotalStr, "未观看");
+    m_playList->addMediaFile(filePath);
 }
 
 void BottomBar::slotChangeSpeed()

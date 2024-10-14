@@ -299,7 +299,7 @@ void MediaManager::audioChangeSpeed(float speedFactor)
     m_speedFactor = speedFactor;
 }
 
-bool MediaManager::saveFrameToBmp(std::string filePath, std::string outputPath, int sec)
+bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec)
 {
     AVFormatContext* formatCtx = getMediaInfo(filePath);
 

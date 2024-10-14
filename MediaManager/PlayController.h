@@ -24,7 +24,7 @@ public:
     PlayController();
 
     //开始播放
-    void startPlay(std::string filePath);
+    void startPlay(const std::string filePath);
     //继续播放
     void continuePlay();
     //暂停播放
@@ -40,10 +40,11 @@ public:
     void changeVolume(int volume);
 
     //获取视频时长（秒）
-    int getMediaDuration(std::string filePath);
+    int getMediaDuration(const std::string filePath);
     //获取当前播放进度
     float getPlayProgress();
-    bool saveFrameToBmp(std::string filePath, std::string outputPath, int sec);
+    //保存图片
+    bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
     //格式化时长（hh:mm:ss）
     std::string timeFormatting(int secs);

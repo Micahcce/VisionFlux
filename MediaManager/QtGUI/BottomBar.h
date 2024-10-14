@@ -28,7 +28,6 @@ public:
     void setPlayController(PlayController* playController) {m_playController = playController;}
     void setPlayList(PlayList* playList);
     void setProcessPanel(ProcessPanel* processPanel);
-    void searchMediaFiles(const QString &directoryPath);
 
 public slots:
     void slotPlayAndPause();
@@ -43,8 +42,6 @@ private slots:
     void slotSliderReleased();
 
 private:
-    void addMediaFile(QString filePath);
-
     PlayController* m_playController;
     PlayList* m_playList;
     ProcessPanel* m_processPanel;

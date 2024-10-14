@@ -6,7 +6,7 @@ PlayController::PlayController()
     m_mediaManager = new MediaManager;
 }
 
-void PlayController::startPlay(std::string filePath)
+void PlayController::startPlay(const std::string filePath)
 {
     while (m_mediaManager->getThreadSafeExited() == false)
     {
@@ -88,7 +88,7 @@ void PlayController::changeVolume(int volume)
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
-int PlayController::getMediaDuration(std::string filePath)
+int PlayController::getMediaDuration(const std::string filePath)
 {
     AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath);
     if (!formatCtx)
@@ -105,7 +105,7 @@ float PlayController::getPlayProgress()
     return m_mediaManager->getCurrentProgress();
 }
 
-bool PlayController::saveFrameToBmp(std::string filePath, std::string outputPath, int sec)
+bool PlayController::saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec)
 {
     if(m_mediaManager->saveFrameToBmp(filePath, outputPath, sec))
         return true;

@@ -58,7 +58,7 @@ public:
     void audioChangeSpeed(float speedFactor);
 
     //保存视频帧
-    bool saveFrameToBmp(std::string filePath, std::string outputPath, int sec);
+    bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
     //最大音频帧
     enum

@@ -12,7 +12,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QDirIterator>
-
+#include "PlayController.h"
 
 class PlayList : public QListWidget
 {
@@ -20,8 +20,13 @@ class PlayList : public QListWidget
 public:
     explicit PlayList(QWidget *parent = nullptr);
 
+    void setPlayController(PlayController* playController) {m_playController = playController;};
     QString getMediaPath();
-    void addMediaItem(const QString &thumbnailPath, const QString &title, const QString &duration, const QString &status);
+    void addMediaFile(QString filePath);
+    void searchMediaFiles(const QString &directoryPath);
+
+private:
+    PlayController* m_playController;
 };
 
 #endif // PLAYLIST_H
