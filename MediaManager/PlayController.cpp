@@ -100,10 +100,9 @@ void PlayController::changeVolume(int volume)
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
-void PlayController::pushStream(const std::string &filePath, const std::string &streamUrl)
+void PlayController::streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrll)
 {
-    //其它操作待处理
-    m_mediaManager->pushStream(filePath, streamUrl);
+    m_mediaManager->streamConvert(inputStreamUrl, outputStreamUrll);
 }
 
 int PlayController::getMediaDuration(const std::string filePath)

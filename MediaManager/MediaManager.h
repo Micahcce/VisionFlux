@@ -37,23 +37,26 @@ public:
 
     //解码播放
     bool decodeToPlay(const std::string& filePath);
-    //拉流播放
-    //拉流保存
-    //转码保存
-    //推流
-    bool pushStream(const std::string& filePath, const std::string& streamUrl);
 
+    //流媒体转换
+    /*
+    * 网络流->本地流:拉流保存
+    * 网络流->网络流:网络流转发
+    * 本地流->本地流:格式转换
+    * 本地流->网络流:推流
+    */
+    bool streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
 
     //修改进度
     void seekFrameByVideoStream(int timeSecs);
     void seekFrameByAudioStream(int timeSecs);
 
     //获取当前进度
-    float getCurrentProgress();
+    float getCurrentProgress() const;
 
     //获取流索引
-    int getAudioIndex() {return m_audioIndex;}
-    int getVideoIndex() {return m_videoIndex;}
+    int getAudioIndex() const {return m_audioIndex;}
+    int getVideoIndex() const {return m_videoIndex;}
 
     //变速
     void audioChangeSpeed(float speedFactor);
@@ -94,7 +97,7 @@ private:
     int thread_media_decode();
     int thread_video_display();
     int thread_audio_display();
-    int thread_push_stream();
+    int thread_stream_convert();
 
     // 静态包装函数，因为SDL线程不支持使用成员函数
     static int decodeThreadEntry(void* ptr)
@@ -154,9 +157,9 @@ private:
     double m_videoLastPTS;
     double m_audioLastPTS;
 
-    //推流相关
-    std::string m_filePath;
-    std::string m_streamUrl;
+    //流媒体转换
+    std::string m_inputStreamUrl;
+    std::string m_outputStreamUrl;
 };
 
 #endif // MEDIAMANAGER_H

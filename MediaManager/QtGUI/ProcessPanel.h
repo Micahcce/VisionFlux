@@ -9,6 +9,8 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QUrl>
+#include <QFileInfo>
 #include "BottomBar.h"
 
 class ProcessPanel : public QScrollArea
@@ -22,12 +24,13 @@ public:
 private slots:
     void slotLiveStreamPlay();
     void slotLiveStreamSave();
-    void slotLiveStreamEnd();
 
     void slotPushStreamFileSelect();
     void slotPushStream();
 
     void slotConvertFileSelect();
+
+    void slotAllEnd();
 
 private:
     BottomBar* m_bottomBar;

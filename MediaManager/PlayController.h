@@ -42,7 +42,7 @@ public:
     void changeVolume(int volume);
 
     //推流
-    void pushStream(const std::string& filePath, const std::string& streamUrl);
+    void streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
 
     //获取视频时长（秒）
     int getMediaDuration(const std::string filePath);

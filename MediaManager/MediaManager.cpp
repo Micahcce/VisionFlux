@@ -191,12 +191,12 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     return true;
 }
 
-bool MediaManager::pushStream(const std::string &filePath, const std::string &streamUrl)
+bool MediaManager::streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl)
 {
-    m_filePath = filePath;
-    m_streamUrl = streamUrl;
-    std::thread pushStreamThread(&MediaManager::thread_push_stream, this);
-    pushStreamThread.detach();
+    m_inputStreamUrl = inputStreamUrl;
+    m_outputStreamUrl = outputStreamUrl;
+    std::thread streamConvert(&MediaManager::thread_stream_convert, this);
+    streamConvert.detach();
     return true;
 }
 
@@ -308,7 +308,7 @@ void MediaManager::seekFrameByAudioStream(int timeSecs)
     logger.info("seek complete");
 }
 
-float MediaManager::getCurrentProgress()
+float MediaManager::getCurrentProgress() const
 {
     if(m_audioIndex >= 0)
         return m_audioLastPTS;
@@ -804,18 +804,18 @@ int MediaManager::thread_audio_display()
     return 0;
 }
 
-int MediaManager::thread_push_stream()
+int MediaManager::thread_stream_convert()
 {
     //1.定义输入输出格式上下文
     AVFormatContext* inputFormatCtx = NULL;
     AVFormatContext* outputFormatCtx = NULL;
 
     //2.打开输入文件
-    int ret = avformat_open_input(&inputFormatCtx, m_filePath.data(), NULL, NULL);
+    int ret = avformat_open_input(&inputFormatCtx, m_inputStreamUrl.data(), NULL, NULL);
     if(ret < 0) return -1;
 
     //3.打开输出文件
-    ret = avformat_alloc_output_context2(&outputFormatCtx, NULL, "flv", m_streamUrl.data());
+    ret = avformat_alloc_output_context2(&outputFormatCtx, NULL, "flv", m_outputStreamUrl.data());
     if(ret < 0) return -1;
     if(!outputFormatCtx) return -1;
 
@@ -823,7 +823,7 @@ int MediaManager::thread_push_stream()
     ret = avformat_find_stream_info(inputFormatCtx, NULL);
     if(ret < 0) return -1;
 
-    av_dump_format(inputFormatCtx, 0, m_filePath.data(), 0);            //打印输入信息
+    av_dump_format(inputFormatCtx, 0, m_inputStreamUrl.data(), 0);            //打印输入信息
 
     //5.获取流信息
     for(unsigned int i = 0; i < inputFormatCtx->nb_streams; i++)
@@ -841,7 +841,7 @@ int MediaManager::thread_push_stream()
     //6.输出封装处理
     if(outputFormatCtx && !(outputFormatCtx->flags & AVFMT_NOFILE))
     {
-        ret = avio_open(&outputFormatCtx->pb, m_streamUrl.data(), AVIO_FLAG_WRITE);
+        ret = avio_open(&outputFormatCtx->pb, m_outputStreamUrl.data(), AVIO_FLAG_WRITE);
         if(ret < 0) return -1;
     }
 
@@ -849,7 +849,7 @@ int MediaManager::thread_push_stream()
     ret = avformat_write_header(outputFormatCtx, NULL);
     if(ret < 0) return -1;
 
-    av_dump_format(outputFormatCtx, 0, m_streamUrl.data(), 1);          //打印输出信息
+    av_dump_format(outputFormatCtx, 0, m_outputStreamUrl.data(), 1);          //打印输出信息
 
     //查找是否有视频流
     AVMediaType printMediaType = AVMEDIA_TYPE_AUDIO;
@@ -898,7 +898,7 @@ int MediaManager::thread_push_stream()
 
     //写文件尾
     /*
-     * 可忽略以下报错信息，因为推流rtmp使用的flv格式不含时长和大小信息
+     * 若是rtmp推流，可忽略以下报错信息，因为推流rtmp使用的flv格式不含时长和大小信息
     * [flv @ 0000000031af2880] Failed to update header with correct duration.
     * [flv @ 0000000031af2880] Failed to update header with correct filesize.
     */

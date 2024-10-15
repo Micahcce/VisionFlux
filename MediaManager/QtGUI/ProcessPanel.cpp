@@ -24,10 +24,6 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     StreamUrlSaveBtn->setText("保存");
     connect(StreamUrlSaveBtn, &QPushButton::clicked, this, &ProcessPanel::slotLiveStreamSave);
 
-    QPushButton* StreamUrlEndBtn = new QPushButton(this);
-    StreamUrlEndBtn->setText("结束");
-    connect(StreamUrlEndBtn, &QPushButton::clicked, this, &ProcessPanel::slotLiveStreamEnd);
-
     //推流
     QLabel* PushStreamLabel = new QLabel(this);
     PushStreamLabel->setText("推流");
@@ -71,6 +67,14 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     QPushButton* LocalFileConverBtn = new QPushButton(this);
     LocalFileConverBtn->setText("转换");
 
+    QLabel* AllEndLabel = new QLabel(this);
+    AllEndLabel->setText("全部结束");
+    AllEndLabel->setFont(font);
+
+    QPushButton* AllEndBtn = new QPushButton(this);
+    AllEndBtn->setText("结束");
+    connect(AllEndBtn, &QPushButton::clicked, this, &ProcessPanel::slotAllEnd);
+
 
     // 创建一个容器，用于放置控件
     QWidget *container = new QWidget;
@@ -80,7 +84,6 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     layout->addWidget(m_pullStreamUrlEdit);
     layout->addWidget(StreamUrlPlayBtn);
     layout->addWidget(StreamUrlSaveBtn);
-    layout->addWidget(StreamUrlEndBtn);
     layout->addWidget(PushStreamLabel);
     layout->addWidget(m_pushStreamUrlEdit);
     layout->addWidget(m_pushStreamFileEdit);
@@ -91,6 +94,8 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     layout->addWidget(ConvertFileSelectBtn);
     layout->addWidget(TargetFormatCb);
     layout->addWidget(LocalFileConverBtn);
+    layout->addWidget(AllEndLabel);
+    layout->addWidget(AllEndBtn);
 
 
     // 将容器设置为 QScrollArea 的子组件
@@ -106,12 +111,13 @@ void ProcessPanel::slotLiveStreamPlay()
 
 void ProcessPanel::slotLiveStreamSave()
 {
-    logger.info("To be developed");
-}
+    const QString streamUrl = m_pullStreamUrlEdit->text();
+    QUrl qUrl(streamUrl);                                  // 将 URL 转换为 QUrl 对象
+    QString fileName = QFileInfo(qUrl.path()).fileName();  // 获取文件名
+    QString outputPath = QFileInfo(fileName).baseName();   // 获取不带后缀的文件名
+    outputPath += ".flv";                                  // flv格式
 
-void ProcessPanel::slotLiveStreamEnd()
-{
-    logger.info("To be developed");
+    m_bottomBar->getPlayController()->streamConvert(streamUrl.toStdString(), outputPath.toStdString());
 }
 
 void ProcessPanel::slotPushStreamFileSelect()
@@ -127,7 +133,7 @@ void ProcessPanel::slotPushStream()
 {
     QString streamUrl = m_pushStreamUrlEdit->text();
     QString filePath = m_pushStreamFileEdit->text();
-    m_bottomBar->getPlayController()->pushStream(filePath.toStdString(), streamUrl.toStdString());
+    m_bottomBar->getPlayController()->streamConvert(filePath.toStdString(), streamUrl.toStdString());
 //    m_bottomBar->getPlayController()->pushStream("C:\\Users\\13055\\Desktop\\VisionFlux\\media\\output.mp4",
     //                                                 "rtmp://localhost:1935/live/livestream");
 }
@@ -139,4 +145,9 @@ void ProcessPanel::slotConvertFileSelect()
         return;
 
     m_convertFileEdit->setText(filePath);
+}
+
+void ProcessPanel::slotAllEnd()
+{
+    logger.info("To be developed");
 }
