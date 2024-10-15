@@ -41,6 +41,7 @@ public:
     //拉流保存
     //转码保存
     //推流
+    bool pushStream(const std::string& filePath, const std::string& streamUrl);
 
 
     //修改进度
@@ -93,6 +94,7 @@ private:
     int thread_media_decode();
     int thread_video_display();
     int thread_audio_display();
+    int thread_push_stream();
 
     // 静态包装函数，因为SDL线程不支持使用成员函数
     static int decodeThreadEntry(void* ptr)
@@ -151,6 +153,10 @@ private:
     //最后一帧的PTS，已转换为秒数
     double m_videoLastPTS;
     double m_audioLastPTS;
+
+    //推流相关
+    std::string m_filePath;
+    std::string m_streamUrl;
 };
 
 #endif // MEDIAMANAGER_H

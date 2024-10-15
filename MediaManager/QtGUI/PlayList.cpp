@@ -4,6 +4,7 @@
 
 PlayList::PlayList(QWidget *parent) : QListWidget(parent)
 {
+
 }
 
 void PlayList::setBottomBar(BottomBar *bottomBar)
@@ -12,6 +13,11 @@ void PlayList::setBottomBar(BottomBar *bottomBar)
     connect(this, &QListWidget::itemDoubleClicked, this, &PlayList::slotStartPlayMedia);    //双击播放
     connect(this, &QListWidget::itemClicked, this, &PlayList::slotSetSelectedMediaPath);    //设置选中项的文件地址
     connect(m_bottomBar, &BottomBar::sigAddMediaItem, this, &PlayList::slotSetSelectedMediaPath);   //添加播放项
+}
+
+void PlayList::setMediaDirPath(QString mediaDirPath)
+{
+    m_mediaDirPath = mediaDirPath;
 }
 
 QString PlayList::getMediaPath()
@@ -41,7 +47,7 @@ QString PlayList::getMediaPath()
     }
 
     // 获取标题文本，在第二个label
-    QString mediaPath = labels[1]->text();
+    QString mediaPath = m_mediaDirPath + labels[1]->text();
     return mediaPath;
 }
 
@@ -58,7 +64,9 @@ void PlayList::slotAddMediaItem(QString filePath)
     thumbnail->setFixedSize(80, 60);
 
     QString thumbnailPath = filePath;
-    QString fileExtension = filePath.section('.', -1); // 取最后一个点后面的部分
+    QFileInfo fileInfo(filePath);
+    QString fileName = fileInfo.fileName();            // 获取文件名
+    QString fileExtension = filePath.section('.', -1); // 获取文件扩展名
     if(fileExtension != "mp3" && fileExtension != "wav")
     {
         if(filePath.contains("."))
@@ -75,10 +83,8 @@ void PlayList::slotAddMediaItem(QString filePath)
     }
     else
     {
-        QFileInfo fileInfo(filePath);
-        QString fileName = fileInfo.fileName();
         thumbnail->setAlignment(Qt::AlignCenter);
-        thumbnail->setText(fileName);
+        thumbnail->setText(fileExtension);
     }
 
     //获取时长
@@ -86,7 +92,7 @@ void PlayList::slotAddMediaItem(QString filePath)
     QString timetotalStr = QString::fromStdString(m_bottomBar->getPlayController()->timeFormatting(duration));
 
     // 添加标题、时长和状态
-    QLabel *titleLabel = new QLabel(filePath);
+    QLabel *titleLabel = new QLabel(fileName);
     QLabel *durationLabel = new QLabel(timetotalStr);
     QLabel *statusLabel = new QLabel("未观看");
 
@@ -115,14 +121,14 @@ void PlayList::slotAddMediaItem(QString filePath)
     this->setItemWidget(item, itemWidget);
 }
 
-void PlayList::searchMediaFiles(const QString &directoryPath)
+void PlayList::searchMediaFiles()
 {
     // 定义要搜索的文件扩展名
     QStringList filters;
     filters << "*.mp3" << "*.mp4" << "*.wav";
 
     // 创建 QDirIterator 以递归方式搜索文件
-    QDirIterator it(directoryPath, filters, QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it(m_mediaDirPath, filters, QDir::Files, QDirIterator::Subdirectories);
 
     // 迭代找到的文件
     while (it.hasNext())

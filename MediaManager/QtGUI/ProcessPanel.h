@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QFileDialog>
 #include "BottomBar.h"
 
 class ProcessPanel : public QScrollArea
@@ -23,12 +24,18 @@ private slots:
     void slotLiveStreamSave();
     void slotLiveStreamEnd();
 
+    void slotPushStreamFileSelect();
+    void slotPushStream();
+
+    void slotConvertFileSelect();
+
 private:
     BottomBar* m_bottomBar;
 
-    QLineEdit* m_streamUrlEdit;
-    QLineEdit* m_localFileEdit;
-    QLineEdit* m_serverAddressEdit;
+    QLineEdit* m_pullStreamUrlEdit;
+    QLineEdit* m_pushStreamUrlEdit;
+    QLineEdit* m_pushStreamFileEdit;
+    QLineEdit* m_convertFileEdit;
 };
 
 #endif // PROCESSPANEL_H

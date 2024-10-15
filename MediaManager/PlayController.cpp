@@ -12,6 +12,13 @@ void PlayController::startPlay(const std::string filePath)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+
+    std::ifstream file(filePath);
+    if(file.good())                // 如果文件存在且可访问
+        m_mediaInfo->isLiveStream = false;
+    else
+        m_mediaInfo->isLiveStream = true;
+
     logger.debug("ready play: %s", filePath.data());
     if(m_mediaManager->decodeToPlay(filePath) == false)
     {
@@ -56,6 +63,7 @@ void PlayController::endPlay()
     m_mediaInfo->isPlaying = false;
     m_mediaInfo->hasAudioStream = false;
     m_mediaInfo->hasVideoStream = false;
+    m_mediaInfo->isLiveStream = false;
 }
 
 void PlayController::changePlayProgress(int timeSecs)
@@ -92,16 +100,24 @@ void PlayController::changeVolume(int volume)
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
+void PlayController::pushStream(const std::string &filePath, const std::string &streamUrl)
+{
+    //其它操作待处理
+    m_mediaManager->pushStream(filePath, streamUrl);
+}
+
 int PlayController::getMediaDuration(const std::string filePath)
 {
     AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath);
     if (!formatCtx)
-        return 0; // 如果无法获取格式上下文，返回默认值
+        return -1; // 如果无法获取格式上下文，返回-1
     int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
     avformat_close_input(&formatCtx);        // 释放资源
     int secs = duration / AV_TIME_BASE;      // 将微秒转换为秒
-
-    return secs;
+    if(secs < 0)                             // 直播流的情况下会小于0
+        return 0;
+    else
+        return secs;
 }
 
 float PlayController::getPlayProgress()
@@ -131,4 +147,5 @@ std::string PlayController::timeFormatting(int secs)
 
     return std::string(durationStr); // 返回格式化后的字符串
 }
+
 

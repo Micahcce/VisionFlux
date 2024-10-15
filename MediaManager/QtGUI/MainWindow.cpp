@@ -2,7 +2,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-      m_mediaDirPath("C:\\Users\\13055\\Desktop\\VisionFlux\\media")
+      m_mediaDirPath("../media/")
 {
     resize(1000, 600);
 
@@ -50,7 +50,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_playList = new PlayList(playListTab);
     m_playList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_playList->setBottomBar(m_bottomBar);
-    m_playList->searchMediaFiles(m_mediaDirPath);           //添加视频列表
+    m_playList->setMediaDirPath(m_mediaDirPath);
+    m_playList->searchMediaFiles();           //添加视频列表
 
     QVBoxLayout* vBox1 = new QVBoxLayout;
     vBox1->addWidget(m_playList);

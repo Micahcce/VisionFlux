@@ -135,8 +135,8 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         if(m_RGBMode)
             frameYuvToRgb();
 
-        std::thread m_videoThread(&MediaManager::thread_video_display, this);
-        m_videoThread.detach();
+        std::thread videoThread(&MediaManager::thread_video_display, this);
+        videoThread.detach();
     }
 
     // 音频流
@@ -145,13 +145,13 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         initAudioCodec();
         initAudioDevice();
 
-        std::thread m_audioThread(&MediaManager::thread_audio_display, this);
-        m_audioThread.detach();
+        std::thread audioThread(&MediaManager::thread_audio_display, this);
+        audioThread.detach();
     }
 
     //解码线程
-    std::thread m_decodeThread(&MediaManager::thread_media_decode, this);
-    m_decodeThread.detach();
+    std::thread decodeThread(&MediaManager::thread_media_decode, this);
+    decodeThread.detach();
 
 
 #if USE_SDL
@@ -188,6 +188,15 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         }
     }
 #endif
+    return true;
+}
+
+bool MediaManager::pushStream(const std::string &filePath, const std::string &streamUrl)
+{
+    m_filePath = filePath;
+    m_streamUrl = streamUrl;
+    std::thread pushStreamThread(&MediaManager::thread_push_stream, this);
+    pushStreamThread.detach();
     return true;
 }
 
@@ -791,6 +800,112 @@ int MediaManager::thread_audio_display()
     }
     av_frame_free(&frame);
     m_thread_audio_exited = true;
+
+    return 0;
+}
+
+int MediaManager::thread_push_stream()
+{
+    //1.定义输入输出格式上下文
+    AVFormatContext* inputFormatCtx = NULL;
+    AVFormatContext* outputFormatCtx = NULL;
+
+    //2.打开输入文件
+    int ret = avformat_open_input(&inputFormatCtx, m_filePath.data(), NULL, NULL);
+    if(ret < 0) return false;
+
+    //3.打开输出文件
+    ret = avformat_alloc_output_context2(&outputFormatCtx, NULL, "flv", m_streamUrl.data());
+    if(ret < 0) return false;
+
+    //4.分析流信息
+    ret = avformat_find_stream_info(inputFormatCtx, NULL);
+    if(ret < 0) return false;
+
+    av_dump_format(inputFormatCtx, 0, m_filePath.data(), 0);            //打印输入信息
+
+    //5.获取流信息
+    for(unsigned int i = 0; i < inputFormatCtx->nb_streams; i++)
+    {
+        AVStream *in_stream = inputFormatCtx->streams[i];
+        AVStream *out_stream = avformat_new_stream(outputFormatCtx, NULL);
+        if(!out_stream) return -1;
+
+        ret = avcodec_parameters_copy(out_stream->codecpar, in_stream->codecpar);
+        if(ret < 0) return false;
+
+        out_stream->codecpar->codec_tag = 0;
+    }
+
+    //6.输出封装处理
+    if(outputFormatCtx && !(outputFormatCtx->flags & AVFMT_NOFILE))
+    {
+        ret = avio_open(&outputFormatCtx->pb, m_streamUrl.data(), AVIO_FLAG_WRITE);
+        if(ret < 0) return false;
+    }
+
+    //7.写文件头
+    ret = avformat_write_header(outputFormatCtx, NULL);
+    if(ret < 0) return false;
+
+    av_dump_format(outputFormatCtx, 0, m_streamUrl.data(), 1);          //打印输出信息
+
+    //8.定义变量
+    uint64_t frame_index = 0;
+    AVPacket *pkt = av_packet_alloc();
+
+    AVMediaType media_type;
+
+    int64_t start_time = av_gettime();
+    AVRational time_base_q = {1,AV_TIME_BASE}; // us
+
+    bool running = true;
+
+    while(running)
+    {
+        //9.读取一个包
+        if(av_read_frame(inputFormatCtx, pkt) < 0)
+            break;
+
+        //10.转换包
+        AVStream *in_stream = inputFormatCtx->streams[pkt->stream_index];
+        AVStream *out_stream = outputFormatCtx->streams[pkt->stream_index];
+
+        media_type = in_stream->codecpar->codec_type;
+
+        av_packet_rescale_ts(pkt, in_stream->time_base, out_stream->time_base);     //输入、输出都是rtmp时，时基一样，可省略时间戳转换
+
+        //输出到屏幕
+        if(media_type == AVMEDIA_TYPE_VIDEO)
+        {
+            printf("save frame: %llu , time: %lld\n",frame_index, av_gettime() / 1000); // ms
+            frame_index++;
+        }
+
+        //11.写包
+        ret = av_interleaved_write_frame(outputFormatCtx, pkt);
+        if(ret < 0) return ret;
+
+        //适当延时
+        delayMs(5);
+
+
+        av_packet_unref(pkt);
+    }
+
+    //12.写文件尾
+    ret = av_write_trailer(outputFormatCtx);
+    if(ret < 0) return ret;
+
+    //13.关闭输入
+    avformat_close_input(&inputFormatCtx);
+    av_packet_free(&pkt);
+
+    if(outputFormatCtx && !(outputFormatCtx->flags & AVFMT_NOFILE))
+    {
+        avio_close(outputFormatCtx->pb);
+    }
+    avformat_free_context(outputFormatCtx);
 
     return 0;
 }

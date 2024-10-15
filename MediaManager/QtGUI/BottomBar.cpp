@@ -91,7 +91,7 @@ bool BottomBar::startPlayMedia(QString mediaPath)
 
     //获取时长
     int totalTime = m_playController->getMediaDuration(mediaPath.toStdString());
-    if(totalTime == 0)
+    if(totalTime == -1)
     {
         logger.error("getMediaDuration failed");
         return false;
@@ -109,8 +109,9 @@ bool BottomBar::startPlayMedia(QString mediaPath)
     //开始播放
     m_playController->startPlay(mediaPath.toStdString());
 
-    //定时器启动
-    m_sliderTimer->start(200);
+    //定时器启动（非直播流）
+    if(m_playController->getMediaPlayInfo()->isLiveStream == false)
+        m_sliderTimer->start(200);
 
     return true;
 }
@@ -136,7 +137,8 @@ void BottomBar::slotSliderReleased()
 
     //修改进度
     m_playController->changePlayProgress(currentTime);
-    m_sliderTimer->start(200);
+    if(m_playController->getMediaPlayInfo()->isLiveStream == false)
+        m_sliderTimer->start(200);
 }
 
 void BottomBar::slotPlayAndPause()
@@ -170,7 +172,7 @@ void BottomBar::slotPlayAndPause()
 
 void BottomBar::slotAddMediaFile()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "./", "*.mp4 *.wav *.mp3");
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", "*.mp4 *.wav *.mp3");
     if(filePath == "")
         return;
 

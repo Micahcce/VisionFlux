@@ -3,6 +3,7 @@
 
 #include "MediaManager.h"
 #include <string>
+#include <istream>
 
 class MediaPlayInfo
 {
@@ -12,6 +13,7 @@ public:
     bool isPlaying = false;
     bool hasAudioStream = false;
     bool hasVideoStream = false;
+    bool isLiveStream = false;
 
     float speed = 1.0;
     int volume = 100;
@@ -39,6 +41,9 @@ public:
     //修改音量
     void changeVolume(int volume);
 
+    //推流
+    void pushStream(const std::string& filePath, const std::string& streamUrl);
+
     //获取视频时长（秒）
     int getMediaDuration(const std::string filePath);
     //获取当前播放进度
@@ -53,7 +58,7 @@ public:
     void setRenderCallback(MediaManager::RenderCallback callback){m_mediaManager->setRenderCallback(std::move(callback));}
 
     //提供播放状态查询
-    MediaPlayInfo* getMediaPlayInfo()
+    const MediaPlayInfo* getMediaPlayInfo()
     {
         if (!m_mediaInfo)
         {
