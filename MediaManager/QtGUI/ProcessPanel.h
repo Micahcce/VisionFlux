@@ -2,13 +2,15 @@
 #define PROCESSPANEL_H
 
 #include <QWidget>
+#include <QScrollArea>
 #include <QLineEdit>
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QComboBox>
 #include "BottomBar.h"
 
-class ProcessPanel : public QWidget
+class ProcessPanel : public QScrollArea
 {
     Q_OBJECT
 public:
@@ -18,11 +20,15 @@ public:
 
 private slots:
     void slotLiveStreamPlay();
+    void slotLiveStreamSave();
+    void slotLiveStreamEnd();
 
 private:
     BottomBar* m_bottomBar;
 
     QLineEdit* m_streamUrlEdit;
+    QLineEdit* m_localFileEdit;
+    QLineEdit* m_serverAddressEdit;
 };
 
 #endif // PROCESSPANEL_H

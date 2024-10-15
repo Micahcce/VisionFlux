@@ -37,9 +37,9 @@ public:
 
     //解码播放
     bool decodeToPlay(const std::string& filePath);
-    //转码保存
     //拉流播放
     //拉流保存
+    //转码保存
     //推流
 
 
