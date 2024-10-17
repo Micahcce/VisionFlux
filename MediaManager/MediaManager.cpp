@@ -732,7 +732,11 @@ int MediaManager::thread_video_display()
 
         // 调用回调函数，通知 GUI 渲染
         if (m_renderCallback)
+#ifdef ENABLE_PYBIND
+            m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
+#else
             m_renderCallback(m_frameRGB->data[0], m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
+#endif
         else
             logger.error("Render callback not set");
 #endif

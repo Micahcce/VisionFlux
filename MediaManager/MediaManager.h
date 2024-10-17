@@ -7,13 +7,18 @@
 #include <chrono>
 #include <thread>
 #include <atomic>
-#include <functional>
 #include <memory>
 #include "FrameQueue.h"
 #include "SdlPlayer.h"
 #include "Logger.h"
 #include "BmpAndWavAchieve.h"
 #include <SoundTouchDLL.h>
+
+#ifdef ENABLE_PYBIND
+#include <pybind11/functional.h>
+#else
+#include <functional>
+#endif
 
 extern "C"
 {
@@ -80,7 +85,12 @@ public:
     void close();
 
     //设置渲染回调函数
+#ifdef ENABLE_PYBIND
+    using RenderCallback = std::function<void(int64_t, int, int, float)>;
+#else
     using RenderCallback = std::function<void(uint8_t*, int, int, float)>;
+#endif
+
     void setRenderCallback(RenderCallback callback) {m_renderCallback = std::move(callback);}
 
     SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}

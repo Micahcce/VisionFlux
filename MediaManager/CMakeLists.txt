@@ -8,17 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 包含当前路径
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# QT文件工具
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-# 查找QT库
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-
-# 源文件
+# 定义基本源文件集
 set(PROJECT_SOURCES
-    main.cpp
     MediaManager.h
     MediaManager.cpp
     PlayController.h
@@ -30,22 +21,57 @@ set(PROJECT_SOURCES
     SdlPlayer.cpp
     BmpAndWavAchieve.h
     BmpAndWavAchieve.cpp
-
-    QtGUI/MainWindow.h
-    QtGUI/MainWindow.cpp
-    QtGUI/BottomBar.h
-    QtGUI/BottomBar.cpp
-    QtGUI/PlayList.h
-    QtGUI/PlayList.cpp
-    QtGUI/ProcessPanel.h
-    QtGUI/ProcessPanel.cpp
 )
 
-# 创建可执行文件，并指定输出目录为项目的根目录
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-)
+# 是否开启Pybind11
+option(ENABLE_PYBIND "enable pybind11 in order to create pyd files." OFF)
+set(ENABLE_PYBIND OFF)
+
+# 条件编译
+if(ENABLE_PYBIND)
+    message(STATUS "Pubind11 Enabled.")
+    # PyBind11模块
+    set(pybind11_DIR ${PROJECT_SOURCE_DIR}/pybind11/share/cmake/pybind11)
+    find_package(pybind11 REQUIRED)
+
+    pybind11_add_module(${PROJECT_NAME}
+        ${PROJECT_SOURCES}
+        BindClass.cpp
+    )
+    # 为代码添加ENABLE_PYBIND宏定义
+    target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_PYBIND)
+
+else()
+    message(STATUS "Pubind11 Disabled.")
+    # QT文件工具
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+
+    # 查找QT库
+    find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
+    # 创建可执行文件
+    add_executable(${PROJECT_NAME}
+        ${PROJECT_SOURCES}
+        main.cpp
+        QtGUI/MainWindow.h
+        QtGUI/MainWindow.cpp
+        QtGUI/BottomBar.h
+        QtGUI/BottomBar.cpp
+        QtGUI/PlayList.h
+        QtGUI/PlayList.cpp
+        QtGUI/ProcessPanel.h
+        QtGUI/ProcessPanel.cpp
+    )
+
+    # 指定输出目录为项目的根目录
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+
+    target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_PYBIND11) # 为指定Target添加宏定义
+endif()
 
 
 # 设置库的包含目录（包含头文件）
@@ -78,7 +104,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2test.lib
 
     ${PROJECT_SOURCE_DIR}/SoundTouch/lib/SoundTouchDLLD_x64.lib
-
-    Qt5::Core
-    Qt5::Widgets
 )
+
+# 补充
+if(ENABLE_PYBIND)
+    include_directories(${PROJECT_SOURCE_DIR}/pybind11/include)
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Qt5::Core
+        Qt5::Widgets
+    )
+endif()
