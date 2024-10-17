@@ -2,7 +2,7 @@
 
 Logger logger; // 定义全局变量
 
-Logger::Logger() : logLevel_(LogLevel::DEBUG), isOutputFileSet_(false) {}
+Logger::Logger() : logLevel_(LogLevel::TRACE), isOutputFileSet_(false) {}
 
 Logger::~Logger() {
     if (outputFile_.is_open()) {
@@ -26,12 +26,13 @@ void Logger::setOutputFile(const std::string& filename) {
 
 std::string Logger::logLevelToString(LogLevel level) {
     switch (level) {
-        case LogLevel::DEBUG:   return "DEBUG   ";
-        case LogLevel::INFO:    return "INFO    ";
-        case LogLevel::WARNING:  return "WARNING ";
-        case LogLevel::ERROR:    return "ERROR   ";
+        case LogLevel::TRACE: return "TRACE   ";
+        case LogLevel::DEBUG: return "DEBUG   ";
+        case LogLevel::INFO: return "INFO    ";
+        case LogLevel::WARNING: return "WARNING ";
+        case LogLevel::ERROR: return "ERROR   ";
         case LogLevel::CRITICAL: return "CRITICAL";
-        default:                return "UNKNOWN  ";
+        default: return "UNKNOWN  ";
     }
 }
 
@@ -51,6 +52,7 @@ std::string Logger::colorize(const std::string& message, LogLevel level, bool is
     }
 
     switch (level) {
+        case LogLevel::TRACE:    return "\033[37m" + message + "\033[0m"; // TRACE用灰色
         case LogLevel::DEBUG:    return "\033[36m" + message + "\033[0m"; // DEBUG用青色
         case LogLevel::INFO:     return "\033[32m" + message + "\033[0m"; // INFO用绿色
         case LogLevel::WARNING:  return "\033[33m" + message + "\033[0m"; // WARNING用黄色
@@ -78,6 +80,15 @@ void Logger::log(LogLevel level, const std::string& message) {
 }
 
 // 添加格式化日志函数
+void Logger::trace(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buffer[256];
+    vsnprintf(buffer, sizeof(buffer), format, args); // 使用vsnprintf格式化字符串
+    va_end(args);
+    log(LogLevel::TRACE, buffer);
+}
+
 void Logger::debug(const char* format, ...) {
     va_list args;
     va_start(args, format);

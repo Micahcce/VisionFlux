@@ -12,6 +12,7 @@
 #include <cstdarg> // 添加可变参数支持
 
 enum class LogLevel {
+    TRACE,
     DEBUG,
     INFO,
     WARNING,
@@ -28,6 +29,7 @@ public:
     void setOutputFile(const std::string& filename);
 
     // 添加格式化的日志函数
+    void trace(const char* format, ...);
     void debug(const char* format, ...);
     void info(const char* format, ...);
     void warning(const char* format, ...);

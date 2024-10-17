@@ -200,7 +200,7 @@ void BottomBar::slotVolumeChanged()
 
 void BottomBar::slotUpdateProgress()
 {
-    logger.debug("progress: %f", m_playController->getPlayProgress());
+    logger.trace("progress: %f", m_playController->getPlayProgress());
     int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress() + 0.2);  //增加0.2s冗余时间，缓解进度条走不满的问题
 
     //进度条更新
