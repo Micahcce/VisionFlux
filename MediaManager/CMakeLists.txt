@@ -25,7 +25,7 @@ set(PROJECT_SOURCES
 
 # 是否开启Pybind11
 option(ENABLE_PYBIND "enable pybind11 in order to create pyd files." OFF)
-set(ENABLE_PYBIND OFF)
+set(ENABLE_PYBIND ON)
 
 # 条件编译
 if(ENABLE_PYBIND)
@@ -40,6 +40,11 @@ if(ENABLE_PYBIND)
     )
     # 为代码添加ENABLE_PYBIND宏定义
     target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_PYBIND)
+
+    # 设置 pyd 文件的输出路径
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/.."
+    )
 
 else()
     message(STATUS "Pubind11 Disabled.")
@@ -69,8 +74,6 @@ else()
     set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
-
-    target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_PYBIND11) # 为指定Target添加宏定义
 endif()
 
 
