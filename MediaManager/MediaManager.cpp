@@ -1,7 +1,6 @@
 #include "MediaManager.h"
 #define USE_SDL 0
 
-using namespace soundtouch;
 
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
@@ -320,7 +319,7 @@ void MediaManager::audioChangeSpeed(float speedFactor)
 {
     logger.info("change speed to %0.2f", speedFactor);
 
-    m_soundTouch->setTempo(speedFactor);
+    soundtouch_setTempo(m_soundTouch, speedFactor);
     m_sdlPlayer->audioChangeSpeed(speedFactor);
     m_speedFactor = speedFactor;
 }
@@ -563,7 +562,7 @@ void MediaManager::close()
 
     if(m_soundTouch)
     {
-        delete m_soundTouch;
+        soundtouch_destroyInstance(m_soundTouch);
         m_soundTouch = nullptr;
     }
 
@@ -681,10 +680,10 @@ void MediaManager::initAudioDevice()
     swr_init(m_swrCtx);
 
     // 初始化 SoundTouch 实例
-    m_soundTouch = new SoundTouch;
-    m_soundTouch->setSampleRate(m_pAudioParams->out_sample_rate);  // 设置采样率
-    m_soundTouch->setChannels(m_pAudioParams->out_channels);      // 设置通道数
-    m_soundTouch->setTempo(m_speedFactor);                       // 设置倍速播放
+    m_soundTouch = soundtouch_createInstance();
+    soundtouch_setSampleRate(m_soundTouch, m_pAudioParams->out_sample_rate);    // 设置采样率
+    soundtouch_setChannels(m_soundTouch, m_pAudioParams->out_channels);         // 设置通道数
+    soundtouch_setTempo(m_soundTouch, m_speedFactor);                           // 设置倍速播放
 
     //开启音频设备
     m_sdlPlayer = new SdlPlayer;
@@ -778,10 +777,10 @@ int MediaManager::thread_audio_display()
         }
 
         // 将重采样后的音频数据传递给 SoundTouch 进行处理
-        m_soundTouch->putSamples((const float*)m_pAudioParams->outBuff, ret);
+        soundtouch_putSamples(m_soundTouch, (const float*)m_pAudioParams->outBuff, ret);
 
         // 获取处理后的样本
-        int numSamplesProcessed = m_soundTouch->receiveSamples((float*)m_pAudioParams->outBuff, m_pAudioParams->out_nb_samples / m_speedFactor);
+        int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_pAudioParams->outBuff, m_pAudioParams->out_nb_samples / m_speedFactor);
 //        logger.debug("putSamples = %d, numSamplesProcessed = %d", ret, numSamplesProcessed);
 
         // 音频PTS计算

@@ -13,7 +13,7 @@
 #include "SdlPlayer.h"
 #include "Logger.h"
 #include "BmpAndWavAchieve.h"
-#include <SoundTouch.h>
+#include <SoundTouchDLL.h>
 
 extern "C"
 {
@@ -121,7 +121,7 @@ private:
 
     FrameQueue* m_frameQueue;
     SdlPlayer* m_sdlPlayer;
-    soundtouch::SoundTouch* m_soundTouch;
+    HANDLE m_soundTouch;
 
     //媒体数据相关，其中Index同时用于音视频流是否存在的判断
     AVFormatContext* m_pFormatCtx;

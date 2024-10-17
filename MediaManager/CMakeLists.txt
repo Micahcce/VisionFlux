@@ -77,7 +77,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2main.lib
     ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2test.lib
 
-    ${PROJECT_SOURCE_DIR}/SoundTouch/lib/libSoundTouch.a
+    ${PROJECT_SOURCE_DIR}/SoundTouch/lib/SoundTouchDLLD_x64.lib
 
     Qt5::Core
     Qt5::Widgets
