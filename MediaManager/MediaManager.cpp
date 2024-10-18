@@ -324,12 +324,15 @@ float MediaManager::getCurrentProgress() const
         return m_videoLastPTS;
 }
 
-void MediaManager::audioChangeSpeed(float speedFactor)
+void MediaManager::changeSpeed(float speedFactor)
 {
     logger.info("change speed to %0.2f", speedFactor);
 
-    soundtouch_setTempo(m_soundTouch, speedFactor);
-    m_sdlPlayer->audioChangeSpeed(speedFactor);
+    if(m_audioIndex >= 0)
+    {
+        soundtouch_setTempo(m_soundTouch, speedFactor);
+        m_sdlPlayer->audioChangeSpeed(speedFactor);
+    }
     m_speedFactor = speedFactor;
 }
 
@@ -975,10 +978,15 @@ void MediaManager::videoDelayControl(AVFrame* frame)
     {
         if(delayDuration > 0.1)
             delayDuration = 0.04;
+
 //        logger.debug("video delay: %f", delayDuration);
-        av_usleep(delayDuration * AV_TIME_BASE);   // 微秒延时
+//        logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
+
+        if(m_audioIndex >= 0)
+            av_usleep(delayDuration * AV_TIME_BASE);
+        else
+            av_usleep(delayDuration * AV_TIME_BASE / m_speedFactor);
     }
-//    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;

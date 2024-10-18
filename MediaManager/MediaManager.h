@@ -64,7 +64,7 @@ public:
     int getVideoIndex() const {return m_videoIndex;}
 
     //变速
-    void audioChangeSpeed(float speedFactor);
+    void changeSpeed(float speedFactor);
 
     //保存视频帧
     bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
@@ -135,26 +135,26 @@ private:
 
     //媒体数据相关，其中Index同时用于音视频流是否存在的判断
     AVFormatContext* m_pFormatCtx;
-    int m_videoIndex = -1;
-    int m_audioIndex = -1;
+    int m_videoIndex;
+    int m_audioIndex;
     AVCodecContext* m_pCodecCtx_video;
     AVCodecContext* m_pCodecCtx_audio;
     const AVCodec* m_pCodec_video;
     const AVCodec* m_pCodec_audio;
 
-    //视频信息
+    //视频变量
+    uint8_t* m_frameBuf;
+    AVFrame *m_frameRGB;
+    SwsContext* m_pSwsCtx;
     float m_aspectRatio;
     bool m_RGBMode;
-    uint8_t* m_frameBuf;
 
     //音频变量
     AudioParams* m_pAudioParams;
     SwrContext *m_swrCtx;
-    float m_speedFactor;
 
-    //视频转换变量
-    AVFrame *m_frameRGB;
-    SwsContext* m_pSwsCtx;
+    //公共变量
+    float m_speedFactor;
 
     //线程状态变量
     std::atomic<bool> m_thread_quit;

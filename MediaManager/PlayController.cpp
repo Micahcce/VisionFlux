@@ -34,8 +34,8 @@ void PlayController::startPlay(const std::string filePath)
     if(m_mediaInfo->hasAudioStream)
     {
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
-        m_mediaManager->audioChangeSpeed(m_mediaInfo->speed);
     }
+    m_mediaManager->changeSpeed(m_mediaInfo->speed);
     m_mediaInfo->mediaName = filePath;
     m_mediaInfo->isPlaying = true;
 }
@@ -76,15 +76,12 @@ void PlayController::changePlayProgress(int timeSecs)
 
 void PlayController::changePlaySpeed(float speedFactor)
 {
+    m_mediaInfo->speed = speedFactor;
+
     if(m_mediaInfo->mediaName == "")
         return;
 
-    m_mediaInfo->speed = speedFactor;
-
-    if(m_mediaInfo->hasAudioStream)
-        m_mediaManager->audioChangeSpeed(m_mediaInfo->speed);
-    else
-        ;//待完成：单视频流变速逻辑
+    m_mediaManager->changeSpeed(m_mediaInfo->speed);
 }
 
 void PlayController::changeVolume(int volume)
