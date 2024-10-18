@@ -16,6 +16,7 @@ MediaManager::MediaManager()
       m_pCodec_audio(nullptr),
       m_aspectRatio(0.0f),
       m_RGBMode(false),
+      m_frameBuf(nullptr),
       m_pAudioParams(nullptr),
       m_swrCtx(nullptr),
       m_frameRGB(nullptr),
@@ -218,6 +219,7 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
         logger.error("Error seeking to position.");
         return;
     }
+
     avcodec_flush_buffers(m_pCodecCtx_video);
     if(m_audioIndex >= 0)
         avcodec_flush_buffers(m_pCodecCtx_audio);
@@ -240,9 +242,11 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
                 if (frame->pts >= targetPTS)
                 {
                     // 找到目标帧
+                    av_frame_unref(frame);
                     throwing = false;
                     break;
                 }
+                av_frame_unref(frame);
             }
         }
         av_packet_unref(packet);
@@ -294,9 +298,11 @@ void MediaManager::seekFrameByAudioStream(int timeSecs)
                 if (frame->pts >= targetPTS)
                 {
                     // 找到目标帧
+                    av_frame_unref(frame);
                     throwing = false;
                     break;
                 }
+                av_frame_unref(frame);
             }
         }
         av_packet_unref(packet);
@@ -600,6 +606,12 @@ void MediaManager::close()
     {
         avformat_close_input(&m_pFormatCtx);
         m_pFormatCtx = nullptr;
+    }
+
+    if(m_frameBuf)
+    {
+        av_free(m_frameBuf);
+        m_frameBuf = nullptr;
     }
 
     m_videoLastPTS = 0.0;
@@ -925,31 +937,25 @@ int MediaManager::thread_stream_convert()
 void MediaManager::videoDelayControl(AVFrame* frame)
 {
     double currentVideoPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
-
+    double delayDuration = 0.0;
     //有音频时向音频流同步，无音频流则按PTS播放
     if(m_audioIndex >= 0)
-    {
-        // 判断视频是否超前于音频，如果超前则等待
-        if (currentVideoPTS > m_audioLastPTS && m_audioLastPTS != 0.0)
-        {
-            double delayDuration = currentVideoPTS - m_audioLastPTS;
-            if (delayDuration > 0.0 && m_thread_quit == false)
-            {
-                av_usleep(delayDuration * AV_TIME_BASE);   // 微秒延时
-            }
-        }
-    }
+        delayDuration = currentVideoPTS - m_audioLastPTS;
     else
+        delayDuration = currentVideoPTS - m_videoLastPTS;
+
+    /* 注意：
+     * 跳转后当视频流比音频流先渲染第一帧时，
+     * m_audioLastPTS还处于跳转前的PTS，
+     * 极大落后于新视频帧的PTS，因此可能出现长时间的延时，
+     * 因此需要另外调整delayDuration的值
+    */
+    if (delayDuration > 0.0 &&  m_thread_quit == false)
     {
-        //视频按pts渲染
-        if (m_videoLastPTS != 0.0)
-        {
-            double delayDuration = currentVideoPTS - m_videoLastPTS;
-            if (delayDuration > 0.0 && m_thread_quit == false)
-            {
-                av_usleep(delayDuration * AV_TIME_BASE); // 微秒延时
-            }
-        }
+        if(delayDuration > 0.1)
+            delayDuration = 0.04;
+//        logger.debug("video delay: %f", delayDuration);
+        av_usleep(delayDuration * AV_TIME_BASE);   // 微秒延时
     }
     //logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
@@ -972,9 +978,11 @@ void MediaManager::frameYuvToRgb()
 #endif
 
     m_frameRGB = av_frame_alloc();                   //转换后的帧
+    if(m_frameBuf)
+        av_free(m_frameBuf);
     m_pSwsCtx = sws_getContext(srcWidth, srcHeight, m_pCodecCtx_video->pix_fmt, dstWidth, dstHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
-    unsigned char *buf = (unsigned char *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, dstWidth*2, dstHeight*2, 1));
-    av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, buf, AV_PIX_FMT_RGB32, dstWidth, dstHeight, 1);
+    m_frameBuf = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, dstWidth*2, dstHeight*2, 1));
+    av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, m_frameBuf, AV_PIX_FMT_RGB32, dstWidth, dstHeight, 1);
 }
 
 

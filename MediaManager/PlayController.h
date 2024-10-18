@@ -9,11 +9,10 @@ class MediaPlayInfo
 {
     //播放信息
 public:
-    bool isStarted = false;
     bool isPlaying = false;
+    bool isLiveStream = false;
     bool hasAudioStream = false;
     bool hasVideoStream = false;
-    bool isLiveStream = false;
 
     float speed = 1.0;
     int volume = 100;

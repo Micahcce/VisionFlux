@@ -37,7 +37,6 @@ void PlayController::startPlay(const std::string filePath)
         m_mediaManager->audioChangeSpeed(m_mediaInfo->speed);
     }
     m_mediaInfo->mediaName = filePath;
-    m_mediaInfo->isStarted = true;
     m_mediaInfo->isPlaying = true;
 }
 
@@ -59,7 +58,6 @@ void PlayController::endPlay()
     if(m_mediaInfo->mediaName != "")
         m_mediaManager->close();
     m_mediaInfo->mediaName = "";
-    m_mediaInfo->isStarted = false;
     m_mediaInfo->isPlaying = false;
     m_mediaInfo->hasAudioStream = false;
     m_mediaInfo->hasVideoStream = false;

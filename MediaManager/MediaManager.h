@@ -73,7 +73,7 @@ public:
     enum
     {
         MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
-        MAX_NODE_NUMBER = 50                 // 帧缓冲数量过少（如1、2）当连续解码音频或视频帧时，会使解码线程阻塞导致无法继续解码
+        MAX_NODE_NUMBER = 20                 // 帧缓冲数量过少（如1、2）当连续解码音频或视频帧时，会使解码线程阻塞导致无法继续解码
     };
 
     //线程状态
@@ -145,6 +145,7 @@ private:
     //视频信息
     float m_aspectRatio;
     bool m_RGBMode;
+    uint8_t* m_frameBuf;
 
     //音频变量
     AudioParams* m_pAudioParams;

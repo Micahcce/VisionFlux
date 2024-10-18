@@ -143,7 +143,7 @@ void BottomBar::slotSliderReleased()
 
 void BottomBar::slotPlayAndPause()
 {
-    if(!m_playController->getMediaPlayInfo()->isStarted)    //未开始播放
+    if(m_playController->getMediaPlayInfo()->mediaName == "")    //未开始播放
     {
         if(m_selectedMediaPath != "")
             startPlayMedia(m_selectedMediaPath);
