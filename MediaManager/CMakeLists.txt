@@ -25,11 +25,11 @@ set(PROJECT_SOURCES
 
 # 是否开启Pybind11
 option(ENABLE_PYBIND "enable pybind11 in order to create pyd files." OFF)
-set(ENABLE_PYBIND ON)
+set(ENABLE_PYBIND OFF)
 
 # 条件编译
 if(ENABLE_PYBIND)
-    message(STATUS "Pubind11 Enabled.")
+    message(STATUS "Pybind11 Enabled.")
     # PyBind11模块
     set(pybind11_DIR ${PROJECT_SOURCE_DIR}/pybind11/share/cmake/pybind11)
     find_package(pybind11 REQUIRED)
@@ -43,11 +43,11 @@ if(ENABLE_PYBIND)
 
     # 设置 pyd 文件的输出路径
     set_target_properties(${PROJECT_NAME} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/.."
+        LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build"
     )
 
 else()
-    message(STATUS "Pubind11 Disabled.")
+    message(STATUS "Pybind11 Disabled.")
     # QT文件工具
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)
