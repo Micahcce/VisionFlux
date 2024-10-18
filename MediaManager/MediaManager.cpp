@@ -32,6 +32,7 @@ MediaManager::MediaManager()
       m_speedFactor(1.0)
 {
     m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
+//    av_log_set_level(AV_LOG_DEBUG);
 //    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
 #if USE_SDL
@@ -239,6 +240,7 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
             avcodec_send_packet(m_pCodecCtx_video, packet);
             while (avcodec_receive_frame(m_pCodecCtx_video, frame) >= 0)
             {
+//                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
                 if (frame->pts >= targetPTS)
                 {
                     // 找到目标帧
@@ -295,6 +297,7 @@ void MediaManager::seekFrameByAudioStream(int timeSecs)
             avcodec_send_packet(m_pCodecCtx_audio, packet);
             while (avcodec_receive_frame(m_pCodecCtx_audio, frame) >= 0)
             {
+//                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
                 if (frame->pts >= targetPTS)
                 {
                     // 找到目标帧
@@ -474,6 +477,7 @@ int MediaManager::thread_media_decode()
             delayMs(10);
             continue;
         }
+        //logger.debug("video frame count: %d, audio frame count: %d", m_frameQueue->getVideoFrameCount(), m_frameQueue->getAudioFrameCount());
 
         if(av_read_frame(m_pFormatCtx, packet) < 0)
             break;
@@ -484,6 +488,17 @@ int MediaManager::thread_media_decode()
 
             while(1)
             {
+                /*
+                 * 防止跳帧时该线程仍在该while中循环，
+                 * 否则avcodec_receive_frame与跳帧线程中的send/receive竞争解码器资源，
+                 * 造成程序奔溃。
+                */
+                if(m_thread_pause)
+                {
+                    delayMs(10);
+                    continue;
+                }
+
                 ret = avcodec_receive_frame(m_pCodecCtx_video, frame);
 
                 if(ret < 0)
@@ -507,6 +522,12 @@ int MediaManager::thread_media_decode()
 
             while(1)
             {
+                if(m_thread_pause)
+                {
+                    delayMs(10);
+                    continue;
+                }
+
                 ret = avcodec_receive_frame(m_pCodecCtx_audio, frame);
 
                 if(ret < 0)
@@ -541,7 +562,7 @@ void MediaManager::delayMs(int ms)
 
 void MediaManager::close()
 {
-    logger.debug("wait.");
+    logger.debug("closing");
     m_thread_quit = true;
     if(m_frameQueue)
         m_frameQueue->signalExit();
@@ -950,14 +971,14 @@ void MediaManager::videoDelayControl(AVFrame* frame)
      * 极大落后于新视频帧的PTS，因此可能出现长时间的延时，
      * 因此需要另外调整delayDuration的值
     */
-    if (delayDuration > 0.0 &&  m_thread_quit == false)
+    if (delayDuration > 0.0 && m_thread_quit == false && m_thread_pause == false)
     {
         if(delayDuration > 0.1)
             delayDuration = 0.04;
 //        logger.debug("video delay: %f", delayDuration);
         av_usleep(delayDuration * AV_TIME_BASE);   // 微秒延时
     }
-    //logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
+//    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;
