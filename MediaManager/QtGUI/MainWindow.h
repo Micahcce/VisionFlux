@@ -27,7 +27,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void emitRenderSignal(uint8_t *data, int width, int height, float aspectRatio);
     void renderFrameRGB(uint8_t *data, int width, int height, float aspectRatio);
+
+signals:
+    void sigRender(uint8_t *data, int width, int height, float aspectRatio);
 
 private:
     PlayController* m_playController;

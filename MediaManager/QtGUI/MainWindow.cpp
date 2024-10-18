@@ -13,8 +13,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_playController->setRenderCallback(
                 [this](uint8_t* data, int width, int height, float aspectRatio)
     {
-        renderFrameRGB(data, width, height, aspectRatio);  // 渲染帧的回调
+        emitRenderSignal(data, width, height, aspectRatio);  // 渲染帧的回调
     });
+
+    //连接渲染信号
+    connect(this, &MainWindow::sigRender, this, &MainWindow::renderFrameRGB);
 
     //播放窗口
     m_videoView = new QLabel(this);
@@ -85,6 +88,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::emitRenderSignal(uint8_t *data, int width, int height, float aspectRatio)
+{
+    emit sigRender(data, width, height, aspectRatio);
 }
 
 void MainWindow::renderFrameRGB(uint8_t *data, int width, int height, float aspectRatio)
