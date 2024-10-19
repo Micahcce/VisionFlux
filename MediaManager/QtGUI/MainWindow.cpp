@@ -11,9 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     //设置回调
     m_playController->setRenderCallback(
-                [this](uint8_t* data, int width, int height, float aspectRatio)
+                [this](uint8_t* data, int width, int height)
     {
-        emitRenderSignal(data, width, height, aspectRatio);  // 渲染帧的回调
+        emitRenderSignal(data, width, height);  // 渲染帧的回调
     });
 
     //连接渲染信号
@@ -90,12 +90,12 @@ MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::emitRenderSignal(uint8_t *data, int width, int height, float aspectRatio)
+void MainWindow::emitRenderSignal(uint8_t *data, int width, int height)
 {
-    emit sigRender(data, width, height, aspectRatio);
+    emit sigRender(data, width, height);
 }
 
-void MainWindow::renderFrameRGB(uint8_t *data, int width, int height, float aspectRatio)
+void MainWindow::renderFrameRGB(uint8_t *data, int width, int height)
 {
     QImage img((uchar*)data, width, height, QImage::Format_RGB32);
     m_videoView->setPixmap(QPixmap::fromImage(img));

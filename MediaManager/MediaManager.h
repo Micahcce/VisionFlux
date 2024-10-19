@@ -87,9 +87,9 @@ public:
 
     //设置渲染回调函数
 #ifdef ENABLE_PYBIND
-    using RenderCallback = std::function<void(int64_t, int, int, float)>;
+    using RenderCallback = std::function<void(int64_t, int, int)>;
 #else
-    using RenderCallback = std::function<void(uint8_t*, int, int, float)>;
+    using RenderCallback = std::function<void(uint8_t*, int, int)>;
 #endif
 
     void setRenderCallback(RenderCallback callback) {m_renderCallback = std::move(callback);}
@@ -113,7 +113,7 @@ private:
     void initVideoCodec();
     void initAudioCodec();
     void initAudioDevice();
-    void videoDelayControl(AVFrame* frame);
+    void renderDelayControl(AVFrame* frame);
     void frameYuvToRgb();
     void delayMs(int ms);
 

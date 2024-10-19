@@ -489,7 +489,7 @@ int MediaManager::thread_media_decode()
             delayMs(10);
             continue;
         }
-        //logger.debug("video frame count: %d, audio frame count: %d", m_frameQueue->getVideoFrameCount(), m_frameQueue->getAudioFrameCount());
+//        logger.debug("video frame count: %d, audio frame count: %d", m_frameQueue->getVideoFrameCount(), m_frameQueue->getAudioFrameCount());
 
         if(av_read_frame(m_pFormatCtx, packet) < 0)
             break;
@@ -505,7 +505,7 @@ int MediaManager::thread_media_decode()
                  * 否则avcodec_receive_frame与跳帧线程中的send/receive竞争解码器资源，
                  * 造成程序奔溃。
                 */
-                if(m_thread_pause)
+                if(m_thread_pause && !m_thread_quit)
                 {
                     delayMs(10);
                     continue;
@@ -534,7 +534,7 @@ int MediaManager::thread_media_decode()
 
             while(1)
             {
-                if(m_thread_pause)
+                if(m_thread_pause && !m_thread_quit)
                 {
                     delayMs(10);
                     continue;
@@ -641,11 +641,7 @@ void MediaManager::close()
         m_pFormatCtx = nullptr;
     }
 
-    if(m_frameBuf)
-    {
-        av_free(m_frameBuf);
-        m_frameBuf = nullptr;
-    }
+    /*m_frameBuf不可轻易释放，避免渲染函数访问造成崩溃，比如Qt重绘仍会使用该内存*/
 
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
@@ -779,16 +775,15 @@ int MediaManager::thread_video_display()
         // 调用回调函数，通知 GUI 渲染
         if (m_renderCallback)
 #ifdef ENABLE_PYBIND
-            m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
+            m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_pCodecCtx_video->width, m_pCodecCtx_video->height);
 #else
-            m_renderCallback(m_frameRGB->data[0], m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_aspectRatio);
+            m_renderCallback(m_frameRGB->data[0], m_pCodecCtx_video->width, m_pCodecCtx_video->height);
 #endif
         else
             logger.error("Render callback not set");
 #endif
-
         //延时控制
-        videoDelayControl(frame);
+        renderDelayControl(frame);
 
         av_frame_unref(frame);
     }
@@ -968,7 +963,7 @@ int MediaManager::thread_stream_convert()
     return 0;
 }
 
-void MediaManager::videoDelayControl(AVFrame* frame)
+void MediaManager::renderDelayControl(AVFrame* frame)
 {
     double currentVideoPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
     double delayDuration = 0.0;
