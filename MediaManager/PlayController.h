@@ -40,6 +40,9 @@ public:
     //修改音量
     void changeVolume(int volume);
 
+    //窗口大小变化
+    void windowResize(int width, int height, bool uniformScale);
+
     //推流
     void streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
 

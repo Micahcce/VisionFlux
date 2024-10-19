@@ -97,6 +97,15 @@ void PlayController::changeVolume(int volume)
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
+void PlayController::windowResize(int width, int height, bool uniformScale)
+{
+    if(m_mediaInfo->mediaName == "")
+        return;
+    if(m_mediaInfo->hasVideoStream == false)
+        return;
+    m_mediaManager->frameResize(width, height, uniformScale);
+}
+
 void PlayController::streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrll)
 {
     m_mediaManager->streamConvert(inputStreamUrl, outputStreamUrll);

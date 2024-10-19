@@ -101,5 +101,10 @@ void MainWindow::renderFrameRGB(uint8_t *data, int width, int height)
     m_videoView->setPixmap(QPixmap::fromImage(img));
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);  // 调用父类的 resizeEvent
+    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
+}
 
 

@@ -15,8 +15,10 @@ MediaManager::MediaManager()
       m_pCodecCtx_audio(nullptr),
       m_pCodec_video(nullptr),
       m_pCodec_audio(nullptr),
-      m_aspectRatio(0.0f),
       m_RGBMode(false),
+      m_aspectRatio(1.0),
+      m_windowWidth(0),
+      m_windowHeight(0),
       m_frameBuf(nullptr),
       m_pAudioParams(nullptr),
       m_swrCtx(nullptr),
@@ -134,7 +136,9 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     {
         initVideoCodec();
 
-        m_aspectRatio = static_cast<float>(m_pCodecCtx_video->width) / static_cast<float>(m_pCodecCtx_video->height);
+        m_aspectRatio = static_cast<double>(m_pCodecCtx_video->width) / static_cast<double>(m_pCodecCtx_video->height);
+        m_windowWidth = m_pCodecCtx_video->width;
+        m_windowHeight = m_pCodecCtx_video->height;
 
         if(m_RGBMode)
             frameYuvToRgb();
@@ -248,7 +252,24 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
 //                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
                 if (frame->pts >= targetPTS)
                 {
-                    // 找到目标帧
+                    // 找到目标帧，渲染并结束
+                    sws_scale(m_pSwsCtx,
+                              (const unsigned char* const*)frame->data,
+                              frame->linesize, 0,
+                              m_pCodecCtx_video->height,
+                              m_frameRGB->data,
+                              m_frameRGB->linesize);
+
+                    // 调用回调函数，通知 GUI 渲染
+                    if (m_renderCallback)
+#ifdef ENABLE_PYBIND
+                        m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_windowWidth, m_windowHeight);
+#else
+                        m_renderCallback(m_frameRGB->data[0], m_windowWidth, m_windowHeight);
+#endif
+                    else
+                        logger.error("Render callback not set");
+
                     av_frame_unref(frame);
                     throwing = false;
                     break;
@@ -775,13 +796,14 @@ int MediaManager::thread_video_display()
         // 调用回调函数，通知 GUI 渲染
         if (m_renderCallback)
 #ifdef ENABLE_PYBIND
-            m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_pCodecCtx_video->width, m_pCodecCtx_video->height);
+            m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_windowWidth, m_windowHeight);
 #else
-            m_renderCallback(m_frameRGB->data[0], m_pCodecCtx_video->width, m_pCodecCtx_video->height);
+            m_renderCallback(m_frameRGB->data[0], m_windowWidth, m_windowHeight);
 #endif
         else
             logger.error("Render callback not set");
 #endif
+
         //延时控制
         renderDelayControl(frame);
 
@@ -1017,6 +1039,55 @@ void MediaManager::frameYuvToRgb()
     av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, m_frameBuf, AV_PIX_FMT_RGB32, dstWidth, dstHeight, 1);
 }
 
+void MediaManager::frameResize(int width, int height, bool uniformScale)
+{
+    m_windowWidth = width;
+    m_windowHeight = height;
+
+    //等比例调整
+    if(uniformScale)
+    {
+        if (width / static_cast<double>(height) > m_aspectRatio)
+            m_windowWidth = static_cast<int>(height * m_aspectRatio);       // 根据高度计算宽度
+        else
+            m_windowHeight = static_cast<int>(width / m_aspectRatio);       // 根据宽度计算高度
+    }
+
+//    logger.debug("m_windowWidth: %d, m_windowHeight: %d", m_windowWidth, m_windowHeight);
+
+
+    // 缓冲区数量
+    static uint8_t* tmpBuf[TMP_BUFFER_NUMBER] = {nullptr};
+    static SwsContext* tmpSws[TMP_BUFFER_NUMBER] = {nullptr};
+    static int count = 0;
+
+//    logger.debug("av_malloc: %d", count);
+//    logger.debug("av_free: %d", (count + 1) % TMP_BUFFER_NUMBER);
+
+    // 创建新的缓冲区，需要预留空间
+    tmpBuf[count] = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth * 1.3, m_windowHeight * 1.3, 1));
+
+    if(tmpBuf[(count + 1) % TMP_BUFFER_NUMBER])
+        av_free(tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
+
+    // 创建新的 SwsContext 以转换图像
+    tmpSws[count] = sws_getContext(m_pCodecCtx_video->width, m_pCodecCtx_video->height,
+                                      m_pCodecCtx_video->pix_fmt, m_windowWidth, m_windowHeight,
+                                      AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+    if(tmpSws[(count + 1) % TMP_BUFFER_NUMBER])
+        sws_freeContext(tmpSws[(count + 1) % TMP_BUFFER_NUMBER]);
+
+    // 使用新缓冲区填充数据
+    av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, tmpBuf[count], AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
+
+    // 确保新缓冲区准备好后切换
+    m_frameBuf = tmpBuf[count];  // 切换到新的缓冲区
+    m_pSwsCtx = tmpSws[count];   // 切换到新的 SwsContext
+
+    count++;
+    if(count == TMP_BUFFER_NUMBER)
+        count = 0;
+}
 
 
 

@@ -67,6 +67,9 @@ public:
     //变速
     void changeSpeed(float speedFactor);
 
+    //尺寸调整
+    void frameResize(int width, int height, bool uniformScale);
+
     //保存视频帧
     bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
@@ -108,6 +111,7 @@ private:
     enum
     {
         MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
+        TMP_BUFFER_NUMBER = 15               // 需要足够大小
     };
 
     void initVideoCodec();
@@ -159,14 +163,16 @@ private:
 
     //视频变量
     uint8_t* m_frameBuf;
-    AVFrame *m_frameRGB;
+    AVFrame* m_frameRGB;
     SwsContext* m_pSwsCtx;
-    float m_aspectRatio;
     bool m_RGBMode;
+    double m_aspectRatio;
+    int m_windowWidth;
+    int m_windowHeight;
 
     //音频变量
     AudioParams* m_pAudioParams;
-    SwrContext *m_swrCtx;
+    SwrContext* m_swrCtx;
 
     //公共变量
     float m_speedFactor;

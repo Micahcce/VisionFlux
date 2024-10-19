@@ -33,6 +33,9 @@ public:
 signals:
     void sigRender(uint8_t *data, int width, int height);
 
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+
 private:
     PlayController* m_playController;
     QLabel* m_videoView;
