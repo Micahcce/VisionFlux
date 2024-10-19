@@ -11,6 +11,7 @@
 #include "FrameQueue.h"
 #include "SdlPlayer.h"
 #include "Logger.h"
+#include "SystemClock.h"
 #include "BmpAndWavAchieve.h"
 #include <SoundTouchDLL.h>
 
@@ -69,17 +70,17 @@ public:
     //保存视频帧
     bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
-    //最大音频帧
-    enum
-    {
-        MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
-        MAX_NODE_NUMBER = 20                 // 帧缓冲数量过少（如1、2）当连续解码音频或视频帧时，会使解码线程阻塞导致无法继续解码
-    };
-
     //线程状态
     bool getThreadSafeExited() {return m_thread_safe_exited;}
     void setThreadQuit(bool status) {m_thread_quit = status;}
-    void setThreadPause(bool status) {m_thread_pause = status;}
+    void setThreadPause(bool status)
+    {
+        m_thread_pause = status;
+        if(m_thread_pause)
+            m_systemClock->pause();
+        else
+            m_systemClock->resume();
+    }
 
     //关闭线程与回收资源
     void close();
@@ -96,6 +97,19 @@ public:
     SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
 
 private:
+    enum FrameQueueCapacity
+    {
+        //帧缓冲数量过少（如1、2）当连续解码音频或视频帧时，会使解码线程阻塞导致无法继续解码。
+        //音频帧率通常为40多（采样率/每帧样本数）
+        MAX_AUDIO_FRAMES = 30,
+        MAX_VIDEO_FRAMES = 20
+    };
+
+    enum
+    {
+        MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
+    };
+
     void initVideoCodec();
     void initAudioCodec();
     void initAudioDevice();
@@ -130,6 +144,7 @@ private:
     RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
 
     FrameQueue* m_frameQueue;
+    SystemClock* m_systemClock;
     SdlPlayer* m_sdlPlayer;
     HANDLE m_soundTouch;
 

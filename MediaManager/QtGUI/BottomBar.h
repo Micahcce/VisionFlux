@@ -41,6 +41,11 @@ private slots:
     void slotSliderReleased();
 
 private:
+    enum
+    {
+        TIMING_INTERVAL = 200
+    };
+
     PlayController* m_playController;
 
     QLabel* m_currentTime;

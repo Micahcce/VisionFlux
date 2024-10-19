@@ -5,6 +5,7 @@
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
       m_frameQueue(nullptr),
+      m_systemClock(nullptr),
       m_sdlPlayer(nullptr),
       m_soundTouch(nullptr),
       m_pFormatCtx(nullptr),
@@ -38,11 +39,13 @@ MediaManager::MediaManager()
 #if USE_SDL
 
 #endif
+    m_systemClock = new SystemClock;
 }
 
 MediaManager::~MediaManager()
 {
     close();
+    delete m_systemClock;
 }
 
 
@@ -150,10 +153,12 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         audioThread.detach();
     }
 
-    //解码线程
+    // 解码线程
     std::thread decodeThread(&MediaManager::thread_media_decode, this);
     decodeThread.detach();
 
+    // 开启系统设置，目前只用于单视频流的渲染延时控制
+    m_systemClock->start();
 
 #if USE_SDL
     m_sdlPlayer->initVideoDevice(m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_RGBMode);
@@ -256,6 +261,7 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
     av_frame_free(&frame);
     av_packet_free(&packet);
 
+    m_systemClock->setTime(timeSecs);
     logger.info("seek complete");
 }
 
@@ -313,6 +319,7 @@ void MediaManager::seekFrameByAudioStream(int timeSecs)
     av_frame_free(&frame);
     av_packet_free(&packet);
 
+    m_systemClock->setTime(timeSecs);
     logger.info("seek complete");
 }
 
@@ -333,6 +340,8 @@ void MediaManager::changeSpeed(float speedFactor)
         soundtouch_setTempo(m_soundTouch, speedFactor);
         m_sdlPlayer->audioChangeSpeed(speedFactor);
     }
+
+    m_systemClock->setSpeed(speedFactor);
     m_speedFactor = speedFactor;
 }
 
@@ -511,7 +520,7 @@ int MediaManager::thread_media_decode()
                     break;
                 }
 
-                while(m_frameQueue->getVideoFrameCount() >= MAX_NODE_NUMBER && !m_thread_quit)
+                while(m_frameQueue->getVideoFrameCount() >= MAX_VIDEO_FRAMES && !m_thread_quit)
                     delayMs(10);
 
                 m_frameQueue->pushVideoFrame(frame);
@@ -540,7 +549,7 @@ int MediaManager::thread_media_decode()
                     break;
                 }
 
-                while(m_frameQueue->getAudioFrameCount() >= MAX_NODE_NUMBER && !m_thread_quit)
+                while(m_frameQueue->getAudioFrameCount() >= MAX_AUDIO_FRAMES && !m_thread_quit)
                     delayMs(10);
 
                 m_frameQueue->pushAudioFrame(frame);
@@ -642,6 +651,7 @@ void MediaManager::close()
     m_audioLastPTS = 0.0;
     m_videoIndex = -1;
     m_audioIndex = -1;
+    m_systemClock->stop();
 
     //安全退出标志
     m_thread_safe_exited = true;
@@ -823,7 +833,7 @@ int MediaManager::thread_audio_display()
         int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_pAudioParams->outBuff, m_pAudioParams->out_nb_samples / m_speedFactor);
 //        logger.debug("putSamples = %d, numSamplesProcessed = %d", ret, numSamplesProcessed);
 
-        // 音频PTS计算
+        // 音频PTS计算并记录
         m_audioLastPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_audioIndex]->time_base);
 
         // 等待SDL音频播放器完成当前的音频数据处理和输出
@@ -966,7 +976,10 @@ void MediaManager::videoDelayControl(AVFrame* frame)
     if(m_audioIndex >= 0)
         delayDuration = currentVideoPTS - m_audioLastPTS;
     else
-        delayDuration = currentVideoPTS - m_videoLastPTS;
+        delayDuration = currentVideoPTS - m_systemClock->getTime();
+
+//    logger.debug("time: %f", m_systemClock->getTime());
+//    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
     /* 注意：
      * 跳转后当视频流比音频流先渲染第一帧时，
@@ -976,16 +989,11 @@ void MediaManager::videoDelayControl(AVFrame* frame)
     */
     if (delayDuration > 0.0 && m_thread_quit == false && m_thread_pause == false)
     {
-        if(delayDuration > 0.1)
-            delayDuration = 0.04;
+        if(delayDuration > 0.1 / m_speedFactor)
+            delayDuration = 0.04 / m_speedFactor;
 
 //        logger.debug("video delay: %f", delayDuration);
-//        logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
-
-        if(m_audioIndex >= 0)
-            av_usleep(delayDuration * AV_TIME_BASE);
-        else
-            av_usleep(delayDuration * AV_TIME_BASE / m_speedFactor);
+        av_usleep(delayDuration * AV_TIME_BASE);
     }
 
     // 记录当前视频PTS

@@ -111,7 +111,7 @@ bool BottomBar::startPlayMedia(QString mediaPath)
 
     //定时器启动（非直播流）
     if(m_playController->getMediaPlayInfo()->isLiveStream == false)
-        m_sliderTimer->start(200);
+        m_sliderTimer->start(TIMING_INTERVAL);
 
     return true;
 }
@@ -137,8 +137,8 @@ void BottomBar::slotSliderReleased()
 
     //修改进度
     m_playController->changePlayProgress(currentTime);
-    if(m_playController->getMediaPlayInfo()->isLiveStream == false)
-        m_sliderTimer->start(200);
+    if(m_playController->getMediaPlayInfo()->isLiveStream == false && m_playController->getMediaPlayInfo()->isPlaying)
+        m_sliderTimer->start(TIMING_INTERVAL);
 }
 
 void BottomBar::slotPlayAndPause()
@@ -155,6 +155,7 @@ void BottomBar::slotPlayAndPause()
         {
             //暂停
             m_playController->pausePlay();
+            m_sliderTimer->stop();
 
             QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPlay);
             m_playBtn->setIcon(playIcon);
@@ -163,6 +164,7 @@ void BottomBar::slotPlayAndPause()
         {
             //继续
             m_playController->continuePlay();
+            m_sliderTimer->start(TIMING_INTERVAL);
 
             QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
             m_playBtn->setIcon(playIcon);

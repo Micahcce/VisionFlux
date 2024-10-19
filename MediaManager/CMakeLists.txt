@@ -15,6 +15,7 @@ set(PROJECT_SOURCES
     PlayController.h
     PlayController.cpp
     FrameQueue.h
+    SystemClock.h
     Logger.h
     Logger.cpp
     SdlPlayer.h
