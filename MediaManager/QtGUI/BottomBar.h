@@ -14,6 +14,7 @@
 #include <QStyle>
 #include <QApplication>
 #include <QFileDialog>
+#include <QKeyEvent>
 #include "PlayController.h"
 
 
@@ -27,9 +28,13 @@ public:
     PlayController* getPlayController() {return m_playController;}
     bool startPlayMedia(QString mediaPath);
     void setSelectMediaPath(QString mediaPath) {m_selectedMediaPath = mediaPath;}
+    void changeProgress(int changeSecs);
 
 signals:
     void sigAddMediaItem(QString filePath);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void slotPlayAndPause();

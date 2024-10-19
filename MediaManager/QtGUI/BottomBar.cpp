@@ -71,6 +71,9 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2), m_select
     vBox->addLayout(hBox2);
 
     this->setLayout(vBox);
+
+    //开启键盘捕获
+    this->grabKeyboard();
 }
 
 bool BottomBar::startPlayMedia(QString mediaPath)
@@ -114,6 +117,40 @@ bool BottomBar::startPlayMedia(QString mediaPath)
         m_sliderTimer->start(TIMING_INTERVAL);
 
     return true;
+}
+
+void BottomBar::changeProgress(int changeSecs)
+{
+    if(m_playController->getMediaPlayInfo()->mediaName == "")
+    {
+        logger.warning("No media is currently playing.");
+        return;
+    }
+
+    m_timeSlider->setValue(m_timeSlider->value() + changeSecs);
+    slotSliderReleased();
+}
+
+void BottomBar::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+    case Qt::Key_Left:
+        changeProgress(-5);
+        break;
+
+    case Qt::Key_Right:
+        changeProgress(+5);
+        break;
+
+    case Qt::Key_Space:
+        slotPlayAndPause();
+        break;
+
+    default:
+        QWidget::keyPressEvent(event);
+        break;
+    }
 }
 
 void BottomBar::slotSliderPressed()
