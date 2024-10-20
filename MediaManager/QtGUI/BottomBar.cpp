@@ -200,7 +200,7 @@ void BottomBar::slotPlayAndPause()
         else
         {
             //继续
-            m_playController->continuePlay();
+            m_playController->resumePlay();
             m_sliderTimer->start(TIMING_INTERVAL);
 
             QIcon playIcon = QApplication::style()->standardIcon(QStyle::SP_MediaPause);
@@ -240,7 +240,7 @@ void BottomBar::slotVolumeChanged()
 void BottomBar::slotUpdateProgress()
 {
 //    logger.trace("progress: %f", m_playController->getPlayProgress());
-    int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress() + 0.2);  //增加0.2s冗余时间，缓解进度条走不满的问题
+    int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress() + 0.3);  //增加0.3s冗余时间，缓解进度条走不满的问题
 
     //进度条更新
     if (currentPlayProgress <= m_timeSlider->maximum())

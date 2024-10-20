@@ -40,7 +40,7 @@ void PlayController::startPlay(const std::string filePath)
     m_mediaInfo->isPlaying = true;
 }
 
-void PlayController::continuePlay()
+void PlayController::resumePlay()
 {
     m_mediaManager->setThreadPause(false);
     m_mediaInfo->isPlaying = true;

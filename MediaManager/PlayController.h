@@ -27,7 +27,7 @@ public:
     //开始播放
     void startPlay(const std::string filePath);
     //继续播放
-    void continuePlay();
+    void resumePlay();
     //暂停播放
     void pausePlay();
     //结束播放

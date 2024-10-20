@@ -5,6 +5,7 @@
 #include <mutex>
 #include <queue>
 #include <condition_variable>
+#include <atomic>
 
 extern "C"
 {
@@ -21,9 +22,15 @@ public:
     // Add a method to signal exit
     void signalExit()
     {
-        std::unique_lock<std::mutex> lock(mutex);
         m_exit = true;
         cv.notify_all(); // Notify all waiting threads
+    }
+
+    // Reset the frame queue for reuse
+    void reset()
+    {
+        m_exit = false;
+        clear();
     }
 
     // Push an audio frame into the queue
@@ -79,17 +86,19 @@ public:
     // Check if we should exit
     bool shouldExit() const { return m_exit; }
 
-    int getAudioFrameCount() { return audioFrames.size(); }
-    int getVideoFrameCount() { return videoFrames.size(); }
+    int getAudioFrameCount() const { return audioFrames.size(); }
+    int getVideoFrameCount() const { return videoFrames.size(); }
 
     void clear()
     {
         std::unique_lock<std::mutex> lock(mutex);
-        while (!audioFrames.empty()){
+        while (!audioFrames.empty())
+        {
             av_frame_free(&audioFrames.front());
             audioFrames.pop();
         }
-        while (!videoFrames.empty()){
+        while (!videoFrames.empty())
+        {
             av_frame_free(&videoFrames.front());
             videoFrames.pop();
         }
@@ -101,7 +110,7 @@ private:
     std::queue<AVFrame*> videoFrames; // Queue for video frames
     std::mutex mutex;                   // Mutex for thread safety
     std::condition_variable cv;         // Condition variable for synchronization
-    bool m_exit;                        // Exit flag
+    std::atomic<bool> m_exit;                        // Exit flag
 };
 
 

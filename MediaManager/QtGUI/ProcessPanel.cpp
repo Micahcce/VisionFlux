@@ -134,8 +134,6 @@ void ProcessPanel::slotPushStream()
     QString streamUrl = m_pushStreamUrlEdit->text();
     QString filePath = m_pushStreamFileEdit->text();
     m_bottomBar->getPlayController()->streamConvert(filePath.toStdString(), streamUrl.toStdString());
-//    m_bottomBar->getPlayController()->pushStream("C:\\Users\\13055\\Desktop\\VisionFlux\\media\\output.mp4",
-    //                                                 "rtmp://localhost:1935/live/livestream");
 }
 
 void ProcessPanel::slotConvertFileSelect()

@@ -39,6 +39,7 @@ MediaManager::MediaManager()
     logger.debug("avformat_version :%d", avformat_version());
 
     m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
+    m_frameQueue = new FrameQueue;
     m_systemClock = new SystemClock;
 }
 
@@ -77,7 +78,6 @@ AVFormatContext* MediaManager::getMediaInfo(const std::string& filePath)
 
 bool MediaManager::decodeToPlay(const std::string& filePath)
 {
-    m_frameQueue = new FrameQueue;
     int ret;
 
     //1.创建上下文
@@ -123,6 +123,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     m_thread_decode_exited = false;
     m_thread_video_exited = false;
     m_thread_audio_exited = false;
+    m_frameQueue->reset();
 
     if(m_videoIndex < 0)
         m_thread_video_exited = true;
@@ -550,8 +551,6 @@ void MediaManager::close()
 {
     logger.debug("closing");
     m_thread_quit = true;
-    if(m_frameQueue)
-        m_frameQueue->signalExit();
 
     // 安全退出
     while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
@@ -579,12 +578,6 @@ void MediaManager::close()
     {
         av_free(m_pAudioParams->outBuff);
         m_pAudioParams->outBuff = nullptr;
-    }
-
-    if (m_frameQueue)
-    {
-        delete m_frameQueue;
-        m_frameQueue = nullptr;
     }
 
     if(m_swrCtx)
@@ -627,7 +620,13 @@ void MediaManager::close()
     m_audioLastPTS = 0.0;
     m_videoIndex = -1;
     m_audioIndex = -1;
+
     m_systemClock->stop();
+    if(m_frameQueue)
+    {
+        m_frameQueue->signalExit();
+        m_frameQueue->clear();
+    }
 
     // 安全退出标志
     m_thread_safe_exited = true;
