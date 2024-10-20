@@ -2,7 +2,7 @@
 
 // 构造函数
 SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr),
-    m_volume(100), m_raw_nb_samples(0)
+    m_volume(100), m_raw_frame_size(0)
 {
 }
 
@@ -59,20 +59,20 @@ bool SdlPlayer::initVideoDevice(int width, int height, bool RgbMode)
     return true;
 }
 
-bool SdlPlayer::initAudioDevice(AudioParams* audioParams)
+bool SdlPlayer::initAudioDevice(AVCodecContext* audioCodecCtx, AVSampleFormat fmt)
 {
     ///   SDL
     //配置音频播放结构体SDL_AudioSpec，和SwrContext的音频重采样参数保持一致
-    m_wantSpec.freq = audioParams->out_sample_rate;        //48000/1024=46.875帧
-    m_wantSpec.format = AUDIO_FORMAT_MAP[audioParams->out_sample_fmt];
-    m_wantSpec.channels = audioParams->out_channels;
+    m_wantSpec.freq = audioCodecCtx->sample_rate;        //48000/1024=46.875帧
+    m_wantSpec.format = AUDIO_FORMAT_MAP[fmt];
+    m_wantSpec.channels = audioCodecCtx->ch_layout.nb_channels;
     m_wantSpec.silence = 0;
-    m_wantSpec.samples = audioParams->out_nb_samples;
+    m_wantSpec.samples = audioCodecCtx->frame_size;
     m_wantSpec.callback = fill_audio;                     //回调函数
     m_wantSpec.userdata = this;
 
     //保存原始采样率用于变速
-    m_raw_nb_samples = audioParams->out_nb_samples;
+    m_raw_frame_size = audioCodecCtx->frame_size;
 
     //打开音频设备
     if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
@@ -151,7 +151,7 @@ void SdlPlayer::audioChangeSpeed(float speedFactor)
 {
     //需要修改每帧样本数
     SDL_CloseAudio();
-    m_wantSpec.samples = m_raw_nb_samples / speedFactor;
+    m_wantSpec.samples = m_raw_frame_size / speedFactor;
 
     //打开音频设备
     if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)

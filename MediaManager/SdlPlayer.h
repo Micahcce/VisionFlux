@@ -20,18 +20,6 @@ static std::map<int,int> AUDIO_FORMAT_MAP = {
 };
 
 
-class AudioParams
-{
-public:
-    int out_sample_rate;                 //采样率
-    int out_channels;                    //通道数
-    int out_nb_samples;                  //单个通道的样本数
-    enum AVSampleFormat out_sample_fmt;  //声音格式
-
-    int out_buffer_size;        //输出缓冲区大小
-    unsigned char *outBuff = nullptr;     //音频数据缓冲区
-};
-
 // 定义 SdlPlayer 类
 class SdlPlayer {
 public:
@@ -39,7 +27,7 @@ public:
     ~SdlPlayer();
 
     bool initVideoDevice(int width, int height, bool RgbMode);
-    bool initAudioDevice(AudioParams* audioParams);
+    bool initAudioDevice(AVCodecContext* audioCodecCtx, AVSampleFormat fmt);
 
     static void fill_audio(void * udata, Uint8 * stream, int len);
 
@@ -60,7 +48,7 @@ private:
     SDL_Rect m_rect;           // SDL矩形
 
     SDL_AudioSpec m_wantSpec;
-    int m_raw_nb_samples;     //记录原始样本数
+    int m_raw_frame_size;      //记录原始每帧样本数
     int m_volume;              //音量
 };
 

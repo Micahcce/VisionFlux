@@ -19,7 +19,7 @@ MediaManager::MediaManager()
       m_windowWidth(0),
       m_windowHeight(0),
       m_frameBuf(nullptr),
-      m_audioParams(nullptr),
+      m_outBuf(nullptr),
       m_swrCtx(nullptr),
       m_frame(nullptr),
       m_frameRgb(nullptr),
@@ -505,6 +505,8 @@ void MediaManager::close()
 {
     logger.debug("closing");
     m_thread_quit = true;
+    m_frameQueue->signalExit();
+    m_frameQueue->clear();
 
     // 安全退出
     while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
@@ -528,10 +530,10 @@ void MediaManager::close()
         m_soundTouch = nullptr;
     }
 
-    if (m_audioParams && m_audioParams->outBuff)
+    if (m_outBuf)
     {
-        av_free(m_audioParams->outBuff);
-        m_audioParams->outBuff = nullptr;
+        av_free(m_outBuf);
+        m_outBuf = nullptr;
     }
 
     if(m_swrCtx)
@@ -574,13 +576,7 @@ void MediaManager::close()
     m_audioLastPTS = 0.0;
     m_videoIndex = -1;
     m_audioIndex = -1;
-
     m_systemClock->stop();
-    if(m_frameQueue)
-    {
-        m_frameQueue->signalExit();
-        m_frameQueue->clear();
-    }
 
     // 安全退出标志
     m_thread_safe_exited = true;
@@ -627,15 +623,9 @@ void MediaManager::initAudioCodec()
 void MediaManager::initAudioDevice()
 {
     ///////音频设备初始化///////
-    m_audioParams = new AudioParams;
-    // 设置音频播放采样参数
-    m_audioParams->out_sample_rate = m_audioCodecCtx->sample_rate;           //采样率    48000
-    m_audioParams->out_channels =    m_audioCodecCtx->ch_layout.nb_channels; //通道数    2
-    m_audioParams->out_nb_samples =  m_audioCodecCtx->frame_size;            //单个通道中的样本数  1024
-    m_audioParams->out_sample_fmt =  AV_SAMPLE_FMT_FLT;                        //声音格式  SDL仅支持部分音频格式
 
     // 创建音频数据缓冲区
-    m_audioParams->outBuff = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_audioParams->out_channels);
+    m_outBuf = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_audioCodecCtx->ch_layout.nb_channels);
 
     // 创建重采样上下文
     m_swrCtx = swr_alloc();
@@ -643,8 +633,8 @@ void MediaManager::initAudioDevice()
     // 分配重采样的上下文信息
     swr_alloc_set_opts2(&m_swrCtx,
                            &m_audioCodecCtx->ch_layout,             /*out*/
-                           m_audioParams->out_sample_fmt,                    /*out*///fltp->slt
-                           m_audioParams->out_sample_rate,                   /*out*/
+                           AV_SAMPLE_FMT_FLT,                    /*out*///fltp->slt
+                           m_audioCodecCtx->sample_rate,                   /*out*/
                            &m_audioCodecCtx->ch_layout,               /*in*/
                            m_audioCodecCtx->sample_fmt,               /*in*/
                            m_audioCodecCtx->sample_rate,              /*in*/
@@ -656,13 +646,13 @@ void MediaManager::initAudioDevice()
 
     // 初始化 SoundTouch 实例
     m_soundTouch = soundtouch_createInstance();
-    soundtouch_setSampleRate(m_soundTouch, m_audioParams->out_sample_rate);    // 设置采样率
-    soundtouch_setChannels(m_soundTouch, m_audioParams->out_channels);         // 设置通道数
+    soundtouch_setSampleRate(m_soundTouch, m_audioCodecCtx->sample_rate);    // 设置采样率
+    soundtouch_setChannels(m_soundTouch, m_audioCodecCtx->ch_layout.nb_channels);         // 设置通道数
     soundtouch_setTempo(m_soundTouch, m_speedFactor);                           // 设置倍速播放
 
     // 开启音频设备
     m_sdlPlayer = new SdlPlayer;
-    m_sdlPlayer->initAudioDevice(m_audioParams);
+    m_sdlPlayer->initAudioDevice(m_audioCodecCtx, AV_SAMPLE_FMT_FLT);       //SDL仅支持部分音频格式
 }
 
 //视频播放线程
@@ -723,7 +713,7 @@ int MediaManager::thread_audio_display()
         if(!frame)
             continue;
 
-        ret = swr_convert(m_swrCtx, &m_audioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
+        ret = swr_convert(m_swrCtx, &m_outBuf, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
         if(ret < 0)
         {
             logger.error("Error while converting\n");
@@ -731,10 +721,10 @@ int MediaManager::thread_audio_display()
         }
 
         // 将重采样后的音频数据传递给 SoundTouch 进行处理
-        soundtouch_putSamples(m_soundTouch, (const float*)m_audioParams->outBuff, ret);
+        soundtouch_putSamples(m_soundTouch, (const float*)m_outBuf, ret);
 
         // 获取处理后的样本
-        int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_audioParams->outBuff, m_audioParams->out_nb_samples / m_speedFactor);
+        int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_outBuf, m_audioCodecCtx->frame_size / m_speedFactor);
 //        logger.debug("putSamples = %d, numSamplesProcessed = %d", ret, numSamplesProcessed);
 
         // 音频PTS计算并记录
@@ -745,9 +735,9 @@ int MediaManager::thread_audio_display()
             delayMs(1);
 
         // 音频填充参数
-        m_sdlPlayer->m_audioChunk = (unsigned char *)m_audioParams->outBuff;
+        m_sdlPlayer->m_audioChunk = (unsigned char *)m_outBuf;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
-        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_audioParams->out_channels * sizeof(float);  // 处理后的数据长度
+        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_audioCodecCtx->ch_layout.nb_channels * sizeof(float);  // 处理后的数据长度
 
         av_frame_unref(frame);
     }

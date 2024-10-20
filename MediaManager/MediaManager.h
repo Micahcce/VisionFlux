@@ -155,8 +155,8 @@ private:
     std::mutex renderMtx;
 
     //音频变量
-    AudioParams* m_audioParams;
     SwrContext* m_swrCtx;
+    unsigned char * m_outBuf;
 
     //公共变量
     float m_speedFactor;
