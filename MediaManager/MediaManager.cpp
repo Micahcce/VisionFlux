@@ -138,9 +138,10 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         m_windowWidth = m_pCodecCtx_video->width;
         m_windowHeight = m_pCodecCtx_video->height;
         m_frame = av_frame_alloc();
+        m_frameRGB = av_frame_alloc();
 
         if(m_RGBMode)
-            frameYuvToRgb();
+            frameResize(m_windowWidth, m_windowHeight, true);
 
         std::thread videoThread(&MediaManager::thread_video_display, this);
         videoThread.detach();
@@ -560,11 +561,7 @@ void MediaManager::close()
     }
 
     // 清理资源，注意顺序避免崩溃
-    if (m_pSwsCtx)
-    {
-        sws_freeContext(m_pSwsCtx);
-        m_pSwsCtx = nullptr;
-    }
+    /*m_frameBuf和m_pSwsCtx不可轻易释放，避免渲染函数访问造成崩溃，比如Qt重绘仍会使用该内存*/
 
     if (m_sdlPlayer)
     {
@@ -625,8 +622,6 @@ void MediaManager::close()
         av_frame_free(&m_frameRGB);
         m_frameRGB = nullptr;
     }
-
-    /*m_frameBuf不可轻易释放，避免渲染函数访问造成崩溃，比如Qt重绘仍会使用该内存*/
 
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
@@ -956,28 +951,6 @@ void MediaManager::renderDelayControl(AVFrame* frame)
     m_videoLastPTS = currentVideoPTS;
 }
 
-void MediaManager::frameYuvToRgb()
-{   
-    int srcWidth = m_pCodecCtx_video->width;
-    int srcHeight = m_pCodecCtx_video->height;
-
-#if USE_SDL
-    int dstWidth = srcWidth;
-    int dstHeight = srcHeight;
-#else
-    int dstWidth = srcWidth;
-    int dstHeight = srcHeight;
-
-#endif
-
-    m_frameRGB = av_frame_alloc();                   // 转换后的帧
-    if(m_frameBuf)
-        av_free(m_frameBuf);
-    m_pSwsCtx = sws_getContext(srcWidth, srcHeight, m_pCodecCtx_video->pix_fmt, dstWidth, dstHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
-    m_frameBuf = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, dstWidth*2, dstHeight*2, 1));
-    av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, m_frameBuf, AV_PIX_FMT_RGB32, dstWidth, dstHeight, 1);
-}
-
 void MediaManager::frameResize(int width, int height, bool uniformScale)
 {
     m_windowWidth = width;
@@ -1007,14 +980,16 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
     tmpBuf[count] = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth * 1.3, m_windowHeight * 1.3, 1));
 
     if(tmpBuf[(count + 1) % TMP_BUFFER_NUMBER])
-        av_free(tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
+        av_freep(&tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
 
     // 创建新的 SwsContext 以转换图像
-    tmpSws[count] = sws_getContext(m_pCodecCtx_video->width, m_pCodecCtx_video->height,
-                                      m_pCodecCtx_video->pix_fmt, m_windowWidth, m_windowHeight,
-                                      AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+    tmpSws[count] = sws_getContext(m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_pCodecCtx_video->pix_fmt,
+                                   m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
     if(tmpSws[(count + 1) % TMP_BUFFER_NUMBER])
+    {
         sws_freeContext(tmpSws[(count + 1) % TMP_BUFFER_NUMBER]);
+        tmpSws[(count + 1) % TMP_BUFFER_NUMBER] = nullptr;
+    }
 
     // 使用新缓冲区填充数据
     av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, tmpBuf[count], AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
@@ -1034,8 +1009,9 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
 
 void MediaManager::renderFrameRGB()
 {
-    if(!m_frame)
+    if(!m_frame || !m_frame->data[0] || !m_pSwsCtx)
         return;
+
     sws_scale(m_pSwsCtx,
               (const unsigned char* const*)m_frame->data,
               m_frame->linesize, 0,
@@ -1052,5 +1028,7 @@ void MediaManager::renderFrameRGB()
 #endif
     else
         logger.error("Render callback not set");
+
+    av_frame_unref(m_frame);
 }
 

@@ -118,7 +118,6 @@ private:
     void initAudioCodec();
     void initAudioDevice();
     void renderDelayControl(AVFrame* frame);
-    void frameYuvToRgb();
     void delayMs(int ms);
     void renderFrameRGB();
 
