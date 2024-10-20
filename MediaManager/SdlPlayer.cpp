@@ -29,7 +29,7 @@ SdlPlayer::~SdlPlayer()
 }
 
 // 创建窗口和渲染器
-bool SdlPlayer::initVideoDevice(int width, int height, bool RGBMode)
+bool SdlPlayer::initVideoDevice(int width, int height, bool RgbMode)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -48,7 +48,7 @@ bool SdlPlayer::initVideoDevice(int width, int height, bool RGBMode)
         return false;
     }
 
-    if(RGBMode)
+    if(RgbMode)
         m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_BGRA32, SDL_TEXTUREACCESS_STREAMING, width, height);
     else
         m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING, width, height);
@@ -98,16 +98,16 @@ void SdlPlayer::renderFrame(const AVFrame* frame) {
     SDL_RenderPresent(m_renderer);
 }
 
-void SdlPlayer::renderFrameRGB(const AVFrame *frameRGB)
+void SdlPlayer::renderFrameRgb(const AVFrame *frameRgb)
 {
     SDL_UpdateTexture(m_texture, nullptr,
-                         frameRGB->data[0], frameRGB->linesize[0]);
+                         frameRgb->data[0], frameRgb->linesize[0]);
     SDL_RenderClear(m_renderer);
     SDL_RenderCopy(m_renderer, m_texture, nullptr, nullptr);
     SDL_RenderPresent(m_renderer);
 }
 
-void SdlPlayer::resize(int width, int height, bool RGBMode)
+void SdlPlayer::resize(int width, int height, bool RgbMode)
 {
     // 释放旧的资源
     if (m_renderer != nullptr) {
@@ -127,7 +127,7 @@ void SdlPlayer::resize(int width, int height, bool RGBMode)
     }
 
     // 重新创建纹理
-    if(RGBMode)
+    if(RgbMode)
         m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_BGRA32, SDL_TEXTUREACCESS_STREAMING, width, height);
     else
         m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING, width, height);

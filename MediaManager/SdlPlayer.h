@@ -38,14 +38,14 @@ public:
     SdlPlayer();
     ~SdlPlayer();
 
-    bool initVideoDevice(int width, int height, bool RGBMode);
+    bool initVideoDevice(int width, int height, bool RgbMode);
     bool initAudioDevice(AudioParams* audioParams);
 
     static void fill_audio(void * udata, Uint8 * stream, int len);
 
     void renderFrame(const AVFrame* frame);
-    void renderFrameRGB(const AVFrame* frameRGB);
-    void resize(int width, int height, bool RGBMode);
+    void renderFrameRgb(const AVFrame* frameRgb);
+    void resize(int width, int height, bool RgbMode);
     void setVolume(int volume);
     void audioChangeSpeed(float speedFactor);
 

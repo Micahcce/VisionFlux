@@ -7,23 +7,23 @@ MediaManager::MediaManager()
       m_systemClock(nullptr),
       m_sdlPlayer(nullptr),
       m_soundTouch(nullptr),
-      m_pFormatCtx(nullptr),
+      m_formatCtx(nullptr),
       m_videoIndex(-1),
       m_audioIndex(-1),
-      m_pCodecCtx_video(nullptr),
-      m_pCodecCtx_audio(nullptr),
-      m_pCodec_video(nullptr),
-      m_pCodec_audio(nullptr),
-      m_RGBMode(false),
+      m_videoCodecCtx(nullptr),
+      m_audioCodecCtx(nullptr),
+      m_videoCodec(nullptr),
+      m_audioCodec(nullptr),
+      m_rgbMode(false),
       m_aspectRatio(1.0),
       m_windowWidth(0),
       m_windowHeight(0),
       m_frameBuf(nullptr),
-      m_pAudioParams(nullptr),
+      m_audioParams(nullptr),
       m_swrCtx(nullptr),
       m_frame(nullptr),
-      m_frameRGB(nullptr),
-      m_pSwsCtx(nullptr),
+      m_frameRgb(nullptr),
+      m_swsCtx(nullptr),
       m_thread_quit(true),
       m_thread_pause(false),
       m_thread_safe_exited(true),
@@ -38,7 +38,7 @@ MediaManager::MediaManager()
 //    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
 
-    m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
+    m_rgbMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
     m_frameQueue = new FrameQueue;
     m_systemClock = new SystemClock;
 }
@@ -60,7 +60,7 @@ AVFormatContext* MediaManager::getMediaInfo(const std::string& filePath)
     if(ret < 0)
     {
         logger.error("Error occurred in avformat_open_input");
-        avformat_close_input(&m_pFormatCtx);
+        avformat_close_input(&m_formatCtx);
         return nullptr;
     }
 
@@ -69,7 +69,7 @@ AVFormatContext* MediaManager::getMediaInfo(const std::string& filePath)
     if(ret < 0)
     {
         logger.error("Error occurred in avformat_find_stream_info");
-        avformat_close_input(&m_pFormatCtx);
+        avformat_close_input(&m_formatCtx);
         return nullptr;
     }
 
@@ -81,37 +81,37 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     int ret;
 
     //1.创建上下文
-    m_pFormatCtx = avformat_alloc_context();
+    m_formatCtx = avformat_alloc_context();
 
     //2.打开文件
-    ret = avformat_open_input(&m_pFormatCtx, filePath.data(), nullptr, nullptr);
+    ret = avformat_open_input(&m_formatCtx, filePath.data(), nullptr, nullptr);
     if(ret < 0)
     {
         logger.error("Error occurred in avformat_open_input");
-        avformat_close_input(&m_pFormatCtx);
+        avformat_close_input(&m_formatCtx);
         return false;
     }
 
     //3.上下文获取流信息
-    ret = avformat_find_stream_info(m_pFormatCtx, nullptr);
+    ret = avformat_find_stream_info(m_formatCtx, nullptr);
     if(ret < 0)
     {
         logger.error("Error occurred in avformat_find_stream_info");
-        avformat_close_input(&m_pFormatCtx);
+        avformat_close_input(&m_formatCtx);
         return false;
     }
 
     //4.查找视频流和音频流
-    m_videoIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
+    m_videoIndex = av_find_best_stream(m_formatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(m_videoIndex < 0)
         logger.warning("Not found video stream");
 
-    m_audioIndex = av_find_best_stream(m_pFormatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
+    m_audioIndex = av_find_best_stream(m_formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
     if(m_audioIndex < 0)
         logger.warning("Not found audio stream");
 
     //5.获取视频数据
-    av_dump_format(m_pFormatCtx, -1, nullptr, 0);
+    av_dump_format(m_formatCtx, -1, nullptr, 0);
 
 
     // 相关变量初始化
@@ -135,13 +135,13 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     {
         initVideoCodec();
 
-        m_aspectRatio = static_cast<double>(m_pCodecCtx_video->width) / static_cast<double>(m_pCodecCtx_video->height);
-        m_windowWidth = m_pCodecCtx_video->width;
-        m_windowHeight = m_pCodecCtx_video->height;
+        m_aspectRatio = static_cast<double>(m_videoCodecCtx->width) / static_cast<double>(m_videoCodecCtx->height);
+        m_windowWidth = m_videoCodecCtx->width;
+        m_windowHeight = m_videoCodecCtx->height;
         m_frame = av_frame_alloc();
-        m_frameRGB = av_frame_alloc();
+        m_frameRgb = av_frame_alloc();
 
-        if(m_RGBMode)
+        if(m_rgbMode)
             frameResize(m_windowWidth, m_windowHeight, true);
 
         std::thread videoThread(&MediaManager::thread_video_display, this);
@@ -184,9 +184,9 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
 
     // 优先根据视频帧来seek，因为音频帧的解码不需要I帧，跳转后可能会影响到视频帧的解码
     int streamIndex = hasVideoStream ? m_videoIndex : m_audioIndex;
-    AVCodecContext* codecCtx = hasVideoStream ? m_pCodecCtx_video : m_pCodecCtx_audio;
+    AVCodecContext* codecCtx = hasVideoStream ? m_videoCodecCtx : m_audioCodecCtx;
 
-    AVRational time_base = m_pFormatCtx->streams[streamIndex]->time_base;
+    AVRational time_base = m_formatCtx->streams[streamIndex]->time_base;
     logger.debug("time_base.num: %d", time_base.num);
     logger.debug("time_base.den: %d", time_base.den);
 
@@ -195,16 +195,16 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
     logger.info("seek PTS: %d", targetPTS);
 
     // 使用 AVSEEK_FLAG_BACKWARD 来确保向前查找最近的 I 帧
-    if (av_seek_frame(m_pFormatCtx, streamIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
+    if (av_seek_frame(m_formatCtx, streamIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
     {
         logger.error("Error seeking to position.");
         return;
     }
 
     if(m_videoIndex >= 0)
-        avcodec_flush_buffers(m_pCodecCtx_video);
+        avcodec_flush_buffers(m_videoCodecCtx);
     if(m_audioIndex >= 0)
-        avcodec_flush_buffers(m_pCodecCtx_audio);
+        avcodec_flush_buffers(m_audioCodecCtx);
 
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
@@ -213,7 +213,7 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
     // 丢弃多余帧
     while (throwing)
     {
-        if (av_read_frame(m_pFormatCtx, packet) < 0)
+        if (av_read_frame(m_formatCtx, packet) < 0)
             break; // 没有更多的帧
 
         if (packet->stream_index == streamIndex)
@@ -235,7 +235,7 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
                     // 渲染
                     av_frame_ref(m_frame, frame);
                     std::lock_guard<std::mutex> lock(renderMtx);
-                    renderFrameRGB();
+                    renderFrameRgb();
                 }
                 av_frame_unref(frame);
                 throwing = false;
@@ -316,7 +316,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
 
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
-    AVFrame* frameRGB = av_frame_alloc();
+    AVFrame* frameRgb = av_frame_alloc();
 
     // 跳转
     if (av_seek_frame(formatCtx, -1, sec, AVSEEK_FLAG_BACKWARD) < 0)
@@ -336,7 +336,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
                 else if (ret < 0)
                 {
                     logger.error("Could not receive a frame");
-                    av_frame_free(&frameRGB);
+                    av_frame_free(&frameRgb);
                     av_frame_free(&frame);
                     av_packet_free(&packet);
                     avcodec_free_context(&codecCtx);
@@ -353,7 +353,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
     // 设置输出图像的参数
     int numBytes = av_image_get_buffer_size(AV_PIX_FMT_RGB32, codecCtx->width, codecCtx->height, 1);
     uint8_t* buffer = (uint8_t*)av_malloc(numBytes * sizeof(uint8_t));
-    av_image_fill_arrays(frameRGB->data, frameRGB->linesize, buffer, AV_PIX_FMT_RGB32, codecCtx->width, codecCtx->height, 1);
+    av_image_fill_arrays(frameRgb->data, frameRgb->linesize, buffer, AV_PIX_FMT_RGB32, codecCtx->width, codecCtx->height, 1);
 
     // 初始化swsCtx（假设codecCtx的参数在整个过程中保持不变）
     SwsContext* swsCtx = sws_getContext(
@@ -366,7 +366,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
     {
         logger.error("Failed to initialize sws context.");
         av_freep(&buffer);
-        av_frame_free(&frameRGB);
+        av_frame_free(&frameRgb);
         av_frame_free(&frame);
         av_packet_free(&packet);
         avcodec_free_context(&codecCtx);
@@ -375,7 +375,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
     }
 
     // 使用已经初始化的swsCtx进行转换
-    sws_scale(swsCtx, frame->data, frame->linesize, 0, codecCtx->height, frameRGB->data, frameRGB->linesize);
+    sws_scale(swsCtx, frame->data, frame->linesize, 0, codecCtx->height, frameRgb->data, frameRgb->linesize);
 
     // 保存为图片
     bool saved = saveBMP(outputPath.data(), buffer, codecCtx->width, codecCtx->height, StorageFormat::BGRA);
@@ -384,7 +384,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
     sws_freeContext(swsCtx);
     av_freep(&buffer);
     av_frame_free(&frame);
-    av_frame_free(&frameRGB);
+    av_frame_free(&frameRgb);
     av_packet_free(&packet);
     avcodec_free_context(&codecCtx);
     avformat_close_input(&formatCtx);
@@ -420,12 +420,12 @@ int MediaManager::thread_media_decode()
         }
 //        logger.debug("video frame count: %d, audio frame count: %d", m_frameQueue->getVideoFrameCount(), m_frameQueue->getAudioFrameCount());
 
-        if(av_read_frame(m_pFormatCtx, packet) < 0)
+        if(av_read_frame(m_formatCtx, packet) < 0)
             break;
 
         if(packet->stream_index == m_videoIndex)
         {
-            avcodec_send_packet(m_pCodecCtx_video, packet);
+            avcodec_send_packet(m_videoCodecCtx, packet);
 
             while(1)
             {
@@ -440,7 +440,7 @@ int MediaManager::thread_media_decode()
                     continue;
                 }
 
-                ret = avcodec_receive_frame(m_pCodecCtx_video, frame);
+                ret = avcodec_receive_frame(m_videoCodecCtx, frame);
 
                 if(ret < 0)
                 {
@@ -459,7 +459,7 @@ int MediaManager::thread_media_decode()
         }
         else if(packet->stream_index == m_audioIndex)
         {
-            avcodec_send_packet(m_pCodecCtx_audio, packet);
+            avcodec_send_packet(m_audioCodecCtx, packet);
 
             while(1)
             {
@@ -469,7 +469,7 @@ int MediaManager::thread_media_decode()
                     continue;
                 }
 
-                ret = avcodec_receive_frame(m_pCodecCtx_audio, frame);
+                ret = avcodec_receive_frame(m_audioCodecCtx, frame);
 
                 if(ret < 0)
                 {
@@ -528,10 +528,10 @@ void MediaManager::close()
         m_soundTouch = nullptr;
     }
 
-    if (m_pAudioParams && m_pAudioParams->outBuff)
+    if (m_audioParams && m_audioParams->outBuff)
     {
-        av_free(m_pAudioParams->outBuff);
-        m_pAudioParams->outBuff = nullptr;
+        av_free(m_audioParams->outBuff);
+        m_audioParams->outBuff = nullptr;
     }
 
     if(m_swrCtx)
@@ -540,22 +540,22 @@ void MediaManager::close()
         m_swrCtx = nullptr;
     }
 
-    if(m_pCodecCtx_video)
+    if(m_videoCodecCtx)
     {
-        avcodec_free_context(&m_pCodecCtx_video);
-        m_pCodecCtx_video = nullptr;
+        avcodec_free_context(&m_videoCodecCtx);
+        m_videoCodecCtx = nullptr;
     }
 
-    if(m_pCodecCtx_audio)
+    if(m_audioCodecCtx)
     {
-        avcodec_free_context(&m_pCodecCtx_audio);
-        m_pCodecCtx_audio = nullptr;
+        avcodec_free_context(&m_audioCodecCtx);
+        m_audioCodecCtx = nullptr;
     }
 
-    if(m_pFormatCtx)
+    if(m_formatCtx)
     {
-        avformat_close_input(&m_pFormatCtx);
-        m_pFormatCtx = nullptr;
+        avformat_close_input(&m_formatCtx);
+        m_formatCtx = nullptr;
     }
 
     if(m_frame)
@@ -564,10 +564,10 @@ void MediaManager::close()
         m_frame = nullptr;
     }
 
-    if(m_frameRGB)
+    if(m_frameRgb)
     {
-        av_frame_free(&m_frameRGB);
-        m_frameRGB = nullptr;
+        av_frame_free(&m_frameRgb);
+        m_frameRgb = nullptr;
     }
 
     m_videoLastPTS = 0.0;
@@ -591,17 +591,17 @@ void MediaManager::initVideoCodec()
 {
     int ret = 0;
     // 创建音视频解码器上下文
-    m_pCodecCtx_video = avcodec_alloc_context3(nullptr);
+    m_videoCodecCtx = avcodec_alloc_context3(nullptr);
     // 解码器上下文获取参数
-    ret = avcodec_parameters_to_context(m_pCodecCtx_video, m_pFormatCtx->streams[m_videoIndex]->codecpar);
+    ret = avcodec_parameters_to_context(m_videoCodecCtx, m_formatCtx->streams[m_videoIndex]->codecpar);
     if(ret < 0)
         logger.error("Error occurred in avcodec_parameters_to_context");
     // 查找解码器
-    m_pCodec_video = avcodec_find_decoder(m_pCodecCtx_video->codec_id);
-    if(!m_pCodec_video)
+    m_videoCodec = avcodec_find_decoder(m_videoCodecCtx->codec_id);
+    if(!m_videoCodec)
         logger.error("Error occurred in avcodec_find_decoder");
     // 打开解码器并绑定上下文
-    ret = avcodec_open2(m_pCodecCtx_video, m_pCodec_video, nullptr);
+    ret = avcodec_open2(m_videoCodecCtx, m_videoCodec, nullptr);
     if(ret < 0)
         logger.error("Error occurred in avcodec_open2");
 }
@@ -609,17 +609,17 @@ void MediaManager::initVideoCodec()
 void MediaManager::initAudioCodec()
 {
     int ret = 0;
-    m_pCodecCtx_audio = avcodec_alloc_context3(nullptr);
+    m_audioCodecCtx = avcodec_alloc_context3(nullptr);
 
-    ret = avcodec_parameters_to_context(m_pCodecCtx_audio, m_pFormatCtx->streams[m_audioIndex]->codecpar);
+    ret = avcodec_parameters_to_context(m_audioCodecCtx, m_formatCtx->streams[m_audioIndex]->codecpar);
     if(ret < 0)
         logger.error("Error occurred in avcodec_parameters_to_context");
 
-    m_pCodec_audio = avcodec_find_decoder(m_pCodecCtx_audio->codec_id);
-    if(!m_pCodec_audio)
+    m_audioCodec = avcodec_find_decoder(m_audioCodecCtx->codec_id);
+    if(!m_audioCodec)
         logger.error("Error occurred in avcodec_find_decoder");
 
-    ret = avcodec_open2(m_pCodecCtx_audio, m_pCodec_audio, nullptr);
+    ret = avcodec_open2(m_audioCodecCtx, m_audioCodec, nullptr);
     if(ret < 0)
         logger.error("Error occurred in avcodec_open2");
 }
@@ -627,27 +627,27 @@ void MediaManager::initAudioCodec()
 void MediaManager::initAudioDevice()
 {
     ///////音频设备初始化///////
-    m_pAudioParams = new AudioParams;
+    m_audioParams = new AudioParams;
     // 设置音频播放采样参数
-    m_pAudioParams->out_sample_rate = m_pCodecCtx_audio->sample_rate;           //采样率    48000
-    m_pAudioParams->out_channels =    m_pCodecCtx_audio->ch_layout.nb_channels; //通道数    2
-    m_pAudioParams->out_nb_samples =  m_pCodecCtx_audio->frame_size;            //单个通道中的样本数  1024
-    m_pAudioParams->out_sample_fmt =  AV_SAMPLE_FMT_FLT;                        //声音格式  SDL仅支持部分音频格式
+    m_audioParams->out_sample_rate = m_audioCodecCtx->sample_rate;           //采样率    48000
+    m_audioParams->out_channels =    m_audioCodecCtx->ch_layout.nb_channels; //通道数    2
+    m_audioParams->out_nb_samples =  m_audioCodecCtx->frame_size;            //单个通道中的样本数  1024
+    m_audioParams->out_sample_fmt =  AV_SAMPLE_FMT_FLT;                        //声音格式  SDL仅支持部分音频格式
 
     // 创建音频数据缓冲区
-    m_pAudioParams->outBuff = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_pAudioParams->out_channels);
+    m_audioParams->outBuff = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_audioParams->out_channels);
 
     // 创建重采样上下文
     m_swrCtx = swr_alloc();
 
     // 分配重采样的上下文信息
     swr_alloc_set_opts2(&m_swrCtx,
-                           &m_pCodecCtx_audio->ch_layout,             /*out*/
-                           m_pAudioParams->out_sample_fmt,                    /*out*///fltp->slt
-                           m_pAudioParams->out_sample_rate,                   /*out*/
-                           &m_pCodecCtx_audio->ch_layout,               /*in*/
-                           m_pCodecCtx_audio->sample_fmt,               /*in*/
-                           m_pCodecCtx_audio->sample_rate,              /*in*/
+                           &m_audioCodecCtx->ch_layout,             /*out*/
+                           m_audioParams->out_sample_fmt,                    /*out*///fltp->slt
+                           m_audioParams->out_sample_rate,                   /*out*/
+                           &m_audioCodecCtx->ch_layout,               /*in*/
+                           m_audioCodecCtx->sample_fmt,               /*in*/
+                           m_audioCodecCtx->sample_rate,              /*in*/
                            0,
                            NULL);
 
@@ -656,13 +656,13 @@ void MediaManager::initAudioDevice()
 
     // 初始化 SoundTouch 实例
     m_soundTouch = soundtouch_createInstance();
-    soundtouch_setSampleRate(m_soundTouch, m_pAudioParams->out_sample_rate);    // 设置采样率
-    soundtouch_setChannels(m_soundTouch, m_pAudioParams->out_channels);         // 设置通道数
+    soundtouch_setSampleRate(m_soundTouch, m_audioParams->out_sample_rate);    // 设置采样率
+    soundtouch_setChannels(m_soundTouch, m_audioParams->out_channels);         // 设置通道数
     soundtouch_setTempo(m_soundTouch, m_speedFactor);                           // 设置倍速播放
 
     // 开启音频设备
     m_sdlPlayer = new SdlPlayer;
-    m_sdlPlayer->initAudioDevice(m_pAudioParams);
+    m_sdlPlayer->initAudioDevice(m_audioParams);
 }
 
 //视频播放线程
@@ -689,7 +689,7 @@ int MediaManager::thread_video_display()
         if (renderMtx.try_lock()) // 尝试获取锁，非阻塞
         {
             std::lock_guard<std::mutex> lock(renderMtx, std::adopt_lock);  // std::adopt_lock:接管try_lock()锁定的互斥量
-            renderFrameRGB();
+            renderFrameRgb();
         }
 
         // 延时控制
@@ -723,7 +723,7 @@ int MediaManager::thread_audio_display()
         if(!frame)
             continue;
 
-        ret = swr_convert(m_swrCtx, &m_pAudioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
+        ret = swr_convert(m_swrCtx, &m_audioParams->outBuff, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)frame->data, frame->nb_samples);
         if(ret < 0)
         {
             logger.error("Error while converting\n");
@@ -731,23 +731,23 @@ int MediaManager::thread_audio_display()
         }
 
         // 将重采样后的音频数据传递给 SoundTouch 进行处理
-        soundtouch_putSamples(m_soundTouch, (const float*)m_pAudioParams->outBuff, ret);
+        soundtouch_putSamples(m_soundTouch, (const float*)m_audioParams->outBuff, ret);
 
         // 获取处理后的样本
-        int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_pAudioParams->outBuff, m_pAudioParams->out_nb_samples / m_speedFactor);
+        int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_audioParams->outBuff, m_audioParams->out_nb_samples / m_speedFactor);
 //        logger.debug("putSamples = %d, numSamplesProcessed = %d", ret, numSamplesProcessed);
 
         // 音频PTS计算并记录
-        m_audioLastPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_audioIndex]->time_base);
+        m_audioLastPTS = frame->pts * av_q2d(m_formatCtx->streams[m_audioIndex]->time_base);
 
         // 等待SDL音频播放器完成当前的音频数据处理和输出
         while(m_sdlPlayer->m_audioLen > 0)
             delayMs(1);
 
         // 音频填充参数
-        m_sdlPlayer->m_audioChunk = (unsigned char *)m_pAudioParams->outBuff;
+        m_sdlPlayer->m_audioChunk = (unsigned char *)m_audioParams->outBuff;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
-        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_pAudioParams->out_channels * sizeof(float);  // 处理后的数据长度
+        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_audioParams->out_channels * sizeof(float);  // 处理后的数据长度
 
         av_frame_unref(frame);
     }
@@ -874,7 +874,7 @@ int MediaManager::thread_stream_convert()
 
 void MediaManager::renderDelayControl(AVFrame* frame)
 {
-    double currentVideoPTS = frame->pts * av_q2d(m_pFormatCtx->streams[m_videoIndex]->time_base);
+    double currentVideoPTS = frame->pts * av_q2d(m_formatCtx->streams[m_videoIndex]->time_base);
     double delayDuration = 0.0;
     // 有音频时向音频流同步，无音频流则按PTS播放
     if(m_audioIndex >= 0)
@@ -936,7 +936,7 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
         av_freep(&tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
 
     // 创建新的 SwsContext 以转换图像
-    tmpSws[count] = sws_getContext(m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_pCodecCtx_video->pix_fmt,
+    tmpSws[count] = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, m_videoCodecCtx->pix_fmt,
                                    m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
     if(tmpSws[(count + 1) % TMP_BUFFER_NUMBER])
     {
@@ -945,11 +945,11 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
     }
 
     // 使用新缓冲区填充数据
-    av_image_fill_arrays(m_frameRGB->data, m_frameRGB->linesize, tmpBuf[count], AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
+    av_image_fill_arrays(m_frameRgb->data, m_frameRgb->linesize, tmpBuf[count], AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
 
     // 确保新缓冲区准备好后切换
     m_frameBuf = tmpBuf[count];  // 切换到新的缓冲区
-    m_pSwsCtx = tmpSws[count];   // 切换到新的 SwsContext
+    m_swsCtx = tmpSws[count];   // 切换到新的 SwsContext
 
     count++;
     if(count == TMP_BUFFER_NUMBER)
@@ -957,27 +957,27 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
 
     // 渲染
     std::lock_guard<std::mutex> lock(renderMtx);
-    renderFrameRGB();
+    renderFrameRgb();
 }
 
-void MediaManager::renderFrameRGB()
+void MediaManager::renderFrameRgb()
 {
-    if(!m_frame || !m_frame->data[0] || !m_pSwsCtx)
+    if(!m_frame || !m_frame->data[0] || !m_swsCtx)
         return;
 
-    sws_scale(m_pSwsCtx,
+    sws_scale(m_swsCtx,
               (const unsigned char* const*)m_frame->data,
               m_frame->linesize, 0,
-              m_pCodecCtx_video->height,
-              m_frameRGB->data,
-              m_frameRGB->linesize);
+              m_videoCodecCtx->height,
+              m_frameRgb->data,
+              m_frameRgb->linesize);
 
     // 调用回调函数，通知 GUI 渲染
     if (m_renderCallback)
 #ifdef ENABLE_PYBIND
-        m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_windowWidth, m_windowHeight);
+        m_renderCallback(reinterpret_cast<int64_t>(m_frameRgb->data[0]), m_windowWidth, m_windowHeight);
 #else
-        m_renderCallback(m_frameRGB->data[0], m_windowWidth, m_windowHeight);
+        m_renderCallback(m_frameRgb->data[0], m_windowWidth, m_windowHeight);
 #endif
     else
         logger.error("Render callback not set");

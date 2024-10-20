@@ -118,7 +118,7 @@ private:
     void initAudioDevice();
     void renderDelayControl(AVFrame* frame);
     void delayMs(int ms);
-    void renderFrameRGB();
+    void renderFrameRgb();
 
     //线程函数
     int thread_media_decode();
@@ -135,27 +135,27 @@ private:
     HANDLE m_soundTouch;
 
     //媒体数据相关，其中Index同时用于音视频流是否存在的判断
-    AVFormatContext* m_pFormatCtx;
+    AVFormatContext* m_formatCtx;
     int m_videoIndex;
     int m_audioIndex;
-    AVCodecContext* m_pCodecCtx_video;
-    AVCodecContext* m_pCodecCtx_audio;
-    const AVCodec* m_pCodec_video;
-    const AVCodec* m_pCodec_audio;
+    AVCodecContext* m_videoCodecCtx;
+    AVCodecContext* m_audioCodecCtx;
+    const AVCodec* m_videoCodec;
+    const AVCodec* m_audioCodec;
 
     //视频变量
     uint8_t* m_frameBuf;
     AVFrame* m_frame;
-    AVFrame* m_frameRGB;
-    SwsContext* m_pSwsCtx;
-    bool m_RGBMode;
+    AVFrame* m_frameRgb;
+    SwsContext* m_swsCtx;
+    bool m_rgbMode;
     double m_aspectRatio;
     int m_windowWidth;
     int m_windowHeight;
     std::mutex renderMtx;
 
     //音频变量
-    AudioParams* m_pAudioParams;
+    AudioParams* m_audioParams;
     SwrContext* m_swrCtx;
 
     //公共变量

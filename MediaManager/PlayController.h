@@ -3,7 +3,6 @@
 
 #include "MediaManager.h"
 #include <string>
-#include <istream>
 
 class MediaPlayInfo
 {

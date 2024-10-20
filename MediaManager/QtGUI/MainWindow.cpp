@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     //连接渲染信号
-    connect(this, &MainWindow::sigRender, this, &MainWindow::renderFrameRGB);
+    connect(this, &MainWindow::sigRender, this, &MainWindow::renderFrameRgb);
 
     //播放窗口
     m_videoView = new QLabel(this);
@@ -96,7 +96,7 @@ void MainWindow::emitRenderSignal(uint8_t *data, int width, int height)
     emit sigRender(data, width, height);
 }
 
-void MainWindow::renderFrameRGB(uint8_t *data, int width, int height)
+void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 {
     QImage img((uchar*)data, width, height, QImage::Format_RGB32);
     m_videoView->setPixmap(QPixmap::fromImage(img));

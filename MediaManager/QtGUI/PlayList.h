@@ -9,7 +9,6 @@
 #include <QLabel>
 #include <QFont>
 #include <QFile>
-#include <QPainter>
 #include <QDir>
 #include <QDirIterator>
 #include "PlayController.h"

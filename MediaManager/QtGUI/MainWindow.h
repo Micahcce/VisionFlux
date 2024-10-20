@@ -28,7 +28,7 @@ public:
     ~MainWindow();
 
     void emitRenderSignal(uint8_t *data, int width, int height);
-    void renderFrameRGB(uint8_t *data, int width, int height);
+    void renderFrameRgb(uint8_t *data, int width, int height);
 
 signals:
     void sigRender(uint8_t *data, int width, int height);
