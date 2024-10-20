@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_videoView->setStyleSheet("background-color:#FFFFFF;");
     m_videoView->show();
     m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_videoView->setAlignment(Qt::AlignCenter);
 
     //底栏
     m_bottomBar = new BottomBar(this);

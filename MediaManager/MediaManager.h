@@ -120,29 +120,13 @@ private:
     void renderDelayControl(AVFrame* frame);
     void frameYuvToRgb();
     void delayMs(int ms);
+    void renderFrameRGB();
 
     //线程函数
     int thread_media_decode();
     int thread_video_display();
     int thread_audio_display();
     int thread_stream_convert();
-
-    // 静态包装函数，因为SDL线程不支持使用成员函数
-    static int decodeThreadEntry(void* ptr)
-    {
-        MediaManager* mediaManager = static_cast<MediaManager*>(ptr);
-        return mediaManager->thread_media_decode();
-    }
-    static int videoThreadEntry(void* ptr)
-    {
-        MediaManager* mediaManager = static_cast<MediaManager*>(ptr);
-        return mediaManager->thread_media_decode();
-    }
-    static int audioThreadEntry(void* ptr)
-    {
-        MediaManager* mediaManager = static_cast<MediaManager*>(ptr);
-        return mediaManager->thread_media_decode();
-    }
 
 
     RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
@@ -163,6 +147,7 @@ private:
 
     //视频变量
     uint8_t* m_frameBuf;
+    AVFrame* m_frame;
     AVFrame* m_frameRGB;
     SwsContext* m_pSwsCtx;
     bool m_RGBMode;
@@ -192,6 +177,8 @@ private:
     //流媒体转换
     std::string m_inputStreamUrl;
     std::string m_outputStreamUrl;
+
+    std::mutex mtx;
 };
 
 #endif // MEDIAMANAGER_H

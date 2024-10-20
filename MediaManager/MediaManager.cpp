@@ -1,5 +1,4 @@
 #include "MediaManager.h"
-#define USE_SDL 0
 
 
 MediaManager::MediaManager()
@@ -22,6 +21,7 @@ MediaManager::MediaManager()
       m_frameBuf(nullptr),
       m_pAudioParams(nullptr),
       m_swrCtx(nullptr),
+      m_frame(nullptr),
       m_frameRGB(nullptr),
       m_pSwsCtx(nullptr),
       m_thread_quit(true),
@@ -34,13 +34,11 @@ MediaManager::MediaManager()
       m_audioLastPTS(0.0),
       m_speedFactor(1.0)
 {
-    m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
 //    av_log_set_level(AV_LOG_DEBUG);
 //    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
-#if USE_SDL
 
-#endif
+    m_RGBMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
     m_systemClock = new SystemClock;
 }
 
@@ -139,6 +137,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         m_aspectRatio = static_cast<double>(m_pCodecCtx_video->width) / static_cast<double>(m_pCodecCtx_video->height);
         m_windowWidth = m_pCodecCtx_video->width;
         m_windowHeight = m_pCodecCtx_video->height;
+        m_frame = av_frame_alloc();
 
         if(m_RGBMode)
             frameYuvToRgb();
@@ -164,40 +163,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     // 开启系统设置，目前只用于单视频流的渲染延时控制
     m_systemClock->start();
 
-#if USE_SDL
-    m_sdlPlayer->initVideoDevice(m_pCodecCtx_video->width, m_pCodecCtx_video->height, m_RGBMode);
 
-    SDL_CreateThread(decodeThreadEntry, NULL, this);
-    SDL_CreateThread(videoThreadEntry, NULL, this);
-    SDL_CreateThread(audioThreadEntry, NULL, this);
-
-    SDL_Event event;                    //定义事件
-    while(true)
-    {
-        SDL_WaitEvent(&event);
-
-        if(event.type == SDL_QUIT)      //程序退出
-        {
-            this->setThreadQuit(true);
-            break;
-        }
-        else if(event.type == SDL_KEYDOWN)
-        {
-            if(event.key.keysym.sym == SDLK_SPACE)  //空格键暂停
-            {
-                this->setThreadPause(!this->m_thread_pause);
-            }
-        }
-        else if(event.type == SDL_WINDOWEVENT)
-        {
-            if (event.window.event == SDL_WINDOWEVENT_RESIZED)
-            {
-                // 重新初始化渲染资源
-                this->getSdlPlayer()->resize(event.window.data1, event.window.data2, m_RGBMode);
-            }
-        }
-    }
-#endif
     return true;
 }
 
@@ -252,23 +218,8 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
 //                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
                 if (frame->pts >= targetPTS)
                 {
-                    // 找到目标帧，渲染并结束
-                    sws_scale(m_pSwsCtx,
-                              (const unsigned char* const*)frame->data,
-                              frame->linesize, 0,
-                              m_pCodecCtx_video->height,
-                              m_frameRGB->data,
-                              m_frameRGB->linesize);
-
-                    // 调用回调函数，通知 GUI 渲染
-                    if (m_renderCallback)
-#ifdef ENABLE_PYBIND
-                        m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_windowWidth, m_windowHeight);
-#else
-                        m_renderCallback(m_frameRGB->data[0], m_windowWidth, m_windowHeight);
-#endif
-                    else
-                        logger.error("Render callback not set");
+                    av_frame_ref(m_frame, frame);
+                    renderFrameRGB();
 
                     av_frame_unref(frame);
                     throwing = false;
@@ -662,6 +613,18 @@ void MediaManager::close()
         m_pFormatCtx = nullptr;
     }
 
+    if(m_frame)
+    {
+        av_frame_free(&m_frame);
+        m_frame = nullptr;
+    }
+
+    if(m_frameRGB)
+    {
+        av_frame_free(&m_frameRGB);
+        m_frameRGB = nullptr;
+    }
+
     /*m_frameBuf不可轻易释放，避免渲染函数访问造成崩溃，比如Qt重绘仍会使用该内存*/
 
     m_videoLastPTS = 0.0;
@@ -771,38 +734,15 @@ int MediaManager::thread_video_display()
         if(!frame)
             continue;
 
-        //渲染
-#if USE_SDL
-    if(m_RGBMode)
-    {
-        sws_scale(m_pSwsCtx,
-                  (const unsigned char* const*)frame->data,
-                  frame->linesize, 0,
-                  m_pCodecCtx_video->height,
-                  m_frameRGB->data,
-                  m_frameRGB->linesize);
-        m_sdlPlayer->renderFrameRGB(m_frameRGB);
-    }
-    else
-        m_sdlPlayer->renderFrame(frame);
-#else
-        sws_scale(m_pSwsCtx,
-                  (const unsigned char* const*)frame->data,
-                  frame->linesize, 0,
-                  m_pCodecCtx_video->height,
-                  m_frameRGB->data,
-                  m_frameRGB->linesize);
+        //引用
+        av_frame_ref(m_frame, frame);
 
-        // 调用回调函数，通知 GUI 渲染
-        if (m_renderCallback)
-#ifdef ENABLE_PYBIND
-            m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_windowWidth, m_windowHeight);
-#else
-            m_renderCallback(m_frameRGB->data[0], m_windowWidth, m_windowHeight);
-#endif
-        else
-            logger.error("Render callback not set");
-#endif
+        //渲染
+        if (mtx.try_lock()) // 尝试获取锁，非阻塞
+        {
+            std::lock_guard<std::mutex> lock(mtx, std::adopt_lock);  // 如果获取到锁，则继续锁定
+            renderFrameRGB();
+        }
 
         //延时控制
         renderDelayControl(frame);
@@ -1087,7 +1027,31 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
     count++;
     if(count == TMP_BUFFER_NUMBER)
         count = 0;
+
+
+    std::lock_guard<std::mutex> lock(mtx);
+    renderFrameRGB();
 }
 
+void MediaManager::renderFrameRGB()
+{
+    if(!m_frame)
+        return;
+    sws_scale(m_pSwsCtx,
+              (const unsigned char* const*)m_frame->data,
+              m_frame->linesize, 0,
+              m_pCodecCtx_video->height,
+              m_frameRGB->data,
+              m_frameRGB->linesize);
 
+    // 调用回调函数，通知 GUI 渲染
+    if (m_renderCallback)
+#ifdef ENABLE_PYBIND
+        m_renderCallback(reinterpret_cast<int64_t>(m_frameRGB->data[0]), m_windowWidth, m_windowHeight);
+#else
+        m_renderCallback(m_frameRGB->data[0], m_windowWidth, m_windowHeight);
+#endif
+    else
+        logger.error("Render callback not set");
+}
 
