@@ -154,6 +154,7 @@ private:
     double m_aspectRatio;
     int m_windowWidth;
     int m_windowHeight;
+    std::mutex renderMtx;
 
     //音频变量
     AudioParams* m_pAudioParams;
@@ -177,8 +178,6 @@ private:
     //流媒体转换
     std::string m_inputStreamUrl;
     std::string m_outputStreamUrl;
-
-    std::mutex mtx;
 };
 
 #endif // MEDIAMANAGER_H

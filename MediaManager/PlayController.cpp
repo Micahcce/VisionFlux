@@ -26,7 +26,7 @@ void PlayController::startPlay(const std::string filePath)
         return;
     }
 
-    //是否有音频流
+    // 是否有音频流
     if(m_mediaManager->getAudioIndex() >= 0)
         m_mediaInfo->hasAudioStream = true;
     if(m_mediaManager->getVideoIndex() >= 0)

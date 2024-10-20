@@ -36,6 +36,7 @@ private slots:
 private:
     BottomBar* m_bottomBar;
 
+    QStringList m_allowedExtensions;
     QString m_mediaDirPath;
 };
 
