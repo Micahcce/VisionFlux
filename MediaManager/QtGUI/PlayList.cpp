@@ -7,14 +7,6 @@ PlayList::PlayList(QWidget *parent) : QListWidget(parent)
     m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav";
 }
 
-void PlayList::setBottomBar(BottomBar *bottomBar)
-{
-    m_bottomBar = bottomBar;
-    connect(this, &QListWidget::itemDoubleClicked, this, &PlayList::slotStartPlayMedia);    //双击播放
-    connect(this, &QListWidget::itemClicked, this, &PlayList::slotSetSelectedMediaPath);    //设置选中项的文件地址
-    connect(m_bottomBar, &BottomBar::sigAddMediaItem, this, &PlayList::slotAddMediaItem);   //添加播放项
-}
-
 void PlayList::setMediaDirPath(QString mediaDirPath)
 {
     m_mediaDirPath = mediaDirPath;
@@ -65,7 +57,7 @@ void PlayList::slotAddMediaItem(QString filePath)
 
         // 缩略图不存在则创建
         if(QFile::exists(thumbnailPath) == false)
-            m_bottomBar->getPlayController()->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);
+            m_playController->saveFrameToBmp(filePath.toStdString().data(), thumbnailPath.toStdString().data(), 5);
 
         QPixmap pixmap(thumbnailPath);
         thumbnail->setPixmap(pixmap.scaled(80, 60, Qt::KeepAspectRatio)); // 调整封面图像大小
@@ -80,8 +72,8 @@ void PlayList::slotAddMediaItem(QString filePath)
     QWidget *itemWidget = new QWidget(this);
 
     // 获取时长
-    int duration = m_bottomBar->getPlayController()->getMediaDuration(filePath.toStdString());
-    QString timetotalStr = QString::fromStdString(m_bottomBar->getPlayController()->timeFormatting(duration));
+    int duration = m_playController->getMediaDuration(filePath.toStdString());
+    QString timetotalStr = QString::fromStdString(m_playController->timeFormatting(duration));
 
     // 添加标题、时长和状态
     QFileInfo fileInfo(filePath);
@@ -126,14 +118,3 @@ void PlayList::searchMediaFiles()
     }
 }
 
-void PlayList::slotStartPlayMedia()
-{
-    QString mediaPath = getMediaPath();
-    m_bottomBar->startPlayMedia(mediaPath);
-}
-
-void PlayList::slotSetSelectedMediaPath()
-{
-    QString mediaPath = getMediaPath();
-    m_bottomBar->setSelectMediaPath(mediaPath);
-}

@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     //播放列表
     m_playList = new PlayList(playListTab);
     m_playList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_playList->setBottomBar(m_bottomBar);
+    m_playList->setPlayController(m_playController);
     m_playList->setMediaDirPath(m_mediaDirPath);
     m_playList->searchMediaFiles();           //添加视频列表
 
@@ -64,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
     //流处理面板
     m_processPanel = new ProcessPanel(processPanelTab);
     m_processPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_processPanel->setBottomBar(m_bottomBar);
+    m_processPanel->setPlayController(m_playController);
 
     QVBoxLayout* vBox2 = new QVBoxLayout;
     vBox2->addWidget(m_processPanel);
@@ -85,6 +85,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     //初始化窗口宽高比
     m_videoView->adjustSize();
+
+    //连接信号
+    connect(m_bottomBar, &BottomBar::sigStartPlayMedia, m_playList, [this](){emit m_playList->sigPlayMedia(m_playList->getMediaPath());});  //点击播放图标发送播放信号
+    connect(m_playList, &QListWidget::itemDoubleClicked, m_playList, [this](){emit m_playList->sigPlayMedia(m_playList->getMediaPath());}); //双击列表项目发送播放信号
+    connect(m_playList, &PlayList::sigPlayMedia, m_bottomBar, &BottomBar::slotStartPlayMedia);               //播放信号连接播放函数
+    connect(m_processPanel, &ProcessPanel::sigLiveStreamPlay, m_bottomBar, &BottomBar::slotStartPlayMedia);  //播放信号连接播放函数
+    connect(m_bottomBar, &BottomBar::sigAddMediaItem, m_playList, &PlayList::slotAddMediaItem);              //添加播放项
 }
 
 MainWindow::~MainWindow()

@@ -11,7 +11,7 @@
 #include <QFileDialog>
 #include <QUrl>
 #include <QFileInfo>
-#include "BottomBar.h"
+#include "PlayController.h"
 
 class ProcessPanel : public QScrollArea
 {
@@ -19,10 +19,12 @@ class ProcessPanel : public QScrollArea
 public:
     explicit ProcessPanel(QWidget *parent = nullptr);
 
-    void setBottomBar(BottomBar* bottomBar) {m_bottomBar = bottomBar;}
+    void setPlayController(PlayController* playController) {m_playController = playController;}
+
+signals:
+    void sigLiveStreamPlay(QString streamUrl);
 
 private slots:
-    void slotLiveStreamPlay();
     void slotLiveStreamSave();
 
     void slotPushStreamFileSelect();
@@ -33,7 +35,7 @@ private slots:
     void slotAllEnd();
 
 private:
-    BottomBar* m_bottomBar;
+    PlayController* m_playController;
 
     QLineEdit* m_pullStreamUrlEdit;
     QLineEdit* m_pushStreamUrlEdit;

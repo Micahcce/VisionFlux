@@ -18,7 +18,7 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
 
     QPushButton* StreamUrlPlayBtn = new QPushButton(this);
     StreamUrlPlayBtn->setText("播放");
-    connect(StreamUrlPlayBtn, &QPushButton::clicked, this, &ProcessPanel::slotLiveStreamPlay);
+    connect(StreamUrlPlayBtn, &QPushButton::clicked, this, [this]{emit sigLiveStreamPlay(m_pullStreamUrlEdit->text());});
 
     QPushButton* StreamUrlSaveBtn = new QPushButton(this);
     StreamUrlSaveBtn->setText("保存");
@@ -103,12 +103,6 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     setWidget(container);
 }
 
-void ProcessPanel::slotLiveStreamPlay()
-{
-    QString streamUrl = m_pullStreamUrlEdit->text();
-    m_bottomBar->startPlayMedia(streamUrl);
-}
-
 void ProcessPanel::slotLiveStreamSave()
 {
     const QString streamUrl = m_pullStreamUrlEdit->text();
@@ -117,7 +111,7 @@ void ProcessPanel::slotLiveStreamSave()
     QString outputPath = QFileInfo(fileName).baseName();   // 获取不带后缀的文件名
     outputPath += ".flv";                                  // flv格式
 
-    m_bottomBar->getPlayController()->streamConvert(streamUrl.toStdString(), outputPath.toStdString());
+    m_playController->streamConvert(streamUrl.toStdString(), outputPath.toStdString());
 }
 
 void ProcessPanel::slotPushStreamFileSelect()
@@ -133,7 +127,7 @@ void ProcessPanel::slotPushStream()
 {
     QString streamUrl = m_pushStreamUrlEdit->text();
     QString filePath = m_pushStreamFileEdit->text();
-    m_bottomBar->getPlayController()->streamConvert(filePath.toStdString(), streamUrl.toStdString());
+    m_playController->streamConvert(filePath.toStdString(), streamUrl.toStdString());
 }
 
 void ProcessPanel::slotConvertFileSelect()

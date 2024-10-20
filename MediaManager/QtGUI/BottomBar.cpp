@@ -1,6 +1,6 @@
 #include "BottomBar.h"
 
-BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2), m_selectedMediaPath("")
+BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 {
     setStyleSheet("background-color:#DDEEDD;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -72,11 +72,17 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2), m_select
 
     this->setLayout(vBox);
 
-    //开启键盘捕获
-    this->grabKeyboard();
+    //设置快捷键
+    /*KeyEvent需要开启grabKeyboard，导致输入框无法获取键盘输入，因此不可用*/
+    QShortcut *spaceCut = new QShortcut(QKeySequence("Space"), this);
+    connect(spaceCut, &QShortcut::activated, this, &BottomBar::slotPlayAndPause);
+    QShortcut *leftCut = new QShortcut(QKeySequence("Left"), this);
+    connect(leftCut, &QShortcut::activated, this, [this]{changeProgress(-5);});
+    QShortcut *rightCut = new QShortcut(QKeySequence("Right"), this);
+    connect(rightCut, &QShortcut::activated, this, [this]{changeProgress(+5);});
 }
 
-bool BottomBar::startPlayMedia(QString mediaPath)
+bool BottomBar::slotStartPlayMedia(QString mediaPath)
 {
     if(mediaPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
     {
@@ -131,28 +137,6 @@ void BottomBar::changeProgress(int changeSecs)
     slotSliderReleased();
 }
 
-void BottomBar::keyPressEvent(QKeyEvent *event)
-{
-    switch (event->key())
-    {
-    case Qt::Key_Left:
-        changeProgress(-5);
-        break;
-
-    case Qt::Key_Right:
-        changeProgress(+5);
-        break;
-
-    case Qt::Key_Space:
-        slotPlayAndPause();
-        break;
-
-    default:
-        QWidget::keyPressEvent(event);
-        break;
-    }
-}
-
 void BottomBar::slotSliderPressed()
 {
     m_sliderTimer->stop();
@@ -182,8 +166,7 @@ void BottomBar::slotPlayAndPause()
 {
     if(m_playController->getMediaPlayInfo()->mediaName == "")    //未开始播放
     {
-        if(m_selectedMediaPath != "")
-            startPlayMedia(m_selectedMediaPath);
+        emit sigStartPlayMedia();
         return;
     }
     else

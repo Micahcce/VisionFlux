@@ -14,7 +14,7 @@
 #include <QStyle>
 #include <QApplication>
 #include <QFileDialog>
-#include <QKeyEvent>
+#include <QShortcut>
 #include "PlayController.h"
 
 
@@ -26,15 +26,14 @@ public:
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
     PlayController* getPlayController() {return m_playController;}
-    bool startPlayMedia(QString mediaPath);
-    void setSelectMediaPath(QString mediaPath) {m_selectedMediaPath = mediaPath;}
     void changeProgress(int changeSecs);
 
 signals:
+    void sigStartPlayMedia();
     void sigAddMediaItem(QString filePath);
 
-protected:
-    void keyPressEvent(QKeyEvent *event) override;
+public slots:
+    bool slotStartPlayMedia(QString mediaPath);
 
 private slots:
     void slotPlayAndPause();
@@ -65,8 +64,6 @@ private:
     QSlider* m_volumeSlider;
     QPushButton* m_addFileBtn;
     QTimer* m_sliderTimer;        //进度条定时器
-
-    QString m_selectedMediaPath;
 };
 
 #endif // BOTTOMBAR_H

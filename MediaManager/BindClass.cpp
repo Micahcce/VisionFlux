@@ -14,7 +14,6 @@ PYBIND11_MODULE(mediamanager, m) {
         .def("changeVolume", &PlayController::changeVolume)
         .def("streamConvert", &PlayController::streamConvert)
         .def("getMediaDuration", &PlayController::getMediaDuration)
-        .def("getMediaPlayInfo", &PlayController::getMediaPlayInfo)
         .def("saveFrameToBmp", &PlayController::saveFrameToBmp)
         .def("timeFormatting", &PlayController::timeFormatting)
         .def("setRenderCallback", &PlayController::setRenderCallback)

@@ -12,7 +12,6 @@
 #include <QDir>
 #include <QDirIterator>
 #include "PlayController.h"
-#include "BottomBar.h"
 
 class PlayList : public QListWidget
 {
@@ -20,20 +19,19 @@ class PlayList : public QListWidget
 public:
     explicit PlayList(QWidget *parent = nullptr);
 
-    void setBottomBar(BottomBar* bottomBar);
+    void setPlayController(PlayController* playController) {m_playController = playController;}
     void setMediaDirPath(QString mediaDirPath);
     QString getMediaPath();
     void searchMediaFiles();
 
+signals:
+    void sigPlayMedia(QString mediaPath);
+
 public slots:
     void slotAddMediaItem(QString filePath);
 
-private slots:
-    void slotStartPlayMedia();
-    void slotSetSelectedMediaPath();
-
 private:
-    BottomBar* m_bottomBar;
+    PlayController* m_playController;
 
     QStringList m_allowedExtensions;
     QString m_mediaDirPath;
