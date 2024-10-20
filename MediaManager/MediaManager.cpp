@@ -178,12 +178,15 @@ bool MediaManager::streamConvert(const std::string& inputStreamUrl, const std::s
     return true;
 }
 
-void MediaManager::seekFrameByVideoStream(int timeSecs)
+void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
 {
     m_frameQueue->clear();
 
-    // 根据视频帧来seek，因为音频帧的解码不需要I帧，跳转后可能会影响到视频帧的解码
-    AVRational time_base = m_pFormatCtx->streams[m_videoIndex]->time_base;
+    // 优先根据视频帧来seek，因为音频帧的解码不需要I帧，跳转后可能会影响到视频帧的解码
+    int streamIndex = hasVideoStream ? m_videoIndex : m_audioIndex;
+    AVCodecContext* codecCtx = hasVideoStream ? m_pCodecCtx_video : m_pCodecCtx_audio;
+
+    AVRational time_base = m_pFormatCtx->streams[streamIndex]->time_base;
     logger.debug("time_base.num: %d", time_base.num);
     logger.debug("time_base.den: %d", time_base.den);
 
@@ -192,13 +195,14 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
     logger.info("seek PTS: %d", targetPTS);
 
     // 使用 AVSEEK_FLAG_BACKWARD 来确保向前查找最近的 I 帧
-    if (av_seek_frame(m_pFormatCtx, m_videoIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
+    if (av_seek_frame(m_pFormatCtx, streamIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
     {
         logger.error("Error seeking to position.");
         return;
     }
 
-    avcodec_flush_buffers(m_pCodecCtx_video);
+    if(m_videoIndex >= 0)
+        avcodec_flush_buffers(m_pCodecCtx_video);
     if(m_audioIndex >= 0)
         avcodec_flush_buffers(m_pCodecCtx_audio);
 
@@ -212,81 +216,31 @@ void MediaManager::seekFrameByVideoStream(int timeSecs)
         if (av_read_frame(m_pFormatCtx, packet) < 0)
             break; // 没有更多的帧
 
-        if (packet->stream_index == m_videoIndex)
+        if (packet->stream_index == streamIndex)
         {
-            avcodec_send_packet(m_pCodecCtx_video, packet);
-            while (avcodec_receive_frame(m_pCodecCtx_video, frame) >= 0)
+            avcodec_send_packet(codecCtx, packet);
+            while (avcodec_receive_frame(codecCtx, frame) >= 0)
             {
 //                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
-                if (frame->pts >= targetPTS)
+                // 丢弃
+                if (frame->pts < targetPTS)
                 {
+                    av_frame_unref(frame);
+                    continue;
+                }
+
+                // 找到目标帧
+                if(hasVideoStream)
+                {
+                    // 渲染
                     av_frame_ref(m_frame, frame);
                     std::lock_guard<std::mutex> lock(renderMtx);
                     renderFrameRGB();
-
-                    av_frame_unref(frame);
-                    throwing = false;
-                    break;
                 }
                 av_frame_unref(frame);
-            }
-        }
-        av_packet_unref(packet);
-    }
-    av_frame_free(&frame);
-    av_packet_free(&packet);
+                throwing = false;
+                break;
 
-    m_systemClock->setTime(timeSecs);
-    logger.info("seek complete");
-}
-
-void MediaManager::seekFrameByAudioStream(int timeSecs)
-{
-    m_frameQueue->clear();
-
-    AVRational time_base = m_pFormatCtx->streams[m_audioIndex]->time_base;
-    logger.debug("time_base.num: %d", time_base.num);
-    logger.debug("time_base.den: %d", time_base.den);
-
-    // 将目标时间转换为PTS
-    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // 将时间转换为PTS
-    logger.info("seek PTS: %d", targetPTS);
-
-    // 使用 AVSEEK_FLAG_BACKWARD 从当前位置向后查找最近的同步点，不使用该标志则会向前查找
-    if (av_seek_frame(m_pFormatCtx, m_audioIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
-    {
-        logger.error("Error seeking to position.");
-        return;
-    }
-
-    if(m_videoIndex >= 0)
-        avcodec_flush_buffers(m_pCodecCtx_video);
-    avcodec_flush_buffers(m_pCodecCtx_audio);
-
-    AVPacket* packet = av_packet_alloc();
-    AVFrame* frame = av_frame_alloc();
-    bool throwing = true;
-
-    // 丢弃多余帧
-    while (throwing)
-    {
-        if (av_read_frame(m_pFormatCtx, packet) < 0)
-            break; // 没有更多的帧
-
-        if (packet->stream_index == m_audioIndex)
-        {
-            avcodec_send_packet(m_pCodecCtx_audio, packet);
-            while (avcodec_receive_frame(m_pCodecCtx_audio, frame) >= 0)
-            {
-//                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
-                if (frame->pts >= targetPTS)
-                {
-                    // 找到目标帧
-                    av_frame_unref(frame);
-                    throwing = false;
-                    break;
-                }
-                av_frame_unref(frame);
             }
         }
         av_packet_unref(packet);

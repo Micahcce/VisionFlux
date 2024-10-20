@@ -54,8 +54,7 @@ public:
     bool streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
 
     //修改进度
-    void seekFrameByVideoStream(int timeSecs);
-    void seekFrameByAudioStream(int timeSecs);
+    void seekFrameByStream(int timeSecs, bool hasVideoStream);
 
     //获取当前进度
     float getCurrentProgress() const;

@@ -67,11 +67,7 @@ void PlayController::endPlay()
 void PlayController::changePlayProgress(int timeSecs)
 {
     m_mediaManager->setThreadPause(true);
-    if(m_mediaInfo->hasVideoStream == true)
-        m_mediaManager->seekFrameByVideoStream(timeSecs);
-    else
-        m_mediaManager->seekFrameByAudioStream(timeSecs);
-
+    m_mediaManager->seekFrameByStream(timeSecs, m_mediaInfo->hasVideoStream);
     if(m_mediaInfo->isPlaying)
         m_mediaManager->setThreadPause(false);
 }
