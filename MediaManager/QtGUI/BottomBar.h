@@ -15,6 +15,7 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QShortcut>
+#include <QCheckBox>
 #include "PlayController.h"
 
 
@@ -25,7 +26,6 @@ public:
     BottomBar(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
-    PlayController* getPlayController() {return m_playController;}
     void changeProgress(int changeSecs);
 
 signals:

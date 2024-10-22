@@ -4,7 +4,7 @@
 
 PlayList::PlayList(QWidget *parent) : QListWidget(parent)
 {
-    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav";
+    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s";
 }
 
 void PlayList::setMediaDirPath(QString mediaDirPath)

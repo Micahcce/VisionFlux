@@ -18,6 +18,8 @@ MediaManager::MediaManager()
       m_aspectRatio(1.0),
       m_windowWidth(0),
       m_windowHeight(0),
+      m_cudaAccelerate(false),
+      m_safeCudaAccelerate(false),
       m_frameBuf(nullptr),
       m_outBuf(nullptr),
       m_swrCtx(nullptr),
@@ -492,6 +494,7 @@ int MediaManager::thread_media_decode()
     av_frame_free(&frame);
     av_packet_free(&packet);
     m_thread_decode_exited = true;
+    logger.debug("media decode thread exit.");
 
     return 0;
 }
@@ -596,6 +599,45 @@ void MediaManager::initVideoCodec()
     m_videoCodec = avcodec_find_decoder(m_videoCodecCtx->codec_id);
     if(!m_videoCodec)
         logger.error("Error occurred in avcodec_find_decoder");
+
+#ifdef CUDA_ISAVAILABLE
+    m_cudaAccelerate = m_safeCudaAccelerate;
+    if(m_cudaAccelerate)
+    {
+        AVBufferRef *deviceCtx = nullptr;
+
+        enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
+        if (type == AV_HWDEVICE_TYPE_NONE)
+        {
+            logger.error("cuda device type not found\n");
+            return;
+        }
+
+        if (av_hwdevice_ctx_create(&deviceCtx, AV_HWDEVICE_TYPE_CUDA, nullptr, nullptr, 0) < 0) {
+            logger.error("Failed to create CUDA hardware device context");
+            return;
+        }
+        m_videoCodecCtx->hw_device_ctx = deviceCtx;
+
+        m_videoCodecCtx->get_format = [](AVCodecContext *ctx, const AVPixelFormat *pix_fmts) {
+            for (const AVPixelFormat *p = pix_fmts; *p != -1; p++) {
+                if (*p == AV_PIX_FMT_CUDA) {
+                    return *p;
+                }
+            }
+            return pix_fmts[0];
+        };
+
+
+        //存放转换后的帧数据
+        m_frameSw = av_frame_alloc();
+        m_frameSw->format = AV_PIX_FMT_NV12;        //cuda加速后默认输出NV12格式
+        m_frameSw->width = m_videoCodecCtx->width;
+        m_frameSw->height = m_videoCodecCtx->height;
+        av_frame_get_buffer(m_frameSw, 0); // 申请缓冲区
+    }
+#endif
+
     // 打开解码器并绑定上下文
     ret = avcodec_open2(m_videoCodecCtx, m_videoCodec, nullptr);
     if(ret < 0)
@@ -672,9 +714,33 @@ int MediaManager::thread_video_display()
         if(!frame)
             continue;
 
+#ifdef CUDA_ISAVAILABLE
+        if(m_cudaAccelerate)
+        {
+            // Transfer data from GPU to CPU
+            if (frame->format == AV_PIX_FMT_CUDA)
+            {
+                if (av_hwframe_transfer_data(m_frameSw, frame, 0) < 0)
+                {
+                    logger.error("Error transferring the data to system memory\n");
+                    break;
+                }
+            }
+            else
+            {
+                logger.warning("Error format found, decoded frame with timestamp: %lld", frame->pts);
+            }
+
+            av_frame_ref(m_frame, m_frameSw);
+        }
+        else
+        {
+            av_frame_ref(m_frame, frame);
+        }
+#else
         // 引用
         av_frame_ref(m_frame, frame);
-
+#endif
         // 渲染
         if (renderMtx.try_lock()) // 尝试获取锁，非阻塞
         {
@@ -689,6 +755,7 @@ int MediaManager::thread_video_display()
     }
     av_frame_free(&frame);
     m_thread_video_exited = true;
+    logger.debug("video display thread exit.");
 
     return 0;
 }
@@ -743,6 +810,7 @@ int MediaManager::thread_audio_display()
     }
     av_frame_free(&frame);
     m_thread_audio_exited = true;
+    logger.debug("audio display thread exit.");
 
     return 0;
 }
@@ -896,6 +964,9 @@ void MediaManager::renderDelayControl(AVFrame* frame)
 
 void MediaManager::frameResize(int width, int height, bool uniformScale)
 {
+    static AVPixelFormat srcFormat;
+    srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
+
     m_windowWidth = width;
     m_windowHeight = height;
 
@@ -926,7 +997,7 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
         av_freep(&tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
 
     // 创建新的 SwsContext 以转换图像
-    tmpSws[count] = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, m_videoCodecCtx->pix_fmt,
+    tmpSws[count] = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, srcFormat,
                                    m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
     if(tmpSws[(count + 1) % TMP_BUFFER_NUMBER])
     {

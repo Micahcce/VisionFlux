@@ -72,12 +72,15 @@ public:
     //保存视频帧
     bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
+    //cuda加速
+    void setSafeCudaAccelerate(bool state) {m_safeCudaAccelerate = state;}
+
     //线程状态
     bool getThreadSafeExited() {return m_thread_safe_exited;}
-    void setThreadQuit(bool status) {m_thread_quit = status;}
-    void setThreadPause(bool status)
+    void setThreadQuit(bool state) {m_thread_quit = state;}
+    void setThreadPause(bool state)
     {
-        m_thread_pause = status;
+        m_thread_pause = state;
         if(m_thread_pause)
             m_systemClock->pause();
         else
@@ -146,6 +149,7 @@ private:
     //视频变量
     uint8_t* m_frameBuf;
     AVFrame* m_frame;
+    AVFrame *m_frameSw;
     AVFrame* m_frameRgb;
     SwsContext* m_swsCtx;
     bool m_rgbMode;
@@ -153,6 +157,8 @@ private:
     int m_windowWidth;
     int m_windowHeight;
     std::mutex renderMtx;
+    bool m_cudaAccelerate;
+    bool m_safeCudaAccelerate;
 
     //音频变量
     SwrContext* m_swrCtx;

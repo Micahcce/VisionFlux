@@ -51,6 +51,12 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_volumeSlider->setFixedSize(100, 10); // 设置滑块大小
     connect(m_volumeSlider, &QSlider::sliderMoved, this, &BottomBar::slotVolumeChanged);
 
+    //硬件加速
+    QCheckBox* hwAccelerateCb = new QCheckBox("硬件加速", this);
+    hwAccelerateCb->setFixedSize(70, 20);
+    connect(hwAccelerateCb, &QCheckBox::stateChanged, this,
+            [=]{m_playController->setSafeCudaAccelerate(hwAccelerateCb->checkState());});
+
     //添加文件
     m_addFileBtn = new QPushButton(this);
     m_addFileBtn->setFixedSize(30, 30);
@@ -63,6 +69,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     hBox2->addWidget(m_changeSpeedBtn);
     hBox2->addWidget(m_volumeBtn);
     hBox2->addWidget(m_volumeSlider);
+    hBox2->addWidget(hwAccelerateCb);
     hBox2->addWidget(m_addFileBtn);
 
     //垂直布局

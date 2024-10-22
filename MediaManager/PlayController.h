@@ -39,6 +39,9 @@ public:
     //修改音量
     void changeVolume(int volume);
 
+    //cuda加速
+    void setSafeCudaAccelerate(bool state);
+
     //窗口大小变化
     void windowResize(int width, int height, bool uniformScale);
 

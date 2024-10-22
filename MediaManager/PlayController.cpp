@@ -93,6 +93,21 @@ void PlayController::changeVolume(int volume)
         m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
 }
 
+void PlayController::setSafeCudaAccelerate(bool state)
+{
+#ifndef CUDA_ISAVAILABLE
+    logger.warning("cuda is not available.");
+    return;
+#endif
+
+    if(state)
+        logger.info("cuda accelerate enabled, cold swapping");
+    else
+        logger.info("cuda accelerate disabled, cold swapping");
+
+    m_mediaManager->setSafeCudaAccelerate(state);
+}
+
 void PlayController::windowResize(int width, int height, bool uniformScale)
 {
     if(m_mediaInfo->mediaName == "")

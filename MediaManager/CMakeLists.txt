@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
 project(MediaManager LANGUAGES CXX)
 
@@ -118,4 +118,15 @@ else()
         Qt5::Core
         Qt5::Widgets
     )
+endif()
+
+# Cuda加速
+find_package(CUDA REQUIRED)
+if(CUDA_FOUND)
+    message(STATUS "CUDA successfully found!")
+    include_directories(${CUDA_INCLUDE_DIRS})
+    # 为代码添加ENABLE_PYBIND宏定义
+    target_compile_definitions(${PROJECT_NAME} PRIVATE CUDA_ISAVAILABLE)
+else()
+    message(FATAL_ERROR "CUDA not found, please install CUDA or check your installation.")
 endif()
