@@ -30,6 +30,8 @@ if (Test-Path $debugDir) {
     $sourceDir = $releaseDir
 } else {
     Write-Host "Neither Debug nor Release directory found."
+    Write-Host "Press any key to exit..."
+    $x = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit
 }
 

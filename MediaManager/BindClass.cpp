@@ -2,7 +2,7 @@
 #include "PlayController.h"
 namespace py = pybind11;
 
-PYBIND11_MODULE(mediamanager, m) {
+PYBIND11_MODULE(MediaManager, m) {
     py::class_<PlayController>(m, "PlayController")
         .def(py::init<>())  // 绑定构造函数
 

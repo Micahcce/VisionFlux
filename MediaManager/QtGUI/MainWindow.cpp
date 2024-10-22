@@ -119,8 +119,11 @@ void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);  // 调用父类的 resizeEvent
-    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    m_videoView->setPixmap(fitpix);
+    if(m_pix.isNull() == false)
+    {
+        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        m_videoView->setPixmap(fitpix);
+    }
 //    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
 }
 
