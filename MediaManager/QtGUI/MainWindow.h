@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QListWidget>
+#include <QScreen>
 
 
 class MainWindow : public QMainWindow
@@ -44,5 +45,6 @@ private:
     BottomBar* m_bottomBar;
 
     QString m_mediaDirPath;
+    QPixmap m_pix;
 };
 #endif // MAINWINDOW_H

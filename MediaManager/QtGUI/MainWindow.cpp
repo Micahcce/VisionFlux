@@ -105,14 +105,23 @@ void MainWindow::emitRenderSignal(uint8_t *data, int width, int height)
 
 void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 {
+//    static QRect screen = QGuiApplication::primaryScreen()->geometry();
+//    static uint8_t* buf = (uint8_t* )malloc(screen.width() * screen.height() * 4);
+//    std::copy(data, data + (width * height * 4), buf);
+
     QImage img((uchar*)data, width, height, QImage::Format_RGB32);
-    m_videoView->setPixmap(QPixmap::fromImage(img));
+    m_pix = QPixmap::fromImage(img);
+    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_videoView->setPixmap(fitpix);
+//    m_videoView->setPixmap(QPixmap::fromImage(img));
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);  // 调用父类的 resizeEvent
-    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
+    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_videoView->setPixmap(fitpix);
+//    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
 }
 
 

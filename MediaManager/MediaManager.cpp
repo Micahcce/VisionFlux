@@ -145,7 +145,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         m_frameRgb = av_frame_alloc();
 
         if(m_rgbMode)
-            frameResize(m_windowWidth, m_windowHeight, true);
+            frameYuvToRgb();
 
         std::thread videoThread(&MediaManager::thread_video_display, this);
         videoThread.detach();
@@ -977,6 +977,28 @@ void MediaManager::renderDelayControl(AVFrame* frame)
 
     // 记录当前视频PTS
     m_videoLastPTS = currentVideoPTS;
+}
+
+void MediaManager::frameYuvToRgb()
+{
+    static AVPixelFormat srcFormat = m_videoCodecCtx->pix_fmt;
+
+#ifdef CUDA_ISAVAILABLE
+    srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
+#endif
+
+    uint8_t* tmpBuf = m_frameBuf;
+    SwsContext* tmpSws = m_swsCtx;
+    uint8_t* frameBuf = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1));
+    SwsContext* swsCtx = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, srcFormat,
+                                   m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+    av_image_fill_arrays(m_frameRgb->data, m_frameRgb->linesize, frameBuf, AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
+    m_frameBuf = frameBuf;
+    m_swsCtx = swsCtx;
+    if(tmpBuf)
+        av_freep(&tmpBuf);
+    if(tmpSws)
+        sws_freeContext(tmpSws);
 }
 
 void MediaManager::frameResize(int width, int height, bool uniformScale)
