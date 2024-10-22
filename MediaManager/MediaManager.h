@@ -159,6 +159,7 @@ private:
     std::mutex renderMtx;
     bool m_cudaAccelerate;
     bool m_safeCudaAccelerate;
+    AVBufferRef* m_deviceCtx;
 
     //音频变量
     SwrContext* m_swrCtx;

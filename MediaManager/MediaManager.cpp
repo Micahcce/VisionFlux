@@ -20,6 +20,7 @@ MediaManager::MediaManager()
       m_windowHeight(0),
       m_cudaAccelerate(false),
       m_safeCudaAccelerate(false),
+      m_deviceCtx(nullptr),
       m_frameBuf(nullptr),
       m_outBuf(nullptr),
       m_swrCtx(nullptr),
@@ -575,6 +576,24 @@ void MediaManager::close()
         m_frameRgb = nullptr;
     }
 
+    if(m_deviceCtx)
+    {
+        av_buffer_unref(&m_deviceCtx);
+        m_deviceCtx = nullptr;
+    }
+
+    if(m_videoCodecCtx)
+    {
+        avcodec_free_context(&m_videoCodecCtx);
+        m_videoCodecCtx = nullptr;
+    }
+
+    if(m_audioCodecCtx)
+    {
+        avcodec_free_context(&m_audioCodecCtx);
+        m_audioCodecCtx = nullptr;
+    }
+
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
     m_videoIndex = -1;
@@ -604,8 +623,6 @@ void MediaManager::initVideoCodec()
     m_cudaAccelerate = m_safeCudaAccelerate;
     if(m_cudaAccelerate)
     {
-        AVBufferRef *deviceCtx = nullptr;
-
         enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
         if (type == AV_HWDEVICE_TYPE_NONE)
         {
@@ -613,11 +630,11 @@ void MediaManager::initVideoCodec()
             return;
         }
 
-        if (av_hwdevice_ctx_create(&deviceCtx, AV_HWDEVICE_TYPE_CUDA, nullptr, nullptr, 0) < 0) {
+        if (av_hwdevice_ctx_create(&m_deviceCtx, AV_HWDEVICE_TYPE_CUDA, nullptr, nullptr, 0) < 0) {
             logger.error("Failed to create CUDA hardware device context");
             return;
         }
-        m_videoCodecCtx->hw_device_ctx = deviceCtx;
+        m_videoCodecCtx->hw_device_ctx = m_deviceCtx;
 
         m_videoCodecCtx->get_format = [](AVCodecContext *ctx, const AVPixelFormat *pix_fmts) {
             for (const AVPixelFormat *p = pix_fmts; *p != -1; p++) {
@@ -964,8 +981,11 @@ void MediaManager::renderDelayControl(AVFrame* frame)
 
 void MediaManager::frameResize(int width, int height, bool uniformScale)
 {
-    static AVPixelFormat srcFormat;
+    static AVPixelFormat srcFormat = m_videoCodecCtx->pix_fmt;
+
+#ifdef CUDA_ISAVAILABLE
     srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
+#endif
 
     m_windowWidth = width;
     m_windowHeight = height;

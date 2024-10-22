@@ -121,12 +121,12 @@ else()
 endif()
 
 # Cuda加速
-find_package(CUDA REQUIRED)
+find_package(CUDA)
 if(CUDA_FOUND)
     message(STATUS "CUDA successfully found!")
     include_directories(${CUDA_INCLUDE_DIRS})
     # 为代码添加ENABLE_PYBIND宏定义
     target_compile_definitions(${PROJECT_NAME} PRIVATE CUDA_ISAVAILABLE)
 else()
-    message(FATAL_ERROR "CUDA not found, please install CUDA or check your installation.")
+    message(WARNING "CUDA not found, proceeding without CUDA support.")
 endif()
