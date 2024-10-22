@@ -4,18 +4,25 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(mediamanager, m) {
     py::class_<PlayController>(m, "PlayController")
-        .def(py::init<>())
-        .def("startPlay", &PlayController::startPlay)
-        .def("continuePlay", &PlayController::continuePlay)
+        .def(py::init<>())  // 绑定构造函数
+
+        // 绑定所有公有函数
+        .def("startPlay", &PlayController::startPlay, py::arg("filePath"))
+        .def("resumePlay", &PlayController::resumePlay)
         .def("pausePlay", &PlayController::pausePlay)
         .def("endPlay", &PlayController::endPlay)
-        .def("changePlayProgress", &PlayController::changePlayProgress)
-        .def("changePlaySpeed", &PlayController::changePlaySpeed)
-        .def("changeVolume", &PlayController::changeVolume)
-        .def("streamConvert", &PlayController::streamConvert)
-        .def("getMediaDuration", &PlayController::getMediaDuration)
-        .def("saveFrameToBmp", &PlayController::saveFrameToBmp)
-        .def("timeFormatting", &PlayController::timeFormatting)
-        .def("setRenderCallback", &PlayController::setRenderCallback)
-        .def("getMediaPlayInfo", &PlayController::getMediaPlayInfo);
+        .def("changePlayProgress", &PlayController::changePlayProgress, py::arg("timeSecs"))
+        .def("changePlaySpeed", &PlayController::changePlaySpeed, py::arg("speedFactor"))
+        .def("changeVolume", &PlayController::changeVolume, py::arg("volume"))
+        .def("setSafeCudaAccelerate", &PlayController::setSafeCudaAccelerate, py::arg("state"))
+        .def("windowResize", &PlayController::windowResize, py::arg("width"), py::arg("height"), py::arg("uniformScale"))
+        .def("streamConvert", &PlayController::streamConvert, py::arg("inputStreamUrl"), py::arg("outputStreamUrl"))
+        .def("getMediaDuration", &PlayController::getMediaDuration, py::arg("filePath"))
+        .def("getPlayProgress", &PlayController::getPlayProgress)
+        .def("saveFrameToBmp", &PlayController::saveFrameToBmp, py::arg("filePath"), py::arg("outputPath"), py::arg("sec"))
+        .def("timeFormatting", &PlayController::timeFormatting, py::arg("secs"))
+        .def("setRenderCallback", &PlayController::setRenderCallback, py::arg("callback"))
+
+        // 提供访问 m_mediaInfo 的接口
+        .def("getMediaPlayInfo", &PlayController::getMediaPlayInfo, py::return_value_policy::reference);  // 返回指针
 }

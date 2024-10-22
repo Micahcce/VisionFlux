@@ -33,7 +33,7 @@ void PlayController::startPlay(const std::string filePath)
         m_mediaInfo->hasVideoStream = true;
     if(m_mediaInfo->hasAudioStream)
     {
-        m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
+        m_mediaManager->changeVolume(m_mediaInfo->volume);
     }
     m_mediaManager->changeSpeed(m_mediaInfo->speed);
     m_mediaInfo->mediaName = filePath;
@@ -90,7 +90,7 @@ void PlayController::changeVolume(int volume)
     m_mediaInfo->volume = volume;
 
     if(m_mediaInfo->hasAudioStream)
-        m_mediaManager->getSdlPlayer()->setVolume(m_mediaInfo->volume);
+        m_mediaManager->changeVolume(m_mediaInfo->volume);
 }
 
 void PlayController::setSafeCudaAccelerate(bool state)

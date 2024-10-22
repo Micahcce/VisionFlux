@@ -263,6 +263,11 @@ float MediaManager::getCurrentProgress() const
         return m_videoLastPTS;
 }
 
+void MediaManager::changeVolume(int volume)
+{
+    m_sdlPlayer->setVolume(volume);
+}
+
 void MediaManager::changeSpeed(float speedFactor)
 {
     logger.info("change speed to %0.2f", speedFactor);
@@ -281,7 +286,7 @@ bool MediaManager::saveFrameToBmp(const std::string filePath, const std::string 
 {
     AVFormatContext* formatCtx = getMediaInfo(filePath);
 
-    int videoStreamIndex = av_find_best_stream(formatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
+    int videoStreamIndex = av_find_best_stream(formatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if (videoStreamIndex == -1) {
         logger.error("Could not find a video stream.");
         avformat_close_input(&formatCtx);
@@ -698,7 +703,7 @@ void MediaManager::initAudioDevice()
                            m_audioCodecCtx->sample_fmt,               /*in*/
                            m_audioCodecCtx->sample_rate,              /*in*/
                            0,
-                           NULL);
+                           nullptr);
 
     // swr上下文初始化
     swr_init(m_swrCtx);
@@ -835,20 +840,20 @@ int MediaManager::thread_audio_display()
 int MediaManager::thread_stream_convert()
 {
     //1.定义输入输出格式上下文
-    AVFormatContext* inputFormatCtx = NULL;
-    AVFormatContext* outputFormatCtx = NULL;
+    AVFormatContext* inputFormatCtx = nullptr;
+    AVFormatContext* outputFormatCtx = nullptr;
 
     //2.打开输入文件
-    int ret = avformat_open_input(&inputFormatCtx, m_inputStreamUrl.data(), NULL, NULL);
+    int ret = avformat_open_input(&inputFormatCtx, m_inputStreamUrl.data(), nullptr, nullptr);
     if(ret < 0) return -1;
 
     //3.打开输出文件
-    ret = avformat_alloc_output_context2(&outputFormatCtx, NULL, "flv", m_outputStreamUrl.data());
+    ret = avformat_alloc_output_context2(&outputFormatCtx, nullptr, "flv", m_outputStreamUrl.data());
     if(ret < 0) return -1;
     if(!outputFormatCtx) return -1;
 
     //4.分析流信息
-    ret = avformat_find_stream_info(inputFormatCtx, NULL);
+    ret = avformat_find_stream_info(inputFormatCtx, nullptr);
     if(ret < 0) return -1;
 
     av_dump_format(inputFormatCtx, 0, m_inputStreamUrl.data(), 0);            //打印输入信息
@@ -857,7 +862,7 @@ int MediaManager::thread_stream_convert()
     for(unsigned int i = 0; i < inputFormatCtx->nb_streams; i++)
     {
         AVStream *in_stream = inputFormatCtx->streams[i];
-        AVStream *out_stream = avformat_new_stream(outputFormatCtx, NULL);
+        AVStream *out_stream = avformat_new_stream(outputFormatCtx, nullptr);
         if(!out_stream) return -1;
 
         ret = avcodec_parameters_copy(out_stream->codecpar, in_stream->codecpar);
@@ -874,7 +879,7 @@ int MediaManager::thread_stream_convert()
     }
 
     //7.写文件头
-    ret = avformat_write_header(outputFormatCtx, NULL);
+    ret = avformat_write_header(outputFormatCtx, nullptr);
     if(ret < 0) return -1;
 
     av_dump_format(outputFormatCtx, 0, m_outputStreamUrl.data(), 1);          //打印输出信息
@@ -991,7 +996,7 @@ void MediaManager::frameYuvToRgb()
     SwsContext* tmpSws = m_swsCtx;
     uint8_t* frameBuf = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1));
     SwsContext* swsCtx = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, srcFormat,
-                                   m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+                                   m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, nullptr, nullptr, nullptr);
     av_image_fill_arrays(m_frameRgb->data, m_frameRgb->linesize, frameBuf, AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
     m_frameBuf = frameBuf;
     m_swsCtx = swsCtx;
@@ -1040,7 +1045,7 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
 
     // 创建新的 SwsContext 以转换图像
     tmpSws[count] = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, srcFormat,
-                                   m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
+                                   m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, nullptr, nullptr, nullptr);
     if(tmpSws[(count + 1) % TMP_BUFFER_NUMBER])
     {
         sws_freeContext(tmpSws[(count + 1) % TMP_BUFFER_NUMBER]);

@@ -75,7 +75,7 @@ bool SdlPlayer::initAudioDevice(AVCodecContext* audioCodecCtx, AVSampleFormat fm
     m_raw_frame_size = audioCodecCtx->frame_size;
 
     //打开音频设备
-    if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
+    if(SDL_OpenAudio(&m_wantSpec, nullptr) < 0)
     {
         std::cerr << "Error occurred in SDL_OpenAudio" << std::endl;
         SDL_Quit();
@@ -154,7 +154,7 @@ void SdlPlayer::audioChangeSpeed(float speedFactor)
     m_wantSpec.samples = m_raw_frame_size / speedFactor;
 
     //打开音频设备
-    if(SDL_OpenAudio(&m_wantSpec, NULL) < 0)
+    if(SDL_OpenAudio(&m_wantSpec, nullptr) < 0)
     {
         std::cerr << "Error occurred in SDL_OpenAudio" << std::endl;
         SDL_Quit();

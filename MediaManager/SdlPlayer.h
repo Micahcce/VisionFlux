@@ -37,9 +37,9 @@ public:
     void setVolume(int volume);
     void audioChangeSpeed(float speedFactor);
 
-    unsigned int m_audioLen = 0;          //音频数据块的长度
-    unsigned char *m_audioChunk = NULL;   //指向新获取的音频数据块的指针，目前多余
-    unsigned char *m_audioPos = NULL;     //指向当前正在处理的音频数据位置的指针
+    unsigned int m_audioLen = 0;             //音频数据块的长度
+    unsigned char *m_audioChunk = nullptr;   //指向新获取的音频数据块的指针，目前多余
+    unsigned char *m_audioPos = nullptr;     //指向当前正在处理的音频数据位置的指针
 
 private:
     SDL_Window* m_window;      // SDL窗口

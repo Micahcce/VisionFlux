@@ -63,6 +63,9 @@ public:
     int getAudioIndex() const {return m_audioIndex;}
     int getVideoIndex() const {return m_videoIndex;}
 
+    //设置音量
+    void changeVolume(int volume);
+
     //变速
     void changeSpeed(float speedFactor);
 
@@ -98,8 +101,6 @@ public:
 #endif
 
     void setRenderCallback(RenderCallback callback) {m_renderCallback = std::move(callback);}
-
-    SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
 
 private:
     enum FrameQueueCapacity
