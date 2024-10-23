@@ -25,6 +25,7 @@ MediaManager::MediaManager()
       m_outBuf(nullptr),
       m_swrCtx(nullptr),
       m_frame(nullptr),
+      m_frameSw(nullptr),
       m_frameRgb(nullptr),
       m_swsCtx(nullptr),
       m_thread_quit(true),
@@ -151,10 +152,11 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         if(m_cudaAccelerate)
         {
             //存放转换后的帧数据
-            m_frame->format = AV_PIX_FMT_NV12;        //cuda加速后默认输出NV12格式
-            m_frame->width = m_videoCodecCtx->width;
-            m_frame->height = m_videoCodecCtx->height;
-            av_frame_get_buffer(m_frame, 0); // 申请缓冲区
+            m_frameSw = av_frame_alloc();
+            m_frameSw->format = AV_PIX_FMT_NV12;        //cuda加速后默认输出NV12格式
+            m_frameSw->width = m_videoCodecCtx->width;
+            m_frameSw->height = m_videoCodecCtx->height;
+            av_frame_get_buffer(m_frameSw, 0); // 申请缓冲区
         }
 
         if(m_rgbMode)
@@ -565,6 +567,13 @@ void MediaManager::close()
         m_swrCtx = nullptr;
     }
 
+    if(m_deviceCtx)
+    {
+        m_videoCodecCtx->hw_device_ctx = nullptr;
+        av_buffer_unref(&m_deviceCtx);
+        m_deviceCtx = nullptr;
+    }
+
     if(m_videoCodecCtx)
     {
         avcodec_free_context(&m_videoCodecCtx);
@@ -589,16 +598,16 @@ void MediaManager::close()
         m_frame = nullptr;
     }
 
+    if(m_frameSw)
+    {
+        av_frame_free(&m_frameSw);
+        m_frameSw = nullptr;
+    }
+
     if(m_frameRgb)
     {
         av_frame_free(&m_frameRgb);
         m_frameRgb = nullptr;
-    }
-
-    if(m_deviceCtx)
-    {
-        av_buffer_unref(&m_deviceCtx);
-        m_deviceCtx = nullptr;
     }
 
     m_videoLastPTS = 0.0;
@@ -732,7 +741,7 @@ int MediaManager::thread_video_display()
             // Transfer data from GPU to CPU
             if (frame->format == AV_PIX_FMT_CUDA)
             {
-                if (av_hwframe_transfer_data(m_frame, frame, 0) < 0)
+                if (av_hwframe_transfer_data(m_frameSw, frame, 0) < 0)
                 {
                     logger.error("Error transferring the data to system memory\n");
                     break;
@@ -742,6 +751,7 @@ int MediaManager::thread_video_display()
             {
                 logger.warning("Error format found, decoded frame with timestamp: %lld", frame->pts);
             }
+            av_frame_ref(m_frame, m_frameSw);
         }
         else
         {

@@ -155,6 +155,7 @@ private:
     //视频变量
     uint8_t* m_frameBuf;
     AVFrame* m_frame;
+    AVFrame* m_frameSw;
     AVFrame* m_frameRgb;
     SwsContext* m_swsCtx;
     bool m_rgbMode;
