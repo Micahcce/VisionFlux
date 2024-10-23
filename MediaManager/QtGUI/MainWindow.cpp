@@ -105,26 +105,30 @@ void MainWindow::emitRenderSignal(uint8_t *data, int width, int height)
 
 void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 {
-//    static QRect screen = QGuiApplication::primaryScreen()->geometry();
-//    static uint8_t* buf = (uint8_t* )malloc(screen.width() * screen.height() * 4);
-//    std::copy(data, data + (width * height * 4), buf);
+    static QScreen *screen = QGuiApplication::primaryScreen();
+    static QRect screenGeometry = screen->geometry();               // 逻辑分辨率
+    static qreal pixelRatio = screen->devicePixelRatio();           // 缩放因子
+    static QSize physicalSize = screenGeometry.size() * pixelRatio; // 物理分辨率
+    static uint8_t* buf = (uint8_t* )malloc(physicalSize.width() * physicalSize.height() * 4);
+    std::copy(data, data + (width * height * 4), buf);
+    QImage img((uchar*)buf, width, height, QImage::Format_RGB32);
+    m_videoView->setPixmap(QPixmap::fromImage(img));
 
-    QImage img((uchar*)data, width, height, QImage::Format_RGB32);
-    m_pix = QPixmap::fromImage(img);
-    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    m_videoView->setPixmap(fitpix);
-//    m_videoView->setPixmap(QPixmap::fromImage(img));
+//    QImage img((uchar*)data, width, height, QImage::Format_RGB32);
+//    m_pix = QPixmap::fromImage(img);
+//    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//    m_videoView->setPixmap(fitpix);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);  // 调用父类的 resizeEvent
-    if(m_pix.isNull() == false)
-    {
-        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        m_videoView->setPixmap(fitpix);
-    }
-//    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
+//    if(m_pix.isNull() == false)
+//    {
+//        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//        m_videoView->setPixmap(fitpix);
+//    }
+    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
 }
 
 

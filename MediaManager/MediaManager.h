@@ -114,7 +114,11 @@ private:
     enum
     {
         MAX_AUDIO_FRAME_SIZE = 192000,       // 1 second of 48khz 32bit audio    //48000 * (32/8)
-        TMP_BUFFER_NUMBER = 15               // 需要足够大小
+        TMP_BUFFER_NUMBER = 3               // 需要足够大小，和帧率成反比。
+        /*Qt每秒重绘可达数十过百次，视频24帧即平均41.666ms更新一帧才会scale刷新帧大小，Qt重绘按每秒100次平均10ms重绘一次，即在两帧间隔内数据大小会变动4次(41/4)，此时需要4个缓冲区才不会造成数据溢出，
+         * 而视频两帧间隔是不均匀的，也就是说需要提供更多的缓冲区。
+         * 然而如果在渲染端增加一个缓冲区，此处则只需要三个缓冲区
+         * Qt每秒重绘次数与屏幕刷新率以及CPU速度有关*/
     };
 
     void initVideoCodec();
@@ -151,7 +155,6 @@ private:
     //视频变量
     uint8_t* m_frameBuf;
     AVFrame* m_frame;
-    AVFrame *m_frameSw;
     AVFrame* m_frameRgb;
     SwsContext* m_swsCtx;
     bool m_rgbMode;

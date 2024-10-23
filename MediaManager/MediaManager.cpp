@@ -136,6 +136,10 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     // 视频流
     if(m_videoIndex >= 0)
     {
+#ifdef CUDA_ISAVAILABLE
+        m_cudaAccelerate = m_safeCudaAccelerate;
+#endif
+
         initVideoCodec();
 
         m_aspectRatio = static_cast<double>(m_videoCodecCtx->width) / static_cast<double>(m_videoCodecCtx->height);
@@ -144,8 +148,18 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         m_frame = av_frame_alloc();
         m_frameRgb = av_frame_alloc();
 
+        if(m_cudaAccelerate)
+        {
+            //存放转换后的帧数据
+            m_frame->format = AV_PIX_FMT_NV12;        //cuda加速后默认输出NV12格式
+            m_frame->width = m_videoCodecCtx->width;
+            m_frame->height = m_videoCodecCtx->height;
+            av_frame_get_buffer(m_frame, 0); // 申请缓冲区
+        }
+
         if(m_rgbMode)
-            frameYuvToRgb();
+            frameResize(m_windowWidth, m_windowHeight, true);
+//            frameYuvToRgb();
 
         std::thread videoThread(&MediaManager::thread_video_display, this);
         videoThread.detach();
@@ -224,7 +238,7 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
             avcodec_send_packet(codecCtx, packet);
             while (avcodec_receive_frame(codecCtx, frame) >= 0)
             {
-//                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
+                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
                 // 丢弃
                 if (frame->pts < targetPTS)
                 {
@@ -587,18 +601,6 @@ void MediaManager::close()
         m_deviceCtx = nullptr;
     }
 
-    if(m_videoCodecCtx)
-    {
-        avcodec_free_context(&m_videoCodecCtx);
-        m_videoCodecCtx = nullptr;
-    }
-
-    if(m_audioCodecCtx)
-    {
-        avcodec_free_context(&m_audioCodecCtx);
-        m_audioCodecCtx = nullptr;
-    }
-
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
     m_videoIndex = -1;
@@ -624,8 +626,6 @@ void MediaManager::initVideoCodec()
     if(!m_videoCodec)
         logger.error("Error occurred in avcodec_find_decoder");
 
-#ifdef CUDA_ISAVAILABLE
-    m_cudaAccelerate = m_safeCudaAccelerate;
     if(m_cudaAccelerate)
     {
         enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
@@ -649,16 +649,7 @@ void MediaManager::initVideoCodec()
             }
             return pix_fmts[0];
         };
-
-
-        //存放转换后的帧数据
-        m_frameSw = av_frame_alloc();
-        m_frameSw->format = AV_PIX_FMT_NV12;        //cuda加速后默认输出NV12格式
-        m_frameSw->width = m_videoCodecCtx->width;
-        m_frameSw->height = m_videoCodecCtx->height;
-        av_frame_get_buffer(m_frameSw, 0); // 申请缓冲区
     }
-#endif
 
     // 打开解码器并绑定上下文
     ret = avcodec_open2(m_videoCodecCtx, m_videoCodec, nullptr);
@@ -736,13 +727,12 @@ int MediaManager::thread_video_display()
         if(!frame)
             continue;
 
-#ifdef CUDA_ISAVAILABLE
         if(m_cudaAccelerate)
         {
             // Transfer data from GPU to CPU
             if (frame->format == AV_PIX_FMT_CUDA)
             {
-                if (av_hwframe_transfer_data(m_frameSw, frame, 0) < 0)
+                if (av_hwframe_transfer_data(m_frame, frame, 0) < 0)
                 {
                     logger.error("Error transferring the data to system memory\n");
                     break;
@@ -752,28 +742,28 @@ int MediaManager::thread_video_display()
             {
                 logger.warning("Error format found, decoded frame with timestamp: %lld", frame->pts);
             }
-
-            av_frame_ref(m_frame, m_frameSw);
         }
         else
         {
             av_frame_ref(m_frame, frame);
         }
-#else
-        // 引用
-        av_frame_ref(m_frame, frame);
-#endif
+
         // 渲染
         if (renderMtx.try_lock()) // 尝试获取锁，非阻塞
         {
             std::lock_guard<std::mutex> lock(renderMtx, std::adopt_lock);  // std::adopt_lock:接管try_lock()锁定的互斥量
             renderFrameRgb();
         }
+        else
+        {
+            logger.warning("can not get mtx, skip render");
+        }
 
         // 延时控制
         renderDelayControl(frame);
 
         av_frame_unref(frame);
+        av_frame_unref(m_frame);
     }
     av_frame_free(&frame);
     m_thread_video_exited = true;
@@ -986,11 +976,7 @@ void MediaManager::renderDelayControl(AVFrame* frame)
 
 void MediaManager::frameYuvToRgb()
 {
-    static AVPixelFormat srcFormat = m_videoCodecCtx->pix_fmt;
-
-#ifdef CUDA_ISAVAILABLE
-    srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
-#endif
+    AVPixelFormat srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
 
     uint8_t* tmpBuf = m_frameBuf;
     SwsContext* tmpSws = m_swsCtx;
@@ -1008,11 +994,7 @@ void MediaManager::frameYuvToRgb()
 
 void MediaManager::frameResize(int width, int height, bool uniformScale)
 {
-    static AVPixelFormat srcFormat = m_videoCodecCtx->pix_fmt;
-
-#ifdef CUDA_ISAVAILABLE
-    srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
-#endif
+    AVPixelFormat srcFormat = m_cudaAccelerate ? AV_PIX_FMT_NV12 : m_videoCodecCtx->pix_fmt;
 
     m_windowWidth = width;
     m_windowHeight = height;
@@ -1038,7 +1020,7 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
 //    logger.debug("av_free: %d", (count + 1) % TMP_BUFFER_NUMBER);
 
     // 创建新的缓冲区，需要预留空间
-    tmpBuf[count] = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth * 1.3, m_windowHeight * 1.3, 1));
+    tmpBuf[count] = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth * 4, m_windowHeight * 4, 1));
 
     if(tmpBuf[(count + 1) % TMP_BUFFER_NUMBER])
         av_freep(&tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
@@ -1071,7 +1053,10 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
 void MediaManager::renderFrameRgb()
 {
     if(!m_frame || !m_frame->data[0] || !m_swsCtx)
+    {
+        logger.debug("data or swsCtx is null, skip render");
         return;
+    }
 
     sws_scale(m_swsCtx,
               (const unsigned char* const*)m_frame->data,
@@ -1089,7 +1074,5 @@ void MediaManager::renderFrameRgb()
 #endif
     else
         logger.error("Render callback not set");
-
-    av_frame_unref(m_frame);
 }
 
