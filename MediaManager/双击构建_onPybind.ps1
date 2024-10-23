@@ -13,7 +13,7 @@ New-Item -ItemType Directory -Path $buildDir
 Set-Location $buildDir
 
 # 执行 cmake ..
-cmake ..
+cmake -DENABLE_PYBIND=ON ..
 
 # 执行 MSBuild 编译 MediaManager.sln
 MSBuild MediaManager.sln

@@ -14,14 +14,15 @@ set(PROJECT_SOURCES
     MediaManager.cpp
     PlayController.h
     PlayController.cpp
-    FrameQueue.h
-    SystemClock.h
-    Logger.h
-    Logger.cpp
     SdlPlayer.h
     SdlPlayer.cpp
-    BmpAndWavAchieve.h
-    BmpAndWavAchieve.cpp
+
+    common/FrameQueue.h
+    common/SystemClock.h
+    common/Logger.h
+    common/Logger.cpp
+    common/BmpAndWavAchieve.h
+    common/BmpAndWavAchieve.cpp
 )
 
 # 是否开启Pybind11
@@ -37,7 +38,7 @@ if(ENABLE_PYBIND)
 
     pybind11_add_module(${PROJECT_NAME}
         ${PROJECT_SOURCES}
-        BindClass.cpp
+        common/BindClass.cpp
     )
     # 为代码添加ENABLE_PYBIND宏定义
     target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_PYBIND)
@@ -80,6 +81,7 @@ endif()
 
 # 设置库的包含目录（包含头文件）
 include_directories(
+    ${PROJECT_SOURCE_DIR}/common
     ${PROJECT_SOURCE_DIR}/FFmpeg/include
     ${PROJECT_SOURCE_DIR}/SDL/include
     ${PROJECT_SOURCE_DIR}/SoundTouch/include
