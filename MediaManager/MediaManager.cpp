@@ -240,7 +240,7 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
             avcodec_send_packet(codecCtx, packet);
             while (avcodec_receive_frame(codecCtx, frame) >= 0)
             {
-                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
+//                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
                 // 丢弃
                 if (frame->pts < targetPTS)
                 {
@@ -251,10 +251,32 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
                 // 找到目标帧
                 if(hasVideoStream)
                 {
+                    if(m_cudaAccelerate)
+                    {
+                        // Transfer data from GPU to CPU
+                        if (frame->format == AV_PIX_FMT_CUDA)
+                        {
+                            if (av_hwframe_transfer_data(m_frameSw, frame, 0) < 0)
+                            {
+                                logger.error("Error transferring the data to system memory\n");
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            logger.warning("Error format found, decoded frame with timestamp: %lld", frame->pts);
+                        }
+                        av_frame_ref(m_frame, m_frameSw);
+                    }
+                    else
+                    {
+                        av_frame_ref(m_frame, frame);
+                    }
+
                     // 渲染
-                    av_frame_ref(m_frame, frame);
                     std::lock_guard<std::mutex> lock(renderMtx);
                     renderFrameRgb();
+                    av_frame_unref(m_frame);
                 }
                 av_frame_unref(frame);
                 throwing = false;
@@ -1064,7 +1086,7 @@ void MediaManager::renderFrameRgb()
 {
     if(!m_frame || !m_frame->data[0] || !m_swsCtx)
     {
-        logger.debug("data or swsCtx is null, skip render");
+        logger.warning("data or swsCtx is null, skip render");
         return;
     }
 
