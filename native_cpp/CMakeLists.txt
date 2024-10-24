@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(MediaManager LANGUAGES CXX)
+project(VisionFlux LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -27,31 +27,39 @@ set(PROJECT_SOURCES
     common/Utils.cpp
 )
 
+# 定义颜色变量
+string(ASCII 27 Esc)
+set(CYAN "${Esc}[36m")
+set(GREEN "${Esc}[32m")
+set(YELLOW "${Esc}[33m")
+set(RED "${Esc}[31m")
+set(RESET "${Esc}[0m")
+
 # 是否开启Pybind11
 option(ENABLE_PYBIND "enable pybind11 in order to create pyd files." OFF)
-set(ENABLE_PYBIND OFF)
+set(ENABLE_PYBIND ON)
 
 # 条件编译
 if(ENABLE_PYBIND)
-    message(STATUS "Pybind11 Enabled.")
+    message(STATUS "${GREEN}Pybind11 Enabled.${RESET}")
     # PyBind11模块
     set(pybind11_DIR ${PROJECT_SOURCE_DIR}/pybind11/share/cmake/pybind11)
     find_package(pybind11 REQUIRED)
 
-    pybind11_add_module(${PROJECT_NAME}
+    pybind11_add_module(visionflux
         ${PROJECT_SOURCES}
-        common/BindClass.cpp
+        BindClass.cpp
     )
     # 为代码添加ENABLE_PYBIND宏定义
-    target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_PYBIND)
+    target_compile_definitions(visionflux PRIVATE ENABLE_PYBIND)
 
     # 设置 pyd 文件的输出路径
-    set_target_properties(${PROJECT_NAME} PROPERTIES
+    set_target_properties(visionflux PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build"
     )
 
 else()
-    message(STATUS "Pybind11 Disabled.")
+    message(STATUS "${GREEN}Pybind11 Disabled.${RESET}")
     # QT文件工具
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)
@@ -96,8 +104,8 @@ link_directories(
     ${PROJECT_SOURCE_DIR}/SoundTouch/lib
 )
 
-# 添加库到目标（例如 avformat, avcodec 等）
-target_link_libraries(${PROJECT_NAME} PRIVATE
+# 添加库（全局添加需要放在add_executable之前）
+set(ALL_LIBS
     ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avformat.lib
     ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avcodec.lib
     ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avutil.lib
@@ -114,11 +122,13 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/SoundTouch/lib/SoundTouchDLLD_x64.lib
 )
 
-# 补充
+# 添加库
 if(ENABLE_PYBIND)
     include_directories(${PROJECT_SOURCE_DIR}/pybind11/include)
+    target_link_libraries(visionflux PRIVATE ${ALL_LIBS})
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
+        ${ALL_LIBS}
         Qt5::Core
         Qt5::Widgets
     )
@@ -127,10 +137,10 @@ endif()
 # Cuda加速
 find_package(CUDA)
 if(CUDA_FOUND)
-    message(STATUS "CUDA successfully found!")
+    message(STATUS "${GREEN}CUDA successfully found!${RESET}")
     include_directories(${CUDA_INCLUDE_DIRS})
-    # 为代码添加ENABLE_PYBIND宏定义
-    target_compile_definitions(${PROJECT_NAME} PRIVATE CUDA_ISAVAILABLE)
+    # 为代码添加CUDA_ISAVAILABLE宏定义
+    add_compile_definitions(CUDA_ISAVAILABLE)
 else()
-    message(WARNING "CUDA not found, proceeding without CUDA support.")
+    message(WARNING "${YELLOW}CUDA not found, proceeding without CUDA support.${RESET}")
 endif()

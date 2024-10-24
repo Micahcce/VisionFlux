@@ -2,7 +2,7 @@
 #include "PlayController.h"
 namespace py = pybind11;
 
-PYBIND11_MODULE(MediaManager, m) {
+PYBIND11_MODULE(visionflux, m) {
     py::class_<PlayController>(m, "PlayController")
         .def(py::init<>())  // 绑定构造函数
 
@@ -14,8 +14,8 @@ PYBIND11_MODULE(MediaManager, m) {
         .def("changePlayProgress", &PlayController::changePlayProgress, py::arg("timeSecs"))
         .def("changePlaySpeed", &PlayController::changePlaySpeed, py::arg("speedFactor"))
         .def("changeVolume", &PlayController::changeVolume, py::arg("volume"))
+        .def("changeFrameSize", &PlayController::changeFrameSize, py::arg("width"), py::arg("height"), py::arg("uniformScale"))
         .def("setSafeCudaAccelerate", &PlayController::setSafeCudaAccelerate, py::arg("state"))
-        .def("windowResize", &PlayController::windowResize, py::arg("width"), py::arg("height"), py::arg("uniformScale"))
         .def("streamConvert", &PlayController::streamConvert, py::arg("inputStreamUrl"), py::arg("outputStreamUrl"))
         .def("getMediaDuration", &PlayController::getMediaDuration, py::arg("filePath"))
         .def("getPlayProgress", &PlayController::getPlayProgress)
@@ -26,3 +26,8 @@ PYBIND11_MODULE(MediaManager, m) {
         // 提供访问 m_mediaInfo 的接口
         .def("getMediaPlayInfo", &PlayController::getMediaPlayInfo, py::return_value_policy::reference);  // 返回指针
 }
+
+
+//pybind11_add_module() 决定生成的输出文件名
+//PYBIND11_MODULE() 决定 Python 中的导入名
+
