@@ -8,7 +8,7 @@ import ctypes
 
 # 添加 libs 目录到 sys.path
 sys.path.append(os.path.abspath('./libs'))
-from mediamanager import PlayController
+from visionflux import PlayController
 
 
 class MainWindow(QMainWindow):

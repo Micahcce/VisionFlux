@@ -52,7 +52,7 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
 
 ### 注意事项
 
-* 当编译时出现 `error C2059: 语法错误:“)”`，将`MediaManager.cpp`文件以 UTF-8 BOM 编码格式保存后，重新编译即可。
+* 当编译时出现 `error C2059: 语法错误:“)”`或类似错误，将错误中涉及的文件以 UTF-8 BOM 编码格式保存后，重新编译即可。
 * 若希望构建为 Python 模块，请使用 MSVC 编译此项目，与 Python 兼容。另注意编译使用的 Python 与集成模块使用的 Python 版本需要一致。
 * 当开启或关闭 `ENABLE_PYBIND` 不生效时，请手动设置 `CMakeList.txt` 文件中 `set(ENABLE_PYBIND XX)` 选项
 
@@ -62,7 +62,7 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
 
    ```bash
    git clone https://github.com/Micahcce/VisionFlux.git
-   cd VisionFlux/MediaManager
+   cd VisionFlux/native_cpp
    ```
 
 2. 创建构建目录并配置项目：
@@ -82,7 +82,7 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
 
    ```
    cd ../../libs
-   ./MediaManager
+   ./VisionFlux
    ```
 
 ### Python 集成（可选）
@@ -101,7 +101,7 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
 3. 在 Python 中导入模块：
 
    ```
-   import MediaManager
+   import visionflux
    ```
 
 ## 未来计划

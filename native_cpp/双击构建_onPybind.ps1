@@ -15,8 +15,8 @@ Set-Location $buildDir
 # 执行 cmake ..
 cmake -DENABLE_PYBIND=ON ..
 
-# 执行 MSBuild 编译 MediaManager.sln
-MSBuild MediaManager.sln
+# 执行编译
+cmake --build .
 
 # 设置目标目录路径
 $debugDir = "Debug"

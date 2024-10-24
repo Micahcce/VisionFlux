@@ -37,7 +37,7 @@ set(RESET "${Esc}[0m")
 
 # 是否开启Pybind11
 option(ENABLE_PYBIND "enable pybind11 in order to create pyd files." OFF)
-set(ENABLE_PYBIND ON)
+#set(ENABLE_PYBIND OFF)
 
 # 条件编译
 if(ENABLE_PYBIND)
