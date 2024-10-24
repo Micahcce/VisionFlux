@@ -1,4 +1,4 @@
-#include "ProcessPanel.h"
+﻿#include "ProcessPanel.h"
 
 ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
 {

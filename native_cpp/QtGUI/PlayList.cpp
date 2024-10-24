@@ -1,4 +1,4 @@
-#include "PlayList.h"
+﻿#include "PlayList.h"
 #include "Logger.h"
 #include "BmpAndWavAchieve.h"
 

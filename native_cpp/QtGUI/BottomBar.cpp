@@ -1,4 +1,4 @@
-#include "BottomBar.h"
+﻿#include "BottomBar.h"
 
 BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 {

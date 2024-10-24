@@ -42,6 +42,7 @@ option(ENABLE_PYBIND "enable pybind11 in order to create pyd files." OFF)
 # 条件编译
 if(ENABLE_PYBIND)
     message(STATUS "${GREEN}Pybind11 Enabled.${RESET}")
+
     # PyBind11模块
     set(pybind11_DIR ${PROJECT_SOURCE_DIR}/pybind11/share/cmake/pybind11)
     find_package(pybind11 REQUIRED)
@@ -60,6 +61,7 @@ if(ENABLE_PYBIND)
 
 else()
     message(STATUS "${GREEN}Pybind11 Disabled.${RESET}")
+
     # QT文件工具
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)

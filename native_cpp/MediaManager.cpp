@@ -42,7 +42,7 @@ MediaManager::MediaManager()
 //    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
 
-    m_rgbMode = true;       // ç›®å‰ä»…å¯¹SDLæœ‰æ•ˆï¼ŒQtåªèƒ½ä¸ºRGBæ¸²æŸ“
+    m_rgbMode = true;       // Ä¿Ç°½ö¶ÔSDLÓĞĞ§£¬QtÖ»ÄÜÎªRGBäÖÈ¾
     m_frameQueue = new FrameQueue;
     m_systemClock = new SystemClock;
 }
@@ -58,10 +58,10 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
 {
     int ret;
 
-    //1.åˆ›å»ºä¸Šä¸‹æ–‡
+    //1.´´½¨ÉÏÏÂÎÄ
     m_formatCtx = avformat_alloc_context();
 
-    //2.æ‰“å¼€æ–‡ä»¶
+    //2.´ò¿ªÎÄ¼ş
     ret = avformat_open_input(&m_formatCtx, filePath.data(), nullptr, nullptr);
     if(ret < 0)
     {
@@ -70,7 +70,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         return false;
     }
 
-    //3.ä¸Šä¸‹æ–‡è·å–æµä¿¡æ¯
+    //3.ÉÏÏÂÎÄ»ñÈ¡Á÷ĞÅÏ¢
     ret = avformat_find_stream_info(m_formatCtx, nullptr);
     if(ret < 0)
     {
@@ -79,7 +79,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         return false;
     }
 
-    //4.æŸ¥æ‰¾è§†é¢‘æµå’ŒéŸ³é¢‘æµ
+    //4.²éÕÒÊÓÆµÁ÷ºÍÒôÆµÁ÷
     m_videoIndex = av_find_best_stream(m_formatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(m_videoIndex < 0)
         logger.warning("Not found video stream");
@@ -88,11 +88,11 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     if(m_audioIndex < 0)
         logger.warning("Not found audio stream");
 
-    //5.è·å–è§†é¢‘æ•°æ®
+    //5.»ñÈ¡ÊÓÆµÊı¾İ
     av_dump_format(m_formatCtx, -1, nullptr, 0);
 
 
-    // ç›¸å…³å˜é‡åˆå§‹åŒ–
+    // Ïà¹Ø±äÁ¿³õÊ¼»¯
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
     m_thread_quit = false;
@@ -108,7 +108,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     if(m_audioIndex < 0)
         m_thread_audio_exited = true;
 
-    // è§†é¢‘æµ
+    // ÊÓÆµÁ÷
     if(m_videoIndex >= 0)
     {
 #ifdef CUDA_ISAVAILABLE
@@ -125,12 +125,12 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
 
         if(m_cudaAccelerate)
         {
-            //å­˜æ”¾è½¬æ¢åçš„å¸§æ•°æ®
+            //´æ·Å×ª»»ºóµÄÖ¡Êı¾İ
             m_frameSw = av_frame_alloc();
-            m_frameSw->format = AV_PIX_FMT_NV12;        //cudaåŠ é€Ÿåé»˜è®¤è¾“å‡ºNV12æ ¼å¼
+            m_frameSw->format = AV_PIX_FMT_NV12;        //cuda¼ÓËÙºóÄ¬ÈÏÊä³öNV12¸ñÊ½
             m_frameSw->width = m_videoCodecCtx->width;
             m_frameSw->height = m_videoCodecCtx->height;
-            av_frame_get_buffer(m_frameSw, 0); // ç”³è¯·ç¼“å†²åŒº
+            av_frame_get_buffer(m_frameSw, 0); // ÉêÇë»º³åÇø
         }
 
         if(m_rgbMode)
@@ -141,7 +141,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         videoThread.detach();
     }
 
-    // éŸ³é¢‘æµ
+    // ÒôÆµÁ÷
     if(m_audioIndex >= 0)
     {
         initAudioCodec();
@@ -151,11 +151,11 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         audioThread.detach();
     }
 
-    // è§£ç çº¿ç¨‹
+    // ½âÂëÏß³Ì
     std::thread decodeThread(&MediaManager::thread_media_decode, this);
     decodeThread.detach();
 
-    // å¼€å¯ç³»ç»Ÿè®¾ç½®ï¼Œç›®å‰åªç”¨äºå•è§†é¢‘æµçš„æ¸²æŸ“å»¶æ—¶æ§åˆ¶
+    // ¿ªÆôÏµÍ³ÉèÖÃ£¬Ä¿Ç°Ö»ÓÃÓÚµ¥ÊÓÆµÁ÷µÄäÖÈ¾ÑÓÊ±¿ØÖÆ
     m_systemClock->start();
 
 
@@ -175,7 +175,7 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
 {
     m_frameQueue->clear();
 
-    // ä¼˜å…ˆæ ¹æ®è§†é¢‘å¸§æ¥seekï¼Œå› ä¸ºéŸ³é¢‘å¸§çš„è§£ç ä¸éœ€è¦Iå¸§ï¼Œè·³è½¬åå¯èƒ½ä¼šå½±å“åˆ°è§†é¢‘å¸§çš„è§£ç 
+    // ÓÅÏÈ¸ù¾İÊÓÆµÖ¡À´seek£¬ÒòÎªÒôÆµÖ¡µÄ½âÂë²»ĞèÒªIÖ¡£¬Ìø×ªºó¿ÉÄÜ»áÓ°Ïìµ½ÊÓÆµÖ¡µÄ½âÂë
     int streamIndex = hasVideoStream ? m_videoIndex : m_audioIndex;
     AVCodecContext* codecCtx = hasVideoStream ? m_videoCodecCtx : m_audioCodecCtx;
 
@@ -183,11 +183,11 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
     logger.debug("time_base.num: %d", time_base.num);
     logger.debug("time_base.den: %d", time_base.den);
 
-    // å°†ç›®æ ‡æ—¶é—´è½¬æ¢ä¸ºPTS
-    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // å°†æ—¶é—´è½¬æ¢ä¸ºPTS
+    // ½«Ä¿±êÊ±¼ä×ª»»ÎªPTS
+    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // ½«Ê±¼ä×ª»»ÎªPTS
     logger.info("seek PTS: %d", targetPTS);
 
-    // ä½¿ç”¨ AVSEEK_FLAG_BACKWARD æ¥ç¡®ä¿å‘å‰æŸ¥æ‰¾æœ€è¿‘çš„ I å¸§
+    // Ê¹ÓÃ AVSEEK_FLAG_BACKWARD À´È·±£ÏòÇ°²éÕÒ×î½üµÄ I Ö¡
     if (av_seek_frame(m_formatCtx, streamIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
     {
         logger.error("Error seeking to position.");
@@ -203,11 +203,11 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
     AVFrame* frame = av_frame_alloc();
     bool throwing = true;
 
-    // ä¸¢å¼ƒå¤šä½™å¸§
+    // ¶ªÆú¶àÓàÖ¡
     while (throwing)
     {
         if (av_read_frame(m_formatCtx, packet) < 0)
-            break; // æ²¡æœ‰æ›´å¤šçš„å¸§
+            break; // Ã»ÓĞ¸ü¶àµÄÖ¡
 
         if (packet->stream_index == streamIndex)
         {
@@ -215,14 +215,14 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
             while (avcodec_receive_frame(codecCtx, frame) >= 0)
             {
 //                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
-                // ä¸¢å¼ƒ
+                // ¶ªÆú
                 if (frame->pts < targetPTS)
                 {
                     av_frame_unref(frame);
                     continue;
                 }
 
-                // æ‰¾åˆ°ç›®æ ‡å¸§
+                // ÕÒµ½Ä¿±êÖ¡
                 if(hasVideoStream)
                 {
                     if(m_cudaAccelerate)
@@ -247,7 +247,7 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
                         av_frame_ref(m_frame, frame);
                     }
 
-                    // æ¸²æŸ“
+                    // äÖÈ¾
                     std::lock_guard<std::mutex> lock(renderMtx);
                     renderFrameRgb();
                     av_frame_unref(m_frame);
@@ -295,7 +295,7 @@ void MediaManager::changeSpeed(float speedFactor)
 }
 
 
-// è§†é¢‘è§£ç çº¿ç¨‹
+// ÊÓÆµ½âÂëÏß³Ì
 int MediaManager::thread_media_decode()
 {
     int ret;
@@ -303,7 +303,7 @@ int MediaManager::thread_media_decode()
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
 
-    //è§£ç 
+    //½âÂë
     while(m_thread_quit == false)
     {
         if(m_thread_pause)
@@ -323,9 +323,9 @@ int MediaManager::thread_media_decode()
             while(1)
             {
                 /*
-                 * é˜²æ­¢è·³å¸§æ—¶è¯¥çº¿ç¨‹ä»åœ¨è¯¥whileä¸­å¾ªç¯ï¼Œ
-                 * å¦åˆ™avcodec_receive_frameä¸è·³å¸§çº¿ç¨‹ä¸­çš„send/receiveç«äº‰è§£ç å™¨èµ„æºï¼Œ
-                 * é€ æˆç¨‹åºå¥”æºƒã€‚
+                 * ·ÀÖ¹ÌøÖ¡Ê±¸ÃÏß³ÌÈÔÔÚ¸ÃwhileÖĞÑ­»·£¬
+                 * ·ñÔòavcodec_receive_frameÓëÌøÖ¡Ïß³ÌÖĞµÄsend/receive¾ºÕù½âÂëÆ÷×ÊÔ´£¬
+                 * Ôì³É³ÌĞò±¼À£¡£
                 */
                 if(m_thread_pause && !m_thread_quit)
                 {
@@ -338,7 +338,7 @@ int MediaManager::thread_media_decode()
                 if(ret < 0)
                 {
                     if(ret == AVERROR_EOF)
-                        logger.info("Media playback finished.");  // è§†é¢‘è§£ç ç»“æŸ
+                        logger.info("Media playback finished.");  // ÊÓÆµ½âÂë½áÊø
                     break;
                 }
 
@@ -367,7 +367,7 @@ int MediaManager::thread_media_decode()
                 if(ret < 0)
                 {
                     if(ret == AVERROR_EOF)
-                        logger.info("Media playback finished.");  // éŸ³é¢‘è§£ç ç»“æŸ
+                        logger.info("Media playback finished.");  // ÒôÆµ½âÂë½áÊø
                     break;
                 }
 
@@ -402,15 +402,15 @@ void MediaManager::close()
     m_frameQueue->signalExit();
     m_frameQueue->clear();
 
-    // å®‰å…¨é€€å‡º
+    // °²È«ÍË³ö
     while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
     {
         logger.debug("waitting thread exit.");
         delayMs(20);
     }
 
-    // æ¸…ç†èµ„æºï¼Œæ³¨æ„é¡ºåºé¿å…å´©æºƒ
-    /*m_frameBufå’Œm_pSwsCtxä¸å¯è½»æ˜“é‡Šæ”¾ï¼Œé¿å…æ¸²æŸ“å‡½æ•°è®¿é—®é€ æˆå´©æºƒï¼Œæ¯”å¦‚Qté‡ç»˜ä»ä¼šä½¿ç”¨è¯¥å†…å­˜*/
+    // ÇåÀí×ÊÔ´£¬×¢ÒâË³Ğò±ÜÃâ±ÀÀ£
+    /*m_frameBufºÍm_pSwsCtx²»¿ÉÇáÒ×ÊÍ·Å£¬±ÜÃâäÖÈ¾º¯Êı·ÃÎÊÔì³É±ÀÀ££¬±ÈÈçQtÖØ»æÈÔ»áÊ¹ÓÃ¸ÃÄÚ´æ*/
 
     if (m_sdlPlayer)
     {
@@ -485,7 +485,7 @@ void MediaManager::close()
     m_audioIndex = -1;
     m_systemClock->stop();
 
-    // å®‰å…¨é€€å‡ºæ ‡å¿—
+    // °²È«ÍË³ö±êÖ¾
     m_thread_safe_exited = true;
     logger.info("all thread exit.");
 }
@@ -493,13 +493,13 @@ void MediaManager::close()
 void MediaManager::initVideoCodec()
 {
     int ret = 0;
-    // åˆ›å»ºéŸ³è§†é¢‘è§£ç å™¨ä¸Šä¸‹æ–‡
+    // ´´½¨ÒôÊÓÆµ½âÂëÆ÷ÉÏÏÂÎÄ
     m_videoCodecCtx = avcodec_alloc_context3(nullptr);
-    // è§£ç å™¨ä¸Šä¸‹æ–‡è·å–å‚æ•°
+    // ½âÂëÆ÷ÉÏÏÂÎÄ»ñÈ¡²ÎÊı
     ret = avcodec_parameters_to_context(m_videoCodecCtx, m_formatCtx->streams[m_videoIndex]->codecpar);
     if(ret < 0)
         logger.error("Error occurred in avcodec_parameters_to_context");
-    // æŸ¥æ‰¾è§£ç å™¨
+    // ²éÕÒ½âÂëÆ÷
     m_videoCodec = avcodec_find_decoder(m_videoCodecCtx->codec_id);
     if(!m_videoCodec)
         logger.error("Error occurred in avcodec_find_decoder");
@@ -529,7 +529,7 @@ void MediaManager::initVideoCodec()
         };
     }
 
-    // æ‰“å¼€è§£ç å™¨å¹¶ç»‘å®šä¸Šä¸‹æ–‡
+    // ´ò¿ª½âÂëÆ÷²¢°ó¶¨ÉÏÏÂÎÄ
     ret = avcodec_open2(m_videoCodecCtx, m_videoCodec, nullptr);
     if(ret < 0)
         logger.error("Error occurred in avcodec_open2");
@@ -555,40 +555,40 @@ void MediaManager::initAudioCodec()
 
 void MediaManager::initAudioDevice()
 {
-    ///////éŸ³é¢‘è®¾å¤‡åˆå§‹åŒ–///////
+    ///////ÒôÆµÉè±¸³õÊ¼»¯///////
 
-    // åˆ›å»ºéŸ³é¢‘æ•°æ®ç¼“å†²åŒº
+    // ´´½¨ÒôÆµÊı¾İ»º³åÇø
     m_outBuf = (unsigned char *)av_malloc(MAX_AUDIO_FRAME_SIZE * m_audioCodecCtx->ch_layout.nb_channels);
 
-    // åˆ›å»ºé‡é‡‡æ ·ä¸Šä¸‹æ–‡
+    // ´´½¨ÖØ²ÉÑùÉÏÏÂÎÄ
     m_swrCtx = swr_alloc();
 
-    // åˆ†é…é‡é‡‡æ ·çš„ä¸Šä¸‹æ–‡ä¿¡æ¯
+    // ·ÖÅäÖØ²ÉÑùµÄÉÏÏÂÎÄĞÅÏ¢
     swr_alloc_set_opts2(&m_swrCtx,
-                           &m_audioCodecCtx->ch_layout,             /*out*/
-                           AV_SAMPLE_FMT_FLT,                    /*out*///fltp->slt
-                           m_audioCodecCtx->sample_rate,                   /*out*/
-                           &m_audioCodecCtx->ch_layout,               /*in*/
-                           m_audioCodecCtx->sample_fmt,               /*in*/
-                           m_audioCodecCtx->sample_rate,              /*in*/
+                           &m_audioCodecCtx->ch_layout, 
+                           AV_SAMPLE_FMT_FLT,           
+                           m_audioCodecCtx->sample_rate,
+                           &m_audioCodecCtx->ch_layout,      
+                           m_audioCodecCtx->sample_fmt,      
+                           m_audioCodecCtx->sample_rate,     
                            0,
                            nullptr);
 
-    // swrä¸Šä¸‹æ–‡åˆå§‹åŒ–
+    // swrÉÏÏÂÎÄ³õÊ¼»¯
     swr_init(m_swrCtx);
 
-    // åˆå§‹åŒ– SoundTouch å®ä¾‹
+    // ³õÊ¼»¯ SoundTouch ÊµÀı
     m_soundTouch = soundtouch_createInstance();
-    soundtouch_setSampleRate(m_soundTouch, m_audioCodecCtx->sample_rate);    // è®¾ç½®é‡‡æ ·ç‡
-    soundtouch_setChannels(m_soundTouch, m_audioCodecCtx->ch_layout.nb_channels);         // è®¾ç½®é€šé“æ•°
-    soundtouch_setTempo(m_soundTouch, m_speedFactor);                           // è®¾ç½®å€é€Ÿæ’­æ”¾
+    soundtouch_setSampleRate(m_soundTouch, m_audioCodecCtx->sample_rate);    // ÉèÖÃ²ÉÑùÂÊ
+    soundtouch_setChannels(m_soundTouch, m_audioCodecCtx->ch_layout.nb_channels);         // ÉèÖÃÍ¨µÀÊı
+    soundtouch_setTempo(m_soundTouch, m_speedFactor);                           // ÉèÖÃ±¶ËÙ²¥·Å
 
-    // å¼€å¯éŸ³é¢‘è®¾å¤‡
+    // ¿ªÆôÒôÆµÉè±¸
     m_sdlPlayer = new SdlPlayer;
-    m_sdlPlayer->initAudioDevice(m_audioCodecCtx, AV_SAMPLE_FMT_FLT);       //SDLä»…æ”¯æŒéƒ¨åˆ†éŸ³é¢‘æ ¼å¼
+    m_sdlPlayer->initAudioDevice(m_audioCodecCtx, AV_SAMPLE_FMT_FLT);       //SDL½öÖ§³Ö²¿·ÖÒôÆµ¸ñÊ½
 }
 
-//è§†é¢‘æ’­æ”¾çº¿ç¨‹
+//ÊÓÆµ²¥·ÅÏß³Ì
 int MediaManager::thread_video_display()
 {
     AVFrame* frame = av_frame_alloc();
@@ -627,10 +627,10 @@ int MediaManager::thread_video_display()
             av_frame_ref(m_frame, frame);
         }
 
-        // æ¸²æŸ“
-        if (renderMtx.try_lock()) // å°è¯•è·å–é”ï¼Œéé˜»å¡
+        // äÖÈ¾
+        if (renderMtx.try_lock()) // ³¢ÊÔ»ñÈ¡Ëø£¬·Ç×èÈû
         {
-            std::lock_guard<std::mutex> lock(renderMtx, std::adopt_lock);  // std::adopt_lock:æ¥ç®¡try_lock()é”å®šçš„äº’æ–¥é‡
+            std::lock_guard<std::mutex> lock(renderMtx, std::adopt_lock);  // std::adopt_lock:½Ó¹Ütry_lock()Ëø¶¨µÄ»¥³âÁ¿
             renderFrameRgb();
         }
         else
@@ -638,7 +638,7 @@ int MediaManager::thread_video_display()
             logger.warning("can not get mtx, skip render");
         }
 
-        // å»¶æ—¶æ§åˆ¶
+        // ÑÓÊ±¿ØÖÆ
         renderDelayControl(frame);
 
         av_frame_unref(frame);
@@ -652,7 +652,7 @@ int MediaManager::thread_video_display()
 }
 
 
-//éŸ³é¢‘æ’­æ”¾çº¿ç¨‹
+//ÒôÆµ²¥·ÅÏß³Ì
 int MediaManager::thread_audio_display()
 {
     int ret;
@@ -678,24 +678,24 @@ int MediaManager::thread_audio_display()
             break;
         }
 
-        // å°†é‡é‡‡æ ·åçš„éŸ³é¢‘æ•°æ®ä¼ é€’ç»™ SoundTouch è¿›è¡Œå¤„ç†
+        // ½«ÖØ²ÉÑùºóµÄÒôÆµÊı¾İ´«µİ¸ø SoundTouch ½øĞĞ´¦Àí
         soundtouch_putSamples(m_soundTouch, (const float*)m_outBuf, ret);
 
-        // è·å–å¤„ç†åçš„æ ·æœ¬
+        // »ñÈ¡´¦ÀíºóµÄÑù±¾
         int numSamplesProcessed = soundtouch_receiveSamples(m_soundTouch, (float*)m_outBuf, m_audioCodecCtx->frame_size / m_speedFactor);
 //        logger.debug("putSamples = %d, numSamplesProcessed = %d", ret, numSamplesProcessed);
 
-        // éŸ³é¢‘PTSè®¡ç®—å¹¶è®°å½•
+        // ÒôÆµPTS¼ÆËã²¢¼ÇÂ¼
         m_audioLastPTS = frame->pts * av_q2d(m_formatCtx->streams[m_audioIndex]->time_base);
 
-        // ç­‰å¾…SDLéŸ³é¢‘æ’­æ”¾å™¨å®Œæˆå½“å‰çš„éŸ³é¢‘æ•°æ®å¤„ç†å’Œè¾“å‡º
+        // µÈ´ıSDLÒôÆµ²¥·ÅÆ÷Íê³Éµ±Ç°µÄÒôÆµÊı¾İ´¦ÀíºÍÊä³ö
         while(m_sdlPlayer->m_audioLen > 0)
             delayMs(1);
 
-        // éŸ³é¢‘å¡«å……å‚æ•°
+        // ÒôÆµÌî³ä²ÎÊı
         m_sdlPlayer->m_audioChunk = (unsigned char *)m_outBuf;
         m_sdlPlayer->m_audioPos = m_sdlPlayer->m_audioChunk;
-        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_audioCodecCtx->ch_layout.nb_channels * sizeof(float);  // å¤„ç†åçš„æ•°æ®é•¿åº¦
+        m_sdlPlayer->m_audioLen = numSamplesProcessed * m_audioCodecCtx->ch_layout.nb_channels * sizeof(float);  // ´¦ÀíºóµÄÊı¾İ³¤¶È
 
         av_frame_unref(frame);
     }
@@ -708,26 +708,26 @@ int MediaManager::thread_audio_display()
 
 int MediaManager::thread_stream_convert()
 {
-    //1.å®šä¹‰è¾“å…¥è¾“å‡ºæ ¼å¼ä¸Šä¸‹æ–‡
+    //1.¶¨ÒåÊäÈëÊä³ö¸ñÊ½ÉÏÏÂÎÄ
     AVFormatContext* inputFormatCtx = nullptr;
     AVFormatContext* outputFormatCtx = nullptr;
 
-    //2.æ‰“å¼€è¾“å…¥æ–‡ä»¶
+    //2.´ò¿ªÊäÈëÎÄ¼ş
     int ret = avformat_open_input(&inputFormatCtx, m_inputStreamUrl.data(), nullptr, nullptr);
     if(ret < 0) return -1;
 
-    //3.æ‰“å¼€è¾“å‡ºæ–‡ä»¶
+    //3.´ò¿ªÊä³öÎÄ¼ş
     ret = avformat_alloc_output_context2(&outputFormatCtx, nullptr, "flv", m_outputStreamUrl.data());
     if(ret < 0) return -1;
     if(!outputFormatCtx) return -1;
 
-    //4.åˆ†ææµä¿¡æ¯
+    //4.·ÖÎöÁ÷ĞÅÏ¢
     ret = avformat_find_stream_info(inputFormatCtx, nullptr);
     if(ret < 0) return -1;
 
-    av_dump_format(inputFormatCtx, 0, m_inputStreamUrl.data(), 0);            //æ‰“å°è¾“å…¥ä¿¡æ¯
+    av_dump_format(inputFormatCtx, 0, m_inputStreamUrl.data(), 0);            //´òÓ¡ÊäÈëĞÅÏ¢
 
-    //5.è·å–æµä¿¡æ¯
+    //5.»ñÈ¡Á÷ĞÅÏ¢
     for(unsigned int i = 0; i < inputFormatCtx->nb_streams; i++)
     {
         AVStream *in_stream = inputFormatCtx->streams[i];
@@ -740,20 +740,20 @@ int MediaManager::thread_stream_convert()
         out_stream->codecpar->codec_tag = 0;
     }
 
-    //6.è¾“å‡ºå°è£…å¤„ç†
+    //6.Êä³ö·â×°´¦Àí
     if(outputFormatCtx && !(outputFormatCtx->flags & AVFMT_NOFILE))
     {
         ret = avio_open(&outputFormatCtx->pb, m_outputStreamUrl.data(), AVIO_FLAG_WRITE);
         if(ret < 0) return -1;
     }
 
-    //7.å†™æ–‡ä»¶å¤´
+    //7.Ğ´ÎÄ¼şÍ·
     ret = avformat_write_header(outputFormatCtx, nullptr);
     if(ret < 0) return -1;
 
-    av_dump_format(outputFormatCtx, 0, m_outputStreamUrl.data(), 1);          //æ‰“å°è¾“å‡ºä¿¡æ¯
+    av_dump_format(outputFormatCtx, 0, m_outputStreamUrl.data(), 1);          //´òÓ¡Êä³öĞÅÏ¢
 
-    //æŸ¥æ‰¾æ˜¯å¦æœ‰è§†é¢‘æµ
+    //²éÕÒÊÇ·ñÓĞÊÓÆµÁ÷
     AVMediaType printMediaType = AVMEDIA_TYPE_AUDIO;
     int videoIndex = av_find_best_stream(inputFormatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if(videoIndex >= 0)
@@ -761,25 +761,25 @@ int MediaManager::thread_stream_convert()
 
     uint64_t frameIndex = 0;
     AVPacket *packet = av_packet_alloc();
-    int64_t startTime = av_gettime();  //è®¡æ—¶
+    int64_t startTime = av_gettime();  //¼ÆÊ±
 
     while(true)
     {
-        //è¯»å–ä¸€ä¸ªåŒ…
+        //¶ÁÈ¡Ò»¸ö°ü
         if(av_read_frame(inputFormatCtx, packet) < 0)
             break;
 
-        //è½¬æ¢åŒ…
+        //×ª»»°ü
         AVStream *inStream = inputFormatCtx->streams[packet->stream_index];
         AVStream *outStream = outputFormatCtx->streams[packet->stream_index];
 
-        av_packet_rescale_ts(packet, inStream->time_base, outStream->time_base);     //è¾“å…¥ã€è¾“å‡ºéƒ½æ˜¯rtmpæ—¶ï¼Œæ—¶åŸºä¸€æ ·ï¼Œå¯çœç•¥æ—¶é—´æˆ³è½¬æ¢
+        av_packet_rescale_ts(packet, inStream->time_base, outStream->time_base);     //ÊäÈë¡¢Êä³ö¶¼ÊÇrtmpÊ±£¬Ê±»ùÒ»Ñù£¬¿ÉÊ¡ÂÔÊ±¼ä´Á×ª»»
 
-        //è¾“å‡ºåˆ°å±å¹•
+        //Êä³öµ½ÆÁÄ»
         AVMediaType mediaType = inStream->codecpar->codec_type;
         if(mediaType == printMediaType)
         {
-            if(frameIndex % 10 == 0)    //10å¸§1æ‰“å°
+            if(frameIndex % 10 == 0)    //10Ö¡1´òÓ¡
             {
                 uint64_t time = (av_gettime() - startTime) / AV_TIME_BASE;
                 logger.debug("save frame: %llu , time: %llds", frameIndex, time);
@@ -787,27 +787,26 @@ int MediaManager::thread_stream_convert()
             frameIndex++;
         }
 
-        //å†™åŒ…
+        //Ğ´°ü
         ret = av_interleaved_write_frame(outputFormatCtx, packet);
         if(ret < 0) return ret;
 
-        //åŒæ­¥å¾…å¼€å‘
+        //Í¬²½´ı¿ª·¢
         delayMs(10);
 
 
         av_packet_unref(packet);
     }
 
-    //å†™æ–‡ä»¶å°¾
-    /*
-     * è‹¥æ˜¯rtmpæ¨æµï¼Œå¯å¿½ç•¥ä»¥ä¸‹æŠ¥é”™ä¿¡æ¯ï¼Œå› ä¸ºæ¨æµrtmpä½¿ç”¨çš„flvæ ¼å¼ä¸å«æ—¶é•¿å’Œå¤§å°ä¿¡æ¯
+    /* Ğ´ÎÄ¼şÎ²
+    * ÈôÊÇrtmpÍÆÁ÷£¬¿ÉºöÂÔÒÔÏÂ±¨´íĞÅÏ¢£¬ÒòÎªÍÆÁ÷rtmpÊ¹ÓÃµÄflv¸ñÊ½²»º¬Ê±³¤ºÍ´óĞ¡ĞÅÏ¢
     * [flv @ 0000000031af2880] Failed to update header with correct duration.
     * [flv @ 0000000031af2880] Failed to update header with correct filesize.
     */
     ret = av_write_trailer(outputFormatCtx);
     if(ret < 0) return ret;
 
-    //å…³é—­è¾“å…¥
+    //¹Ø±ÕÊäÈë
     avformat_close_input(&inputFormatCtx);
     av_packet_free(&packet);
 
@@ -825,7 +824,7 @@ void MediaManager::renderDelayControl(AVFrame* frame)
 {
     double currentVideoPTS = frame->pts * av_q2d(m_formatCtx->streams[m_videoIndex]->time_base);
     double delayDuration = 0.0;
-    // æœ‰éŸ³é¢‘æ—¶å‘éŸ³é¢‘æµåŒæ­¥ï¼Œæ— éŸ³é¢‘æµåˆ™æŒ‰PTSæ’­æ”¾
+    // ÓĞÒôÆµÊ±ÏòÒôÆµÁ÷Í¬²½£¬ÎŞÒôÆµÁ÷Ôò°´PTS²¥·Å
     if(m_audioIndex >= 0)
         delayDuration = currentVideoPTS - m_audioLastPTS;
     else
@@ -834,11 +833,11 @@ void MediaManager::renderDelayControl(AVFrame* frame)
 //    logger.debug("time: %f", m_systemClock->getTime());
 //    logger.debug("Current Video PTS: %f, Last PTS: %f, m_audioLastPTS: %f", currentVideoPTS, m_videoLastPTS, m_audioLastPTS);
 
-    /* æ³¨æ„ï¼š
-     * è·³è½¬åå½“è§†é¢‘æµæ¯”éŸ³é¢‘æµå…ˆæ¸²æŸ“ç¬¬ä¸€å¸§æ—¶ï¼Œ
-     * m_audioLastPTSè¿˜å¤„äºè·³è½¬å‰çš„PTSï¼Œ
-     * æå¤§è½åäºæ–°è§†é¢‘å¸§çš„PTSï¼Œå› æ­¤å¯èƒ½å‡ºç°é•¿æ—¶é—´çš„å»¶æ—¶ï¼Œ
-     * å› æ­¤éœ€è¦å¦å¤–è°ƒæ•´delayDurationçš„å€¼
+    /* ×¢Òâ£º
+     * Ìø×ªºóµ±ÊÓÆµÁ÷±ÈÒôÆµÁ÷ÏÈäÖÈ¾µÚÒ»Ö¡Ê±£¬
+     * m_audioLastPTS»¹´¦ÓÚÌø×ªÇ°µÄPTS£¬
+     * ¼«´óÂäºóÓÚĞÂÊÓÆµÖ¡µÄPTS£¬Òò´Ë¿ÉÄÜ³öÏÖ³¤Ê±¼äµÄÑÓÊ±£¬
+     * Òò´ËĞèÒªÁíÍâµ÷ÕûdelayDurationµÄÖµ
     */
     if (delayDuration > 0.0 && m_thread_quit == false && m_thread_pause == false)
     {
@@ -849,7 +848,7 @@ void MediaManager::renderDelayControl(AVFrame* frame)
         av_usleep(delayDuration * AV_TIME_BASE);
     }
 
-    // è®°å½•å½“å‰è§†é¢‘PTS
+    // ¼ÇÂ¼µ±Ç°ÊÓÆµPTS
     m_videoLastPTS = currentVideoPTS;
 }
 
@@ -878,19 +877,19 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
     m_windowWidth = width;
     m_windowHeight = height;
 
-    // ç­‰æ¯”ä¾‹è°ƒæ•´
+    // µÈ±ÈÀıµ÷Õû
     if(uniformScale)
     {
         if (width / static_cast<double>(height) > m_aspectRatio)
-            m_windowWidth = static_cast<int>(height * m_aspectRatio);       // æ ¹æ®é«˜åº¦è®¡ç®—å®½åº¦
+            m_windowWidth = static_cast<int>(height * m_aspectRatio);       // ¸ù¾İ¸ß¶È¼ÆËã¿í¶È
         else
-            m_windowHeight = static_cast<int>(width / m_aspectRatio);       // æ ¹æ®å®½åº¦è®¡ç®—é«˜åº¦
+            m_windowHeight = static_cast<int>(width / m_aspectRatio);       // ¸ù¾İ¿í¶È¼ÆËã¸ß¶È
     }
 
 //    logger.debug("m_windowWidth: %d, m_windowHeight: %d", m_windowWidth, m_windowHeight);
 
 
-    // ç¼“å†²åŒºæ•°é‡
+    // »º³åÇøÊıÁ¿
     static uint8_t* tmpBuf[TMP_BUFFER_NUMBER] = {nullptr};
     static SwsContext* tmpSws[TMP_BUFFER_NUMBER] = {nullptr};
     static int count = 0;
@@ -898,13 +897,13 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
 //    logger.debug("av_malloc: %d", count);
 //    logger.debug("av_free: %d", (count + 1) % TMP_BUFFER_NUMBER);
 
-    // åˆ›å»ºæ–°çš„ç¼“å†²åŒºï¼Œéœ€è¦é¢„ç•™ç©ºé—´
+    // ´´½¨ĞÂµÄ»º³åÇø£¬ĞèÒªÔ¤Áô¿Õ¼ä
     tmpBuf[count] = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_windowWidth * 4, m_windowHeight * 4, 1));
 
     if(tmpBuf[(count + 1) % TMP_BUFFER_NUMBER])
         av_freep(&tmpBuf[(count + 1) % TMP_BUFFER_NUMBER]);
 
-    // åˆ›å»ºæ–°çš„ SwsContext ä»¥è½¬æ¢å›¾åƒ
+    // ´´½¨ĞÂµÄ SwsContext ÒÔ×ª»»Í¼Ïñ
     tmpSws[count] = sws_getContext(m_videoCodecCtx->width, m_videoCodecCtx->height, srcFormat,
                                    m_windowWidth, m_windowHeight, AV_PIX_FMT_RGB32, SWS_BICUBIC, nullptr, nullptr, nullptr);
     if(tmpSws[(count + 1) % TMP_BUFFER_NUMBER])
@@ -913,18 +912,18 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
         tmpSws[(count + 1) % TMP_BUFFER_NUMBER] = nullptr;
     }
 
-    // ä½¿ç”¨æ–°ç¼“å†²åŒºå¡«å……æ•°æ®
+    // Ê¹ÓÃĞÂ»º³åÇøÌî³äÊı¾İ
     av_image_fill_arrays(m_frameRgb->data, m_frameRgb->linesize, tmpBuf[count], AV_PIX_FMT_RGB32, m_windowWidth, m_windowHeight, 1);
 
-    // ç¡®ä¿æ–°ç¼“å†²åŒºå‡†å¤‡å¥½ååˆ‡æ¢
-    m_frameBuf = tmpBuf[count];  // åˆ‡æ¢åˆ°æ–°çš„ç¼“å†²åŒº
-    m_swsCtx = tmpSws[count];   // åˆ‡æ¢åˆ°æ–°çš„ SwsContext
+    // È·±£ĞÂ»º³åÇø×¼±¸ºÃºóÇĞ»»
+    m_frameBuf = tmpBuf[count];  // ÇĞ»»µ½ĞÂµÄ»º³åÇø
+    m_swsCtx = tmpSws[count];   // ÇĞ»»µ½ĞÂµÄ SwsContext
 
     count++;
     if(count == TMP_BUFFER_NUMBER)
         count = 0;
 
-    // æ¸²æŸ“
+    // äÖÈ¾
     std::lock_guard<std::mutex> lock(renderMtx);
     renderFrameRgb();
 }
@@ -944,7 +943,7 @@ void MediaManager::renderFrameRgb()
               m_frameRgb->data,
               m_frameRgb->linesize);
 
-    // è°ƒç”¨å›è°ƒå‡½æ•°ï¼Œé€šçŸ¥ GUI æ¸²æŸ“
+    // µ÷ÓÃ»Øµ÷º¯Êı£¬Í¨Öª GUI äÖÈ¾
     if (m_renderCallback)
 #ifdef ENABLE_PYBIND
         m_renderCallback(reinterpret_cast<int64_t>(m_frameRgb->data[0]), m_windowWidth, m_windowHeight);

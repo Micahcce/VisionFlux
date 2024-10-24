@@ -65,14 +65,14 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
    cd VisionFlux/native_cpp
    ```
 
-2. 创建构建目录并配置项目：
+2. 创建构建目录并配置项目：`使用GNU编译，生成文件不包含 Qt 动态库`
 
    ```
    mkdir build && cd build
-   cmake ..
+   cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
    ```
 
-3. 编译项目：
+3. 编译项目：`生成可执行文件在libs目录下`
 
    ```
    cmake --build .
