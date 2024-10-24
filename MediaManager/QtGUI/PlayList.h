@@ -13,6 +13,7 @@
 #include <QDirIterator>
 #include "PlayController.h"
 
+
 class PlayList : public QListWidget
 {
     Q_OBJECT

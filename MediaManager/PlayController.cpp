@@ -93,6 +93,20 @@ void PlayController::changeVolume(int volume)
         m_mediaManager->changeVolume(m_mediaInfo->volume);
 }
 
+void PlayController::changeFrameSize(int width, int height, bool uniformScale)
+{
+    if(m_mediaInfo->mediaName == "")
+        return;
+    if(m_mediaInfo->hasVideoStream == false)
+        return;
+    m_mediaManager->frameResize(width, height, uniformScale);
+}
+
+float PlayController::getPlayProgress()
+{
+    return m_mediaManager->getCurrentProgress();
+}
+
 void PlayController::setSafeCudaAccelerate(bool state)
 {
 #ifndef CUDA_ISAVAILABLE
@@ -108,15 +122,6 @@ void PlayController::setSafeCudaAccelerate(bool state)
     m_mediaManager->setSafeCudaAccelerate(state);
 }
 
-void PlayController::windowResize(int width, int height, bool uniformScale)
-{
-    if(m_mediaInfo->mediaName == "")
-        return;
-    if(m_mediaInfo->hasVideoStream == false)
-        return;
-    m_mediaManager->frameResize(width, height, uniformScale);
-}
-
 void PlayController::streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrll)
 {
     m_mediaManager->streamConvert(inputStreamUrl, outputStreamUrll);
@@ -124,44 +129,17 @@ void PlayController::streamConvert(const std::string& inputStreamUrl, const std:
 
 int PlayController::getMediaDuration(const std::string filePath)
 {
-    AVFormatContext* formatCtx  = m_mediaManager->getMediaInfo(filePath);
-    if (!formatCtx)
-        return -1; // 如果无法获取格式上下文，返回-1
-    int64_t duration = formatCtx->duration;  // 获取视频总时长（单位：微秒）
-    avformat_close_input(&formatCtx);        // 释放资源
-    int secs = duration / AV_TIME_BASE;      // 将微秒转换为秒
-    if(secs < 0)                             // 直播流的情况下会小于0
-        return 0;
-    else
-        return secs;
-}
-
-float PlayController::getPlayProgress()
-{
-    return m_mediaManager->getCurrentProgress();
+    return uGetMediaDuration(filePath);
 }
 
 bool PlayController::saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec)
 {
-    if(m_mediaManager->saveFrameToBmp(filePath, outputPath, sec))
-        return true;
-    else
-        return false;
+    return uSaveFrameToBmp(filePath, outputPath, sec);
 }
-
 
 std::string PlayController::timeFormatting(int secs)
 {
-    // 计算小时、分钟和秒
-    int hours = secs / 3600;
-    int minutes = (secs % 3600) / 60;
-    int seconds = secs % 60;
-
-    // 格式化为 HH:MM:SS
-    char durationStr[9]; // 长度为 8 + 1（用于 '\0'）
-    snprintf(durationStr, sizeof(durationStr), "%02d:%02d:%02d", hours, minutes, seconds);
-
-    return std::string(durationStr); // 返回格式化后的字符串
+    return uTimeFormatting(secs);
 }
 
 

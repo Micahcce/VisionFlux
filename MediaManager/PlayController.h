@@ -2,6 +2,7 @@
 #define PLAYCONTROLLER_H
 
 #include "MediaManager.h"
+#include "Utils.h"
 #include <string>
 
 class MediaPlayInfo
@@ -38,26 +39,15 @@ public:
     void changePlaySpeed(float speedFactor);
     //修改音量
     void changeVolume(int volume);
+    //修改画面大小
+    void changeFrameSize(int width, int height, bool uniformScale);
 
-    //cuda加速
-    void setSafeCudaAccelerate(bool state);
-
-    //窗口大小变化
-    void windowResize(int width, int height, bool uniformScale);
-
-    //推流
-    void streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
-
-    //获取视频时长（秒）
-    int getMediaDuration(const std::string filePath);
     //获取当前播放进度
     float getPlayProgress();
-    //保存图片
-    bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
-
-    //格式化时长（hh:mm:ss）
-    std::string timeFormatting(int secs);
-
+    //cuda加速
+    void setSafeCudaAccelerate(bool state);
+    //流转换
+    void streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
     //传递渲染回调
     void setRenderCallback(MediaManager::RenderCallback callback){m_mediaManager->setRenderCallback(std::move(callback));}
 
@@ -71,6 +61,16 @@ public:
         }
         return m_mediaInfo;
     }
+
+    //// Utils 函数的调用 ////
+
+    //获取视频时长（秒）
+    int getMediaDuration(const std::string filePath);
+    //保存图片
+    bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
+    //格式化时长（hh:mm:ss）
+    std::string timeFormatting(int secs);
+
 
 private:
 

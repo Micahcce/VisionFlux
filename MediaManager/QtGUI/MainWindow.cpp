@@ -128,7 +128,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 //        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 //        m_videoView->setPixmap(fitpix);
 //    }
-    m_playController->windowResize(m_videoView->width(), m_videoView->height(), true);
+    m_playController->changeFrameSize(m_videoView->width(), m_videoView->height(), true);
 }
 
 

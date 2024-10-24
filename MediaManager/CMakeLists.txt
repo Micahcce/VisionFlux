@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
     common/Logger.cpp
     common/BmpAndWavAchieve.h
     common/BmpAndWavAchieve.cpp
+    common/Utils.h
+    common/Utils.cpp
 )
 
 # 是否开启Pybind11

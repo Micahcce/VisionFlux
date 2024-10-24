@@ -12,7 +12,6 @@
 #include "SdlPlayer.h"
 #include "Logger.h"
 #include "SystemClock.h"
-#include "BmpAndWavAchieve.h"
 #include <SoundTouchDLL.h>
 
 #ifdef ENABLE_PYBIND
@@ -37,9 +36,6 @@ class MediaManager
 public:
     MediaManager();
     ~MediaManager();
-
-    //获取数据
-    AVFormatContext* getMediaInfo(const std::string& filePath);
 
     //解码播放
     bool decodeToPlay(const std::string& filePath);
@@ -72,7 +68,7 @@ public:
     //尺寸调整
     void frameResize(int width, int height, bool uniformScale);
 
-    //保存视频帧
+
     bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
     //cuda加速
