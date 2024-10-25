@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_mediaDirPath("../media/")
 {
     resize(1000, 600);
+    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s";
 
     //播放控制器
     m_playController = new PlayController;
@@ -29,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     //底栏
     m_bottomBar = new BottomBar(this);
     m_bottomBar->setPlayController(m_playController);
+    m_bottomBar->setAllowedExtensions(m_allowedExtensions);
 
     //侧边栏
     QTabWidget* sideBar = new QTabWidget(this);
@@ -54,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_playList = new PlayList(playListTab);
     m_playList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_playList->setPlayController(m_playController);
+    m_playList->setAllowedExtensions(m_allowedExtensions);
     m_playList->setMediaDirPath(m_mediaDirPath);
     m_playList->searchMediaFiles();           //添加视频列表
 
@@ -65,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_processPanel = new ProcessPanel(processPanelTab);
     m_processPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_processPanel->setPlayController(m_playController);
+    m_processPanel->setAllowedExtensions(m_allowedExtensions);
 
     QVBoxLayout* vBox2 = new QVBoxLayout;
     vBox2->addWidget(m_processPanel);

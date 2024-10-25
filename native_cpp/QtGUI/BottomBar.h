@@ -26,6 +26,7 @@ public:
     BottomBar(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
+    void setAllowedExtensions(QStringList strList) {m_allowedExtensions = strList;};
     void changeProgress(int changeSecs);
 
 signals:
@@ -51,6 +52,7 @@ private:
     };
 
     PlayController* m_playController;
+    QStringList m_allowedExtensions;
 
     QLabel* m_currentTime;
     QSlider* m_timeSlider;

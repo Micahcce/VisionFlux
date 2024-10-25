@@ -44,6 +44,7 @@ private:
     ProcessPanel* m_processPanel;
     BottomBar* m_bottomBar;
 
+    QStringList m_allowedExtensions;
     QString m_mediaDirPath;
     QPixmap m_pix;
 };

@@ -1,4 +1,4 @@
-﻿#include "ProcessPanel.h"
+#include "ProcessPanel.h"
 
 ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
 {
@@ -116,7 +116,7 @@ void ProcessPanel::slotLiveStreamSave()
 
 void ProcessPanel::slotPushStreamFileSelect()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", "*.mp4 *.wav *.mp3");
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", m_allowedExtensions.join(" "));
     if(filePath == "")
         return;
 
@@ -132,7 +132,7 @@ void ProcessPanel::slotPushStream()
 
 void ProcessPanel::slotConvertFileSelect()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", "*.mp4 *.wav *.mp3");
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", m_allowedExtensions.join(" "));
     if(filePath == "")
         return;
 

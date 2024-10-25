@@ -22,6 +22,7 @@ public:
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
     void setMediaDirPath(QString mediaDirPath);
+    void setAllowedExtensions(QStringList strList) {m_allowedExtensions = strList;};
     QString getMediaPath();
     void searchMediaFiles();
 

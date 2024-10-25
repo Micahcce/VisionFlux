@@ -1,10 +1,9 @@
-﻿#include "PlayList.h"
+#include "PlayList.h"
 #include "Logger.h"
 #include "BmpAndWavAchieve.h"
 
 PlayList::PlayList(QWidget *parent) : QListWidget(parent)
 {
-    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s";
 }
 
 void PlayList::setMediaDirPath(QString mediaDirPath)

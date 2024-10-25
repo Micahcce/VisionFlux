@@ -1,4 +1,4 @@
-﻿#include "BottomBar.h"
+#include "BottomBar.h"
 
 BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 {
@@ -201,7 +201,7 @@ void BottomBar::slotPlayAndPause()
 
 void BottomBar::slotAddMediaFile()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", "*.mp4 *.wav *.mp3");
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", m_allowedExtensions.join(" "));
     if(filePath == "")
         return;
 
