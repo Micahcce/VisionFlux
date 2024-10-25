@@ -50,9 +50,8 @@ class MainWindow(QMainWindow):
         self.playController.startPlay(video_file)
 
 
-    def renderFrameRGB(self, data: bytes, width: int, height: int):
+    def renderFrameRGB(self, data: int, width: int, height: int):
         try:
-            print(f"Received data from C++")
             # 定义数组长度
             length = width * height * 4
 

@@ -137,7 +137,7 @@ sudo ldconfig		# 更新共享库
    cmake --build .
    ```
 
-2. 将在 Debug 目录下生成二进制( .pyd或.so )文件
+2. 将在 Debug 或当前目录下生成二进制( .pyd或.so )文件
 
 3. 在 Python 中导入模块：
 
