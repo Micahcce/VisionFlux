@@ -43,20 +43,55 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
 
 ### 环境依赖
 
-- FFmpeg
+- FFmpeg (>= 6.x)
 - SDL2
 - SoundTouch
 - Qt (>= 5.x)
 - CMake (>= 3.x)
 - Python (>= 3.6) 及 Pybind11（可选，用于 Python 集成）
 
+### 环境安装（Linux）
+
+1. Qt工具链
+
+```
+sudo apt install qtbase5-dev qtchooser qt5-qmake qttools5-dev-tools
+```
+
+2. SDL2
+
+```
+sudo apt install libsdl2-2.0-0 libsdl2-dev
+```
+
+3. FFmpeg6.0（源码安装）
+
+```
+cd ~
+wget https://ffmpeg.org/releases/ffmpeg-6.0.tar.bz2
+tar xjf ffmpeg-6.0.tar.bz2
+cd ffmpeg-6.0
+
+./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libmp3lame \
+--enable-libvorbis --enable-libass --enable-libfreetype --enable-libopus \
+--enable-nonfree --enable-shared
+
+make -j$(nproc)  	# 使用所有可用的处理器核心加速编译
+sudo make install
+sudo ldconfig		# 更新共享库
+```
+
 ### 注意事项
 
 * 当编译时出现 `error C2059: 语法错误:“)”`或类似错误，将错误中涉及的文件以 UTF-8 BOM 编码格式保存后，重新编译即可。
-* 若希望构建为 Python 模块，请使用 MSVC 编译此项目，与 Python 兼容。另注意编译使用的 Python 与集成模块使用的 Python 版本需要一致。
+* 若希望构建为 Python 模块，Winodws下请使用 MSVC 编译此项目，与 Python 兼容。另注意编译使用的 Python 与集成模块使用的 Python 版本需要一致。
 * 当开启或关闭 `ENABLE_PYBIND` 不生效时，请手动设置 `CMakeList.txt` 文件中 `set(ENABLE_PYBIND XX)` 选项
 
-### 编译步骤
+### 脚本编译
+
+` native_cpp/`目录下提供了编译脚本文件，顺利运行后将在`libs/`目录下生成目标
+
+### 手动编译
 
 1. 克隆代码仓库：
 
@@ -65,20 +100,26 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
    cd VisionFlux/native_cpp
    ```
 
-2. 创建构建目录并配置项目：`使用GNU编译，生成文件不包含 Qt 动态库`
+2. 创建构建目录：
 
    ```
    mkdir build && cd build
-   cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
    ```
 
-3. 编译项目：`生成可执行文件在libs目录下`
+3. 配置项目：`使用GNU编译，生成文件不包含 Qt 动态库`
+
+   ```
+   (Windows) cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
+   (Linux) cmake ..
+   ```
+
+4. 编译项目：
 
    ```
    cmake --build .
    ```
 
-4. 运行播放器：
+5. 运行播放器：
 
    ```
    cd ../../libs
@@ -96,13 +137,19 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
    cmake --build .
    ```
 
-2. 将在 Debug 目录下生成二进制( .pyd )文件，该模块依赖于libs下的库文件
+2. 将在 Debug 目录下生成二进制( .pyd或.so )文件
 
 3. 在 Python 中导入模块：
 
    ```
    import visionflux
    ```
+
+* **模块依赖于libs下的库文件，需要导入目录或者放在同一目录。**
+
+* **python执行路径如果与模块不在同一目录，则也需要进行导入。**
+
+*运行示例代码：*`python3 main.py`
 
 ## 未来计划
 

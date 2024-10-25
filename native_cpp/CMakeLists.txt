@@ -90,39 +90,57 @@ else()
     )
 endif()
 
+include_directories(${PROJECT_SOURCE_DIR}/common)
 
-# 设置库的包含目录（包含头文件）
-include_directories(
-    ${PROJECT_SOURCE_DIR}/common
-    ${PROJECT_SOURCE_DIR}/FFmpeg/include
-    ${PROJECT_SOURCE_DIR}/SDL/include
-    ${PROJECT_SOURCE_DIR}/SoundTouch/include
-)
+# 区分平台添加依赖库
+if(WIN32)
+    # Windows平台的库目录
+    include_directories(
+        ${PROJECT_SOURCE_DIR}/FFmpeg/include
+        ${PROJECT_SOURCE_DIR}/SDL/include
+        ${PROJECT_SOURCE_DIR}/SoundTouch/include
+    )
 
-# 设置库目录（包含.lib文件）
-link_directories(
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib
-    ${PROJECT_SOURCE_DIR}/SDL/lib
-    ${PROJECT_SOURCE_DIR}/SoundTouch/lib
-)
+    link_directories(
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib
+        ${PROJECT_SOURCE_DIR}/SDL/lib
+        ${PROJECT_SOURCE_DIR}/SoundTouch/lib
+    )
 
-# 添加库（全局添加需要放在add_executable之前）
-set(ALL_LIBS
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avformat.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avcodec.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avutil.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avdevice.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avfilter.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/swscale.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/swresample.lib
-    ${PROJECT_SOURCE_DIR}/FFmpeg/lib/postproc.lib
+    # 添加库
+    set(ALL_LIBS
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avformat.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avcodec.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avutil.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avdevice.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/avfilter.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/swscale.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/swresample.lib
+        ${PROJECT_SOURCE_DIR}/FFmpeg/lib/postproc.lib
 
-    ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2.lib
-    ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2main.lib
-    ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2test.lib
+        ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2.lib
+        ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2main.lib
+        ${PROJECT_SOURCE_DIR}/SDL/lib/SDL2test.lib
 
-    ${PROJECT_SOURCE_DIR}/SoundTouch/lib/SoundTouchDLLD_x64.lib
-)
+        ${PROJECT_SOURCE_DIR}/SoundTouch/lib/SoundTouchDLLD_x64.lib
+    )
+
+else()
+
+    # Linux平台的库
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET libavformat libavcodec libavutil libswscale libswresample libavfilter)
+    find_package(SDL2 REQUIRED)
+
+    include_directories(${PROJECT_SOURCE_DIR}/SoundTouch/include)
+
+    # 添加库
+    set(ALL_LIBS
+        PkgConfig::FFMPEG
+        SDL2::SDL2
+        ${PROJECT_SOURCE_DIR}/SoundTouch/lib/Linux/SoundTouchDll.so
+    )
+endif()
 
 # 添加库
 if(ENABLE_PYBIND)

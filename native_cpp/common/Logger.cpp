@@ -40,7 +40,11 @@ std::string Logger::getCurrentTime() {
     auto now = std::chrono::system_clock::now();
     std::time_t now_time = std::chrono::system_clock::to_time_t(now);
     std::tm local_tm;
+#ifdef _WIN32
     localtime_s(&local_tm, &now_time);
+#else
+    localtime_r(&now_time, &local_tm);
+#endif
     char buffer[20]; // yyyy-mm-dd hh:mm:ss
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &local_tm);
     return std::string(buffer);
