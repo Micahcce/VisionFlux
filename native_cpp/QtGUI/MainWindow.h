@@ -6,6 +6,7 @@
 #include "BottomBar.h"
 #include "PlayList.h"
 #include "ProcessPanel.h"
+#include "OpenGLWidget.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -43,6 +44,7 @@ private:
     PlayList* m_playList;
     ProcessPanel* m_processPanel;
     BottomBar* m_bottomBar;
+    OpenGLWidget* m_openglWidget;
 
     QStringList m_allowedExtensions;
     QString m_mediaDirPath;

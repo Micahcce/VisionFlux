@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_mediaDirPath("../media/")
 {
     resize(1000, 600);
-    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s";
+    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s" << "*.ts" << "*.flv";
 
     //播放控制器
     m_playController = new PlayController;
@@ -26,6 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_videoView->show();
     m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     m_videoView->setAlignment(Qt::AlignCenter);
+
+    //opengl
+    m_openglWidget = new OpenGLWidget(this);
+    m_openglWidget->setStyleSheet("background-color:#FFFFFF;");
+    m_openglWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
     //底栏
     m_bottomBar = new BottomBar(this);
@@ -76,7 +81,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     //布局管理器
     QVBoxLayout* vBox = new QVBoxLayout;
-    vBox->addWidget(m_videoView);
+//    vBox->addWidget(m_videoView);
+    vBox->addWidget(m_openglWidget);
     vBox->addWidget(m_bottomBar);
 
     QHBoxLayout* hBox = new QHBoxLayout;
@@ -109,15 +115,20 @@ void MainWindow::emitRenderSignal(uint8_t *data, int width, int height)
 
 void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 {
-    static QScreen *screen = QGuiApplication::primaryScreen();
-    static QRect screenGeometry = screen->geometry();               // 逻辑分辨率
-    static qreal pixelRatio = screen->devicePixelRatio();           // 缩放因子
-    static QSize physicalSize = screenGeometry.size() * pixelRatio; // 物理分辨率
-    static uint8_t* buf = (uint8_t* )malloc(physicalSize.width() * physicalSize.height() * 4);
-    std::copy(data, data + (width * height * 4), buf);
-    QImage img((uchar*)buf, width, height, QImage::Format_RGB32);
-    m_videoView->setPixmap(QPixmap::fromImage(img));
+    //QLabel手动
+//    static QScreen *screen = QGuiApplication::primaryScreen();
+//    static QRect screenGeometry = screen->geometry();               // 逻辑分辨率
+//    static qreal pixelRatio = screen->devicePixelRatio();           // 缩放因子
+//    static QSize physicalSize = screenGeometry.size() * pixelRatio; // 物理分辨率
+//    static uint8_t* buf = (uint8_t* )malloc(physicalSize.width() * physicalSize.height() * 4);
+//    std::copy(data, data + (width * height * 4), buf);
+//    QImage img((uchar*)buf, width, height, QImage::Format_RGB32);
+//    m_videoView->setPixmap(QPixmap::fromImage(img));
 
+    //QOpenGLWidget
+    m_openglWidget->setImageData(data, width, height);
+
+    //QLabel自动
 //    QImage img((uchar*)data, width, height, QImage::Format_RGB32);
 //    m_pix = QPixmap::fromImage(img);
 //    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -127,12 +138,14 @@ void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);  // 调用父类的 resizeEvent
+    //QLabel自动
 //    if(m_pix.isNull() == false)
 //    {
 //        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 //        m_videoView->setPixmap(fitpix);
 //    }
-    m_playController->changeFrameSize(m_videoView->width(), m_videoView->height(), true);
+    //QLabel手动
+//    m_playController->changeFrameSize(m_videoView->width(), m_videoView->height(), true);
 }
 
 

@@ -82,6 +82,8 @@ else()
         QtGUI/PlayList.cpp
         QtGUI/ProcessPanel.h
         QtGUI/ProcessPanel.cpp
+        QtGUI/OpenGLWidget.h
+        QtGUI/OpenGLWidget.cpp
     )
 
     # 指定输出目录为项目的根目录

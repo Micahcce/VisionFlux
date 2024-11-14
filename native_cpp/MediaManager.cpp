@@ -1,4 +1,4 @@
-﻿#include "MediaManager.h"
+#include "MediaManager.h"
 
 
 MediaManager::MediaManager()
@@ -134,8 +134,8 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         }
 
         if(m_rgbMode)
-            frameResize(m_windowWidth, m_windowHeight, true);
-//            frameYuvToRgb();
+            frameYuvToRgb();
+//            frameResize(m_windowWidth, m_windowHeight, true);
 
         std::thread videoThread(&MediaManager::thread_video_display, this);
         videoThread.detach();

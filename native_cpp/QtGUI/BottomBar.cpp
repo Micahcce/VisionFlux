@@ -53,7 +53,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 
     //硬件加速
     QCheckBox* hwAccelerateCb = new QCheckBox("硬件加速", this);
-    hwAccelerateCb->setFixedSize(70, 20);
+    hwAccelerateCb->setFixedSize(110, 20);
     connect(hwAccelerateCb, &QCheckBox::stateChanged, this,
             [=]{m_playController->setSafeCudaAccelerate(hwAccelerateCb->checkState());});
 
