@@ -8,7 +8,7 @@
 #include <thread>
 #include <atomic>
 #include <memory>
-#include "FrameQueue.h"
+#include "MediaQueue.h"
 #include "SdlPlayer.h"
 #include "Logger.h"
 #include "SystemClock.h"
@@ -96,7 +96,7 @@ public:
     void setRenderCallback(RenderCallback callback) {m_renderCallback = std::move(callback);}
 
 private:
-    enum FrameQueueCapacity
+    enum MediaQueueCapacity
     {
         //帧缓冲数量过少（如1、2）当连续解码音频或视频帧时，会使解码线程阻塞导致无法继续解码。
         //音频帧率通常为40多（采样率/每帧样本数）
@@ -131,7 +131,7 @@ private:
 
     RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
 
-    FrameQueue* m_frameQueue;
+    MediaQueue* m_mediaQueue;
     SystemClock* m_systemClock;
     SdlPlayer* m_sdlPlayer;
     HANDLE m_soundTouch;

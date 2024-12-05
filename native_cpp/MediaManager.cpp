@@ -3,7 +3,7 @@
 
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
-      m_frameQueue(nullptr),
+      m_mediaQueue(nullptr),
       m_systemClock(nullptr),
       m_sdlPlayer(nullptr),
       m_soundTouch(nullptr),
@@ -43,7 +43,7 @@ MediaManager::MediaManager()
     logger.debug("avformat_version :%d", avformat_version());
 
     m_rgbMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
-    m_frameQueue = new FrameQueue;
+    m_mediaQueue = new MediaQueue;
     m_systemClock = new SystemClock;
 }
 
@@ -101,7 +101,7 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     m_thread_decode_exited = false;
     m_thread_video_exited = false;
     m_thread_audio_exited = false;
-    m_frameQueue->reset();
+    m_mediaQueue->reset();
 
     if(m_videoIndex < 0)
         m_thread_video_exited = true;
@@ -193,7 +193,7 @@ void MediaManager::seekFrameByStream(int timeSecs)
     }
 
     // 清除帧队列
-    m_frameQueue->clear();
+    m_mediaQueue->clear();
 
     // 清除解码器缓存
     std::unique_lock<std::mutex> lock(m_decodeMtx);
@@ -350,10 +350,10 @@ int MediaManager::thread_media_decode()
                     break;
                 }
 
-                while(m_frameQueue->getVideoFrameCount() >= MAX_VIDEO_FRAMES && !m_thread_quit)
+                while(m_mediaQueue->getVideoFrameCount() >= MAX_VIDEO_FRAMES && !m_thread_quit)
                     delayMs(10);
 
-                m_frameQueue->pushVideoFrame(frame);
+                m_mediaQueue->pushVideoFrame(frame);
 
                 av_frame_unref(frame);
             }
@@ -381,10 +381,10 @@ int MediaManager::thread_media_decode()
                     break;
                 }
 
-                while(m_frameQueue->getAudioFrameCount() >= MAX_AUDIO_FRAMES && !m_thread_quit)
+                while(m_mediaQueue->getAudioFrameCount() >= MAX_AUDIO_FRAMES && !m_thread_quit)
                     delayMs(10);
 
-                m_frameQueue->pushAudioFrame(frame);
+                m_mediaQueue->pushAudioFrame(frame);
 
                 av_frame_unref(frame);
             }
@@ -410,8 +410,8 @@ void MediaManager::close()
 {
     logger.debug("closing");
     m_thread_quit = true;
-    m_frameQueue->signalExit();
-    m_frameQueue->clear();
+    m_mediaQueue->signalExit();
+    m_mediaQueue->clear();
 
     // 安全退出
     while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
@@ -579,7 +579,7 @@ int MediaManager::thread_video_display()
             continue;
         }
 
-        frame = m_frameQueue->popVideoFrame();
+        frame = m_mediaQueue->popVideoFrame();
         if(!frame)
             continue;
 
@@ -645,7 +645,7 @@ int MediaManager::thread_audio_display()
             continue;
         }
 
-        frame = m_frameQueue->popAudioFrame();
+        frame = m_mediaQueue->popAudioFrame();
         if(!frame)
             continue;
 

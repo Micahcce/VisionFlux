@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(VisionFlux LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 包含当前路径
@@ -17,7 +17,7 @@ set(PROJECT_SOURCES
     SdlPlayer.h
     SdlPlayer.cpp
 
-    common/FrameQueue.h
+    common/MediaQueue.h
     common/SystemClock.h
     common/Logger.h
     common/Logger.cpp

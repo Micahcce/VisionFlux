@@ -21,11 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::sigRender, this, &MainWindow::renderFrameRgb);
 
     //播放窗口
-    m_videoView = new QLabel(this);
-    m_videoView->setStyleSheet("background-color:#FFFFFF;");
-    m_videoView->show();
-    m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    m_videoView->setAlignment(Qt::AlignCenter);
+//    m_videoView = new QLabel(this);
+//    m_videoView->setStyleSheet("background-color:#FFFFFF;");
+//    m_videoView->show();
+//    m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+//    m_videoView->setAlignment(Qt::AlignCenter);
 
     //opengl
     m_openglWidget = new OpenGLWidget(this);
@@ -94,7 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);  // 使用 setCentralWidget 设置中心窗口部件
 
     //初始化窗口宽高比
-    m_videoView->adjustSize();
+//    m_videoView->adjustSize();
 
     //连接信号
     connect(m_bottomBar, &BottomBar::sigStartPlayMedia, m_playList, [this](){emit m_playList->sigPlayMedia(m_playList->getMediaPath());});  //点击播放图标发送播放信号
