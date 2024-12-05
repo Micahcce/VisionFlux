@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_mediaDirPath("../media/")
 {
     resize(1000, 600);
-    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s" << "*.ts" << "*.flv";
+    m_allowedExtensions << "*.mp3" << "*.mp4" << "*.wav" << "*.m4s" << "*.ts" << "*.flv" << "*.mkv";
 
     //播放控制器
     m_playController = new PlayController;

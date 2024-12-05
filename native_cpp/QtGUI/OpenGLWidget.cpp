@@ -1,4 +1,5 @@
 #include "OpenGLWidget.h"
+#include <QDebug>
 
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
@@ -28,6 +29,13 @@ void OpenGLWidget::setImageData(uint8_t *data, int w, int h)
 void OpenGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
+
+    // OpenGL信息
+    const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+    const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+    qDebug() << "Renderer:" << renderer;
+    qDebug() << "Verdor:" << vendor;
+    qDebug() << "Qt OpenGL Type:" << (QOpenGLContext::openGLModuleType() ? "OpenGL Desktop" : "OpenGL ES");
 
     // 设置清除颜色
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

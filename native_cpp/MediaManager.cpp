@@ -395,6 +395,7 @@ void MediaManager::delayMs(int ms)
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 
+#define FREE_PTR(ptr, freeFunc) if(ptr) { freeFunc(&ptr); ptr = nullptr; }
 void MediaManager::close()
 {
     logger.debug("closing");
@@ -430,12 +431,6 @@ void MediaManager::close()
         m_outBuf = nullptr;
     }
 
-    if(m_swrCtx)
-    {
-        swr_free(&m_swrCtx);
-        m_swrCtx = nullptr;
-    }
-
     if(m_deviceCtx)
     {
         m_videoCodecCtx->hw_device_ctx = nullptr;
@@ -443,41 +438,14 @@ void MediaManager::close()
         m_deviceCtx = nullptr;
     }
 
-    if(m_videoCodecCtx)
-    {
-        avcodec_free_context(&m_videoCodecCtx);
-        m_videoCodecCtx = nullptr;
-    }
+    FREE_PTR(m_swrCtx, swr_free)
+    FREE_PTR(m_videoCodecCtx, avcodec_free_context)
+    FREE_PTR(m_audioCodecCtx, avcodec_free_context)
+    FREE_PTR(m_formatCtx, avformat_close_input)
 
-    if(m_audioCodecCtx)
-    {
-        avcodec_free_context(&m_audioCodecCtx);
-        m_audioCodecCtx = nullptr;
-    }
-
-    if(m_formatCtx)
-    {
-        avformat_close_input(&m_formatCtx);
-        m_formatCtx = nullptr;
-    }
-
-    if(m_frame)
-    {
-        av_frame_free(&m_frame);
-        m_frame = nullptr;
-    }
-
-    if(m_frameSw)
-    {
-        av_frame_free(&m_frameSw);
-        m_frameSw = nullptr;
-    }
-
-    if(m_frameRgb)
-    {
-        av_frame_free(&m_frameRgb);
-        m_frameRgb = nullptr;
-    }
+    FREE_PTR(m_frame, av_frame_free)
+    FREE_PTR(m_frameSw, av_frame_free)
+    FREE_PTR(m_frameRgb, av_frame_free)
 
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
