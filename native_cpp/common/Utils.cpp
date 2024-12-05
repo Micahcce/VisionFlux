@@ -28,7 +28,7 @@ static AVFormatContext* uGetMediaInfo(const std::string& filePath)
 }
 
 
-int uGetMediaDuration(const std::string filePath)
+int uGetMediaDuration(const std::string& filePath)
 {
     AVFormatContext* formatCtx = uGetMediaInfo(filePath);
     if (!formatCtx)
@@ -43,7 +43,7 @@ int uGetMediaDuration(const std::string filePath)
 }
 
 
-bool uSaveFrameToBmp(const std::string filePath, const std::string outputPath, int sec)
+bool uSaveFrameToBmp(const std::string& filePath, const std::string& outputPath, int sec)
 {
     AVFormatContext* formatCtx = uGetMediaInfo(filePath);
 

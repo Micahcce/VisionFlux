@@ -65,9 +65,9 @@ public:
     //// Utils 函数的调用 ////
 
     //获取视频时长（秒）
-    int getMediaDuration(const std::string filePath);
+    int getMediaDuration(const std::string& filePath);
     //保存图片
-    bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
+    bool saveFrameToBmp(const std::string& filePath, const std::string& outputPath, int sec);
     //格式化时长（hh:mm:ss）
     std::string timeFormatting(int secs);
 

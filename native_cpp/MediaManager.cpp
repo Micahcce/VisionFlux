@@ -171,21 +171,19 @@ bool MediaManager::streamConvert(const std::string& inputStreamUrl, const std::s
     return true;
 }
 
-void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
+void MediaManager::seekFrameByStream(int timeSecs)
 {
-    m_frameQueue->clear();
-
     // 优先根据视频帧来seek，因为音频帧的解码不需要I帧，跳转后可能会影响到视频帧的解码
+    bool hasVideoStream = (m_videoIndex >= 0) ? true : false;
     int streamIndex = hasVideoStream ? m_videoIndex : m_audioIndex;
     AVCodecContext* codecCtx = hasVideoStream ? m_videoCodecCtx : m_audioCodecCtx;
 
     AVRational time_base = m_formatCtx->streams[streamIndex]->time_base;
-    logger.debug("time_base.num: %d", time_base.num);
-    logger.debug("time_base.den: %d", time_base.den);
+    logger.debug("time_base: %d / %d", time_base.num, time_base.den);
 
     // 将目标时间转换为PTS
-    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base); // 将时间转换为PTS
-    logger.info("seek PTS: %d", targetPTS);
+    int64_t targetPTS = av_rescale_q(timeSecs * AV_TIME_BASE, AV_TIME_BASE_Q, time_base);
+    logger.info("seek PTS: %lld", targetPTS);
 
     // 使用 AVSEEK_FLAG_BACKWARD 来确保向前查找最近的 I 帧
     if (av_seek_frame(m_formatCtx, streamIndex, targetPTS, AVSEEK_FLAG_BACKWARD) < 0)
@@ -194,10 +192,16 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
         return;
     }
 
+    // 清除帧队列
+    m_frameQueue->clear();
+
+    // 清除解码器缓存
+    std::unique_lock<std::mutex> lock(m_decodeMtx);
     if(m_videoIndex >= 0)
         avcodec_flush_buffers(m_videoCodecCtx);
     if(m_audioIndex >= 0)
         avcodec_flush_buffers(m_audioCodecCtx);
+    lock.unlock();
 
     AVPacket* packet = av_packet_alloc();
     AVFrame* frame = av_frame_alloc();
@@ -207,11 +211,14 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
     while (throwing)
     {
         if (av_read_frame(m_formatCtx, packet) < 0)
-            break; // 没有更多的帧
+            break;
 
         if (packet->stream_index == streamIndex)
         {
+            std::unique_lock<std::mutex> lock(m_decodeMtx);
             avcodec_send_packet(codecCtx, packet);
+            lock.unlock();
+
             while (avcodec_receive_frame(codecCtx, frame) >= 0)
             {
 //                logger.debug("throw frame type: %d ,pts: %d", frame->pict_type, frame->pts);
@@ -248,14 +255,13 @@ void MediaManager::seekFrameByStream(int timeSecs, bool hasVideoStream)
                     }
 
                     // 渲染
-                    std::lock_guard<std::mutex> lock(renderMtx);
+                    std::lock_guard<std::mutex> lock(m_renderMtx);
                     renderFrameRgb();
                     av_frame_unref(m_frame);
                 }
                 av_frame_unref(frame);
                 throwing = false;
                 break;
-
             }
         }
         av_packet_unref(packet);
@@ -318,7 +324,9 @@ int MediaManager::thread_media_decode()
 
         if(packet->stream_index == m_videoIndex)
         {
+            std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
             avcodec_send_packet(m_videoCodecCtx, packet);
+            lock.unlock();
 
             while(1)
             {
@@ -330,7 +338,7 @@ int MediaManager::thread_media_decode()
                 if(m_thread_pause && !m_thread_quit)
                 {
                     delayMs(10);
-                    continue;
+                    break;
                 }
 
                 ret = avcodec_receive_frame(m_videoCodecCtx, frame);
@@ -352,14 +360,16 @@ int MediaManager::thread_media_decode()
         }
         else if(packet->stream_index == m_audioIndex)
         {
+            std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
             avcodec_send_packet(m_audioCodecCtx, packet);
+            lock.unlock();
 
             while(1)
             {
                 if(m_thread_pause && !m_thread_quit)
                 {
                     delayMs(10);
-                    continue;
+                    break;
                 }
 
                 ret = avcodec_receive_frame(m_audioCodecCtx, frame);
@@ -596,9 +606,9 @@ int MediaManager::thread_video_display()
         }
 
         // 渲染
-        if (renderMtx.try_lock()) // 尝试获取锁，非阻塞
+        if (m_renderMtx.try_lock()) // 尝试获取锁，非阻塞
         {
-            std::lock_guard<std::mutex> lock(renderMtx, std::adopt_lock);  // std::adopt_lock:接管try_lock()锁定的互斥量
+            std::lock_guard<std::mutex> lock(m_renderMtx, std::adopt_lock);  // std::adopt_lock:接管try_lock()锁定的互斥量
             renderFrameRgb();
         }
         else
@@ -892,7 +902,7 @@ void MediaManager::frameResize(int width, int height, bool uniformScale)
         count = 0;
 
     // 渲染
-    std::lock_guard<std::mutex> lock(renderMtx);
+    std::lock_guard<std::mutex> lock(m_renderMtx);
     renderFrameRgb();
 }
 

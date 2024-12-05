@@ -19,10 +19,10 @@ extern "C"
 static AVFormatContext* uGetMediaInfo(const std::string& filePath);
 
 //获取视频时长（秒）
-int uGetMediaDuration(const std::string filePath);
+int uGetMediaDuration(const std::string& filePath);
 
 //保存视频帧
-bool uSaveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
+bool uSaveFrameToBmp(const std::string& filePath, const std::string& outputPath, int sec);
 
 //格式化时长（hh:mm:ss）
 std::string uTimeFormatting(int secs);

@@ -50,7 +50,7 @@ public:
     bool streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl);
 
     //修改进度
-    void seekFrameByStream(int timeSecs, bool hasVideoStream);
+    void seekFrameByStream(int timeSecs);
 
     //获取当前进度
     float getCurrentProgress() const;
@@ -67,9 +67,6 @@ public:
 
     //尺寸调整
     void frameResize(int width, int height, bool uniformScale);
-
-
-    bool saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec);
 
     //cuda加速
     void setSafeCudaAccelerate(bool state) {m_safeCudaAccelerate = state;}
@@ -158,7 +155,7 @@ private:
     double m_aspectRatio;
     int m_windowWidth;
     int m_windowHeight;
-    std::mutex renderMtx;
+    std::mutex m_renderMtx;
     bool m_cudaAccelerate;
     bool m_safeCudaAccelerate;
     AVBufferRef* m_deviceCtx;
@@ -168,6 +165,7 @@ private:
     unsigned char * m_outBuf;
 
     //公共变量
+    std::mutex m_decodeMtx;
     float m_speedFactor;
 
     //线程状态变量

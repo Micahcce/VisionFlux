@@ -67,7 +67,7 @@ void PlayController::endPlay()
 void PlayController::changePlayProgress(int timeSecs)
 {
     m_mediaManager->setThreadPause(true);
-    m_mediaManager->seekFrameByStream(timeSecs, m_mediaInfo->hasVideoStream);
+    m_mediaManager->seekFrameByStream(timeSecs);
     if(m_mediaInfo->isPlaying)
         m_mediaManager->setThreadPause(false);
 }
@@ -127,12 +127,12 @@ void PlayController::streamConvert(const std::string& inputStreamUrl, const std:
     m_mediaManager->streamConvert(inputStreamUrl, outputStreamUrll);
 }
 
-int PlayController::getMediaDuration(const std::string filePath)
+int PlayController::getMediaDuration(const std::string& filePath)
 {
     return uGetMediaDuration(filePath);
 }
 
-bool PlayController::saveFrameToBmp(const std::string filePath, const std::string outputPath, int sec)
+bool PlayController::saveFrameToBmp(const std::string& filePath, const std::string& outputPath, int sec)
 {
     return uSaveFrameToBmp(filePath, outputPath, sec);
 }
