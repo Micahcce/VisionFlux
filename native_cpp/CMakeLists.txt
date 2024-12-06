@@ -21,8 +21,6 @@ set(PROJECT_SOURCES
     common/SystemClock.h
     common/Logger.h
     common/Logger.cpp
-    common/BmpAndWavAchieve.h
-    common/BmpAndWavAchieve.cpp
     common/Utils.h
     common/Utils.cpp
 )

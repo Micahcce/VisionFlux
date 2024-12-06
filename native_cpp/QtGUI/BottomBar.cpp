@@ -201,7 +201,7 @@ void BottomBar::slotPlayAndPause()
 
 void BottomBar::slotAddMediaFile()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", m_allowedExtensions.join(" "));
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", QString::fromStdString(m_playController->getAllowedExtensions()));
     if(filePath == "")
         return;
 

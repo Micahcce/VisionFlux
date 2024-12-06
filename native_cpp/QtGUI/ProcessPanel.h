@@ -20,7 +20,6 @@ public:
     explicit ProcessPanel(QWidget *parent = nullptr);
 
     void setPlayController(PlayController* playController) {m_playController = playController;}
-    void setAllowedExtensions(QStringList strList) {m_allowedExtensions = strList;};
 
 signals:
     void sigLiveStreamPlay(QString streamUrl);
@@ -37,7 +36,6 @@ private slots:
 
 private:
     PlayController* m_playController;
-    QStringList m_allowedExtensions;
 
     QLineEdit* m_pullStreamUrlEdit;
     QLineEdit* m_pushStreamUrlEdit;

@@ -116,7 +116,7 @@ void ProcessPanel::slotLiveStreamSave()
 
 void ProcessPanel::slotPushStreamFileSelect()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", m_allowedExtensions.join(" "));
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", QString::fromStdString(m_playController->getAllowedExtensions()));
     if(filePath == "")
         return;
 
@@ -132,7 +132,7 @@ void ProcessPanel::slotPushStream()
 
 void ProcessPanel::slotConvertFileSelect()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", m_allowedExtensions.join(" "));
+    const QString filePath = QFileDialog::getOpenFileName(this, "选择媒体文件", "../media/", QString::fromStdString(m_playController->getAllowedExtensions()));
     if(filePath == "")
         return;
 

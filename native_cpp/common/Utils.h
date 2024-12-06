@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include "Logger.h"
-#include "BmpAndWavAchieve.h"
 
 extern "C"
 {
@@ -15,8 +14,6 @@ extern "C"
 #include "libavutil/time.h"
 }
 
-//获取formatCtx
-static AVFormatContext* uGetMediaInfo(const std::string& filePath);
 
 //获取视频时长（秒）
 int uGetMediaDuration(const std::string& filePath);

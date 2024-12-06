@@ -2,6 +2,8 @@
 
 PlayController::PlayController()
 {
+    m_allowedExtensions = "*.mp3 *.mp4 *.wav *.m4s *.ts *.flv *.mkv";
+
     m_mediaInfo = new MediaPlayInfo;
     m_mediaManager = new MediaManager;
 }

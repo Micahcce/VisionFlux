@@ -1,6 +1,5 @@
 #include "PlayList.h"
 #include "Logger.h"
-#include "BmpAndWavAchieve.h"
 
 PlayList::PlayList(QWidget *parent) : QListWidget(parent)
 {
@@ -106,7 +105,8 @@ void PlayList::slotAddMediaItem(QString filePath)
 void PlayList::searchMediaFiles()
 {
     // 创建 QDirIterator 以递归方式搜索文件
-    QDirIterator it(m_mediaDirPath, m_allowedExtensions, QDir::Files, QDirIterator::Subdirectories);
+    QStringList allowedExtensions = QString::fromStdString(m_playController->getAllowedExtensions()).split(' ');
+    QDirIterator it(m_mediaDirPath, allowedExtensions, QDir::Files, QDirIterator::Subdirectories);
 
     // 迭代找到的文件
     while (it.hasNext())

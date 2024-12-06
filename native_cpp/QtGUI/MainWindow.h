@@ -46,7 +46,6 @@ private:
     BottomBar* m_bottomBar;
     OpenGLWidget* m_openglWidget;
 
-    QStringList m_allowedExtensions;
     QString m_mediaDirPath;
     QPixmap m_pix;
 };

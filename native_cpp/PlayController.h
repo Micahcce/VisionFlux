@@ -51,6 +51,8 @@ public:
     //传递渲染回调
     void setRenderCallback(MediaManager::RenderCallback callback){m_mediaManager->setRenderCallback(std::move(callback));}
 
+    //获取可用媒体格式
+    std::string getAllowedExtensions() const {return m_allowedExtensions;}
     //提供播放状态查询
     const MediaPlayInfo* getMediaPlayInfo()
     {
@@ -76,6 +78,7 @@ private:
 
     MediaPlayInfo* m_mediaInfo;
     MediaManager* m_mediaManager;
+    std::string m_allowedExtensions;
 };
 
 #endif // PLAYCONTROLLER_H

@@ -1,6 +1,82 @@
 #include "Utils.h"
 
+#include <fstream>  // 用于写入 BMP 文件
 
+// 像素存储格式
+enum StorageFormat {
+    RGBA = 0,
+    BGRA
+};
+
+// 定义 BMP 文件头和信息头结构
+#pragma pack(push, 1)
+struct BMPFileHeader {
+    uint16_t fileType{0x4D42};  // 文件类型 'BM'
+    uint32_t fileSize{0};       // 文件大小
+    uint16_t reserved1{0};      // 保留字段
+    uint16_t reserved2{0};      // 保留字段
+    uint32_t offsetData{54};    // 图像数据的偏移量
+};
+
+struct BMPInfoHeader {
+    uint32_t size{40};           // 结构体大小
+    int32_t width{0};            // 图像宽度
+    int32_t height{0};           // 图像高度
+    uint16_t planes{1};          // 颜色平面数（总是为1）
+    uint16_t bitCount{32};       // 每个像素的位数（这里是32位RGB格式）
+    uint32_t compression{0};     // 压缩方式（0表示不压缩）
+    uint32_t sizeImage{0};       // 图像大小（不压缩时可以为0）
+    int32_t xPixelsPerMeter{0};  // 水平分辨率
+    int32_t yPixelsPerMeter{0};  // 垂直分辨率
+    uint32_t colorsUsed{0};      // 使用的颜色数
+    uint32_t colorsImportant{0}; // 重要的颜色数
+};
+#pragma pack(pop)
+
+
+static bool uSaveBMP(const char *filePath, uint8_t *buffer, int width, int height, StorageFormat inputFormat)
+{
+    BMPFileHeader fileHeader;
+    BMPInfoHeader infoHeader;
+
+    infoHeader.width = width;
+    infoHeader.height = -height;  // BMP 的图像数据默认从左下角开始，负值表示从左上角开始
+    fileHeader.fileSize = sizeof(BMPFileHeader) + sizeof(BMPInfoHeader) + width * height * 4;  // 每像素 4 字节
+
+    std::ofstream outFile(filePath, std::ios::binary);
+    if (!outFile)
+        return false;
+
+    // 写入文件头
+    outFile.write(reinterpret_cast<const char*>(&fileHeader), sizeof(fileHeader));
+
+    // 写入信息头
+    outFile.write(reinterpret_cast<const char*>(&infoHeader), sizeof(infoHeader));
+
+    // 写入像素数据（如果 buffer 是 RGBA 格式的，需要转换为 BMP 文件的 BGRA 顺序存储）
+    if(inputFormat == StorageFormat::BGRA)
+        outFile.write(reinterpret_cast<const char*>(buffer), width * height * 4);
+    else if(inputFormat == StorageFormat::RGBA)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                uint8_t* pixel = buffer + (y * width + x) * 4;  // 4字节一个像素（RGBA）
+                outFile.put(pixel[2]);  // B
+                outFile.put(pixel[1]);  // G
+                outFile.put(pixel[0]);  // R
+                outFile.put(pixel[3]);  // A
+            }
+        }
+    }
+
+    outFile.close();
+    return true;
+}
+
+
+//获取formatCtx
 static AVFormatContext* uGetMediaInfo(const std::string& filePath)
 {
     //1.创建上下文，注意使用后要释放
@@ -147,7 +223,7 @@ bool uSaveFrameToBmp(const std::string& filePath, const std::string& outputPath,
     sws_scale(swsCtx, frame->data, frame->linesize, 0, codecCtx->height, frameRgb->data, frameRgb->linesize);
 
     // 保存为图片
-    bool saved = saveBMP(outputPath.data(), buffer, codecCtx->width, codecCtx->height, StorageFormat::BGRA);
+    bool saved = uSaveBMP(outputPath.data(), buffer, codecCtx->width, codecCtx->height, StorageFormat::BGRA);
 
     // 清理资源
     sws_freeContext(swsCtx);

@@ -136,7 +136,6 @@ private:
     //线程状态变量
     std::atomic<bool> m_thread_quit;
     std::atomic<bool> m_thread_pause;
-    std::atomic<int> m_running_thread_count;
     bool m_thread_safe_exited;
     bool m_thread_media_read_exited;
     bool m_thread_video_decode_exited;
