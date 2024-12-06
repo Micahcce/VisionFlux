@@ -101,7 +101,9 @@ private:
         //帧缓冲数量过少（如1、2）当连续解码音频或视频帧时，会使解码线程阻塞导致无法继续解码。
         //音频帧率通常为40多（采样率/每帧样本数）
         MAX_AUDIO_FRAMES = 30,
-        MAX_VIDEO_FRAMES = 20
+        MAX_VIDEO_FRAMES = 20,
+        MAX_AUDIO_PACKETS = 30,
+        MAX_VIDEO_PACKETS = 20
     };
 
     enum
@@ -123,14 +125,30 @@ private:
     void renderFrameRgb();
 
     //线程函数
-    int thread_media_decode();
+    int thread_media_read();
+    int thread_video_decode();
+    int thread_audio_decode();
     int thread_video_display();
     int thread_audio_display();
     int thread_stream_convert();
 
 
-    RenderCallback m_renderCallback = nullptr;      //回调，用于GUI渲染
+    //线程状态变量
+    std::atomic<bool> m_thread_quit;
+    std::atomic<bool> m_thread_pause;
+    std::atomic<int> m_running_thread_count;
+    bool m_thread_safe_exited;
+    bool m_thread_media_read_exited;
+    bool m_thread_video_decode_exited;
+    bool m_thread_audio_decode_exited;
+    bool m_thread_video_display_exited;
+    bool m_thread_audio_display_exited;
 
+
+    //回调，用于GUI渲染
+    RenderCallback m_renderCallback;
+
+    //自定义成员类
     MediaQueue* m_mediaQueue;
     SystemClock* m_systemClock;
     SdlPlayer* m_sdlPlayer;
@@ -167,14 +185,6 @@ private:
     //公共变量
     std::mutex m_decodeMtx;
     float m_speedFactor;
-
-    //线程状态变量
-    std::atomic<bool> m_thread_quit;
-    std::atomic<bool> m_thread_pause;
-    bool m_thread_safe_exited;
-    bool m_thread_decode_exited;
-    bool m_thread_video_exited;
-    bool m_thread_audio_exited;
 
     //最后一帧的PTS，已转换为秒数
     double m_videoLastPTS;

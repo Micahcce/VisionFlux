@@ -31,9 +31,11 @@ MediaManager::MediaManager()
       m_thread_quit(true),
       m_thread_pause(false),
       m_thread_safe_exited(true),
-      m_thread_decode_exited(true),
-      m_thread_video_exited(true),
-      m_thread_audio_exited(true),
+      m_thread_media_read_exited(true),
+      m_thread_video_decode_exited(true),
+      m_thread_audio_decode_exited(true),
+      m_thread_video_display_exited(true),
+      m_thread_audio_display_exited(true),
       m_videoLastPTS(0.0),
       m_audioLastPTS(0.0),
       m_speedFactor(1.0)
@@ -98,15 +100,13 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     m_thread_quit = false;
     m_thread_pause = false;
     m_thread_safe_exited = false;
-    m_thread_decode_exited = false;
-    m_thread_video_exited = false;
-    m_thread_audio_exited = false;
+    m_thread_media_read_exited = false;
     m_mediaQueue->reset();
 
     if(m_videoIndex < 0)
-        m_thread_video_exited = true;
+        m_thread_video_display_exited = true;
     if(m_audioIndex < 0)
-        m_thread_audio_exited = true;
+        m_thread_audio_display_exited = true;
 
     // 视频流
     if(m_videoIndex >= 0)
@@ -137,8 +137,12 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
             frameYuvToRgb();
 //            frameResize(m_windowWidth, m_windowHeight, true);
 
-        std::thread videoThread(&MediaManager::thread_video_display, this);
-        videoThread.detach();
+        m_thread_video_decode_exited = false;
+        m_thread_video_display_exited = false;
+        std::thread videoDecodeThread(&MediaManager::thread_video_decode, this);
+        videoDecodeThread.detach();
+        std::thread videoDisplayThread(&MediaManager::thread_video_display, this);
+        videoDisplayThread.detach();
     }
 
     // 音频流
@@ -147,13 +151,17 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         initAudioCodec();
         initAudioDevice();
 
-        std::thread audioThread(&MediaManager::thread_audio_display, this);
-        audioThread.detach();
+        m_thread_audio_decode_exited = false;
+        m_thread_audio_display_exited = false;
+        std::thread audioDecodeThread(&MediaManager::thread_audio_decode, this);
+        audioDecodeThread.detach();
+        std::thread audioDisplayThread(&MediaManager::thread_audio_display, this);
+        audioDisplayThread.detach();
     }
 
-    // 解码线程
-    std::thread decodeThread(&MediaManager::thread_media_decode, this);
-    decodeThread.detach();
+    // 读取线程
+    std::thread mediaReadThread(&MediaManager::thread_media_read, this);
+    mediaReadThread.detach();
 
     // 开启系统设置，目前只用于单视频流的渲染延时控制
     m_systemClock->start();
@@ -300,106 +308,6 @@ void MediaManager::changeSpeed(float speedFactor)
     m_speedFactor = speedFactor;
 }
 
-
-// 视频解码线程
-int MediaManager::thread_media_decode()
-{
-    int ret;
-
-    AVPacket* packet = av_packet_alloc();
-    AVFrame* frame = av_frame_alloc();
-
-    //解码
-    while(m_thread_quit == false)
-    {
-        if(m_thread_pause)
-        {
-            delayMs(10);
-            continue;
-        }
-//        logger.debug("video frame count: %d, audio frame count: %d", m_frameQueue->getVideoFrameCount(), m_frameQueue->getAudioFrameCount());
-
-        if(av_read_frame(m_formatCtx, packet) < 0)
-            break;
-
-        if(packet->stream_index == m_videoIndex)
-        {
-            std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
-            avcodec_send_packet(m_videoCodecCtx, packet);
-            lock.unlock();
-
-            while(1)
-            {
-                /*
-                 * 防止跳帧时该线程仍在该while中循环，
-                 * 否则avcodec_receive_frame与跳帧线程中的send/receive竞争解码器资源，
-                 * 造成程序奔溃。
-                */
-                if(m_thread_pause && !m_thread_quit)
-                {
-                    delayMs(10);
-                    break;
-                }
-
-                ret = avcodec_receive_frame(m_videoCodecCtx, frame);
-
-                if(ret < 0)
-                {
-                    if(ret == AVERROR_EOF)
-                        logger.info("Media playback finished.");  // 视频解码结束
-                    break;
-                }
-
-                while(m_mediaQueue->getVideoFrameCount() >= MAX_VIDEO_FRAMES && !m_thread_quit)
-                    delayMs(10);
-
-                m_mediaQueue->pushVideoFrame(frame);
-
-                av_frame_unref(frame);
-            }
-        }
-        else if(packet->stream_index == m_audioIndex)
-        {
-            std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
-            avcodec_send_packet(m_audioCodecCtx, packet);
-            lock.unlock();
-
-            while(1)
-            {
-                if(m_thread_pause && !m_thread_quit)
-                {
-                    delayMs(10);
-                    break;
-                }
-
-                ret = avcodec_receive_frame(m_audioCodecCtx, frame);
-
-                if(ret < 0)
-                {
-                    if(ret == AVERROR_EOF)
-                        logger.info("Media playback finished.");  // 音频解码结束
-                    break;
-                }
-
-                while(m_mediaQueue->getAudioFrameCount() >= MAX_AUDIO_FRAMES && !m_thread_quit)
-                    delayMs(10);
-
-                m_mediaQueue->pushAudioFrame(frame);
-
-                av_frame_unref(frame);
-            }
-        }
-        av_packet_unref(packet);
-    }
-
-    av_frame_free(&frame);
-    av_packet_free(&packet);
-    m_thread_decode_exited = true;
-    logger.debug("media decode thread exit.");
-
-    return 0;
-}
-
 void MediaManager::delayMs(int ms)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
@@ -408,20 +316,24 @@ void MediaManager::delayMs(int ms)
 #define FREE_PTR(ptr, freeFunc) if(ptr) { freeFunc(&ptr); ptr = nullptr; }
 void MediaManager::close()
 {
-    logger.debug("closing");
+    logger.debug("call close function");
     m_thread_quit = true;
     m_mediaQueue->signalExit();
     m_mediaQueue->clear();
 
     // 安全退出
-    while(m_thread_decode_exited == false || m_thread_video_exited == false || m_thread_audio_exited == false)
+    while(m_thread_media_read_exited == false ||
+          m_thread_video_decode_exited == false ||
+          m_thread_audio_decode_exited == false ||
+          m_thread_video_display_exited == false ||
+          m_thread_audio_display_exited == false)
     {
         logger.debug("waitting thread exit.");
         delayMs(20);
     }
 
     // 清理资源，注意顺序避免崩溃
-    /*m_frameBuf和m_pSwsCtx不可轻易释放，避免渲染函数访问造成崩溃，比如Qt重绘仍会使用该内存*/
+    /*m_frameBuf和m_swsCtx不可轻易释放，避免渲染函数访问造成崩溃，比如Qt重绘仍会使用该内存*/
 
     if (m_sdlPlayer)
     {
@@ -566,10 +478,180 @@ void MediaManager::initAudioDevice()
     m_sdlPlayer->initAudioDevice(m_audioCodecCtx, AV_SAMPLE_FMT_FLT);       //SDL仅支持部分音频格式
 }
 
+// 读取线程
+int MediaManager::thread_media_read()
+{
+    AVPacket* packet = av_packet_alloc();
+
+    while(m_thread_quit == false)
+    {
+        // 暂停时停止读取和解码线程，防止跳转时出错
+        if(m_thread_pause)
+        {
+            delayMs(10);
+            continue;
+        }
+
+        // 队列满则阻塞
+        if(m_mediaQueue->getVideoPacketCount() >= MAX_VIDEO_PACKETS || m_mediaQueue->getAudioPacketCount() >= MAX_AUDIO_PACKETS)
+        {
+            delayMs(10);
+            continue;
+        }
+
+//        logger.debug("video packet: %d, audio packet: %d",m_mediaQueue->getVideoPacketCount(), m_mediaQueue->getAudioPacketCount());
+
+        if(av_read_frame(m_formatCtx, packet) < 0)
+            break;
+
+        // 放入队列
+        if(packet->stream_index == m_videoIndex)
+            m_mediaQueue->pushVideoPacket(packet);
+        else if(packet->stream_index == m_audioIndex)
+            m_mediaQueue->pushAudioPacket(packet);
+
+        av_packet_unref(packet);
+    }
+
+    av_packet_free(&packet);
+    m_thread_media_read_exited = true;
+    logger.debug("media read thread exit.");
+
+    return 0;
+}
+
+int MediaManager::thread_video_decode()
+{
+    int ret;
+    AVFrame* frame = av_frame_alloc();
+    AVPacket* packet = nullptr;
+
+    //解码
+    while(m_thread_quit == false)
+    {
+        if(m_thread_pause)
+        {
+            delayMs(10);
+            continue;
+        }
+
+        if(m_thread_media_read_exited && m_mediaQueue->getVideoPacketCount() == 0)  //播放完毕
+            break;
+
+        packet = m_mediaQueue->popVideoPacket();
+        if(!packet)
+            continue;
+
+        std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
+        avcodec_send_packet(m_videoCodecCtx, packet);
+        lock.unlock();
+
+        while(m_thread_quit == false)
+        {
+            /*
+             * 防止跳帧时该线程仍在该while中循环，
+             * 否则avcodec_receive_frame与跳帧线程中的send/receive竞争解码器资源，
+             * 造成程序奔溃。
+            */
+            if(m_thread_pause)
+            {
+                delayMs(10);
+                continue;
+            }
+
+            if(m_mediaQueue->getVideoFrameCount() >= MAX_VIDEO_FRAMES)
+            {
+                delayMs(10);
+                continue;
+            }
+
+            ret = avcodec_receive_frame(m_videoCodecCtx, frame);
+            if(ret < 0)
+            {
+                if(ret == AVERROR_EOF)
+                    logger.info("Media playback finished.");  // 视频解码结束
+                break;
+            }
+
+            m_mediaQueue->pushVideoFrame(frame);
+
+            av_frame_unref(frame);
+        }
+    }
+
+    av_frame_free(&frame);
+    m_thread_video_decode_exited = true;
+    logger.debug("video decode thread exit.");
+
+    return 0;
+}
+
+int MediaManager::thread_audio_decode()
+{
+    int ret;
+    AVFrame* frame = av_frame_alloc();
+    AVPacket* packet = nullptr;
+
+    //解码
+    while(m_thread_quit == false)
+    {
+        if(m_thread_pause)
+        {
+            delayMs(10);
+            continue;
+        }
+
+        if(m_thread_media_read_exited && m_mediaQueue->getAudioPacketCount() == 0)  //播放完毕
+            break;
+
+        packet = m_mediaQueue->popAudioPacket();
+        if(!packet)
+            continue;
+
+        std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
+        avcodec_send_packet(m_audioCodecCtx, packet);
+        lock.unlock();
+
+        while(m_thread_quit == false)
+        {
+            if(m_thread_pause)
+            {
+                delayMs(10);
+                continue;
+            }
+
+            if(m_mediaQueue->getAudioFrameCount() >= MAX_AUDIO_FRAMES)
+            {
+                delayMs(10);
+                continue;
+            }
+
+            ret = avcodec_receive_frame(m_audioCodecCtx, frame);
+
+            if(ret < 0)
+            {
+                if(ret == AVERROR_EOF)
+                    logger.info("Media playback finished.");  // 音频解码结束
+                break;
+            }
+
+            m_mediaQueue->pushAudioFrame(frame);
+
+            av_frame_unref(frame);
+        }
+    }
+
+    av_frame_free(&frame);
+    m_thread_audio_decode_exited = true;
+    logger.debug("audio decode thread exit.");
+
+    return 0;
+}
+
 //视频播放线程
 int MediaManager::thread_video_display()
 {
-    AVFrame* frame = av_frame_alloc();
+    AVFrame* frame = nullptr;
 
     while(m_thread_quit == false)
     {
@@ -578,6 +660,9 @@ int MediaManager::thread_video_display()
             delayMs(10);
             continue;
         }
+
+        if(m_thread_video_decode_exited && m_mediaQueue->getVideoFrameCount() == 0)  //播放完毕
+            break;
 
         frame = m_mediaQueue->popVideoFrame();
         if(!frame)
@@ -623,19 +708,17 @@ int MediaManager::thread_video_display()
         av_frame_unref(m_frame);
     }
     av_frame_free(&frame);
-    m_thread_video_exited = true;
+    m_thread_video_display_exited = true;
     logger.debug("video display thread exit.");
 
     return 0;
 }
 
-
 //音频播放线程
 int MediaManager::thread_audio_display()
 {
     int ret;
-
-    AVFrame* frame = av_frame_alloc();
+    AVFrame* frame = nullptr;
 
     while(m_thread_quit == false)
     {
@@ -644,6 +727,9 @@ int MediaManager::thread_audio_display()
             delayMs(10);
             continue;
         }
+
+        if(m_thread_audio_decode_exited && m_mediaQueue->getAudioFrameCount() == 0)  //播放完毕
+            break;
 
         frame = m_mediaQueue->popAudioFrame();
         if(!frame)
@@ -678,7 +764,7 @@ int MediaManager::thread_audio_display()
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
-    m_thread_audio_exited = true;
+    m_thread_audio_display_exited = true;
     logger.debug("audio display thread exit.");
 
     return 0;
