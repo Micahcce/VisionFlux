@@ -550,11 +550,6 @@ int MediaManager::thread_video_decode()
 
         while(m_thread_quit == false)
         {
-            /*
-             * 防止跳帧时该线程仍在该while中循环，
-             * 否则avcodec_receive_frame与跳帧线程中的send/receive竞争解码器资源，
-             * 造成程序奔溃。
-            */
             if(m_thread_pause)
             {
                 delayMs(10);
@@ -579,9 +574,11 @@ int MediaManager::thread_video_decode()
 
             av_frame_unref(frame);
         }
+        av_packet_unref(packet);
     }
 
     av_frame_free(&frame);
+    av_packet_free(&packet);
     m_thread_video_decode_exited = true;
     logger.debug("video decode thread exit.");
 
@@ -640,9 +637,11 @@ int MediaManager::thread_audio_decode()
 
             av_frame_unref(frame);
         }
+        av_packet_unref(packet);
     }
 
     av_frame_free(&frame);
+    av_packet_free(&packet);
     m_thread_audio_decode_exited = true;
     logger.debug("audio decode thread exit.");
 

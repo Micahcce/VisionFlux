@@ -58,14 +58,15 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     ConvertLabel->setText("格式转换");
     ConvertLabel->setFont(font);
 
-    QComboBox* TargetFormatCb = new QComboBox(this);
-    TargetFormatCb->addItem("目标格式: mp3");
-    TargetFormatCb->addItem("目标格式: wav");
-    TargetFormatCb->addItem("目标格式: mp4");
-    TargetFormatCb->addItem("目标格式: flv");
+    m_targetFormatCb = new QComboBox(this);
+    m_targetFormatCb->addItem("mp3");
+    m_targetFormatCb->addItem("wav");
+    m_targetFormatCb->addItem("mp4");
+    m_targetFormatCb->addItem("flv");
 
     QPushButton* LocalFileConverBtn = new QPushButton(this);
     LocalFileConverBtn->setText("转换");
+    connect(LocalFileConverBtn, &QPushButton::clicked, this, &ProcessPanel::slotConvert);
 
     QLabel* AllEndLabel = new QLabel(this);
     AllEndLabel->setText("全部结束");
@@ -92,7 +93,7 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     layout->addWidget(ConvertLabel);
     layout->addWidget(m_convertFileEdit);
     layout->addWidget(ConvertFileSelectBtn);
-    layout->addWidget(TargetFormatCb);
+    layout->addWidget(m_targetFormatCb);
     layout->addWidget(LocalFileConverBtn);
     layout->addWidget(AllEndLabel);
     layout->addWidget(AllEndBtn);
@@ -137,6 +138,17 @@ void ProcessPanel::slotConvertFileSelect()
         return;
 
     m_convertFileEdit->setText(filePath);
+}
+
+void ProcessPanel::slotConvert()
+{
+    QString filePath = m_convertFileEdit->text();
+    QString dstFormat = filePath;
+    if(dstFormat.contains("."))
+        dstFormat = dstFormat.replace(QRegExp("\\.[^.]+$"), "." + m_targetFormatCb->currentText());
+    else
+        dstFormat = dstFormat + "." + m_targetFormatCb->currentText();
+    m_playController->streamConvert(filePath.toStdString(), dstFormat.toStdString());
 }
 
 void ProcessPanel::slotAllEnd()

@@ -20,16 +20,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::sigRender, this, &MainWindow::renderFrameRgb);
 
     //播放窗口
-//    m_videoView = new QLabel(this);
-//    m_videoView->setStyleSheet("background-color:#FFFFFF;");
-//    m_videoView->show();
-//    m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-//    m_videoView->setAlignment(Qt::AlignCenter);
-
+#ifdef OPENGL_RENDER
     //opengl
     m_openglWidget = new OpenGLWidget(this);
     m_openglWidget->setStyleSheet("background-color:#FFFFFF;");
     m_openglWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+#else
+    //QLabel
+    m_videoView = new QLabel(this);
+    m_videoView->setStyleSheet("background-color:#FFFFFF;");
+    m_videoView->show();
+    m_videoView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_videoView->setAlignment(Qt::AlignCenter);
+#endif
 
     //底栏
     m_bottomBar = new BottomBar(this);
@@ -77,8 +80,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //布局管理器
     QVBoxLayout* vBox = new QVBoxLayout;
-//    vBox->addWidget(m_videoView);
+#ifdef OPENGL_RENDER
     vBox->addWidget(m_openglWidget);
+#else
+    vBox->addWidget(m_videoView);
+#endif
     vBox->addWidget(m_bottomBar);
 
     QHBoxLayout* hBox = new QHBoxLayout;
@@ -89,8 +95,10 @@ MainWindow::MainWindow(QWidget *parent)
     centralWidget->setLayout(hBox);  // 设置布局到 centralWidget
     setCentralWidget(centralWidget);  // 使用 setCentralWidget 设置中心窗口部件
 
+#ifndef OPENGL_RENDER
     //初始化窗口宽高比
-//    m_videoView->adjustSize();
+    m_videoView->adjustSize();
+#endif
 
     //连接信号
     connect(m_bottomBar, &BottomBar::sigStartPlayMedia, m_playList, [this](){emit m_playList->sigPlayMedia(m_playList->getMediaPath());});  //点击播放图标发送播放信号
@@ -121,27 +129,54 @@ void MainWindow::renderFrameRgb(uint8_t *data, int width, int height)
 //    QImage img((uchar*)buf, width, height, QImage::Format_RGB32);
 //    m_videoView->setPixmap(QPixmap::fromImage(img));
 
+#ifdef OPENGL_RENDER
     //QOpenGLWidget
     m_openglWidget->setImageData(data, width, height);
-
+#else
     //QLabel自动
-//    QImage img((uchar*)data, width, height, QImage::Format_RGB32);
-//    m_pix = QPixmap::fromImage(img);
-//    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//    m_videoView->setPixmap(fitpix);
+    QImage img((uchar*)data, width, height, QImage::Format_RGB32);
+    m_pix = QPixmap::fromImage(img);
+    QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_videoView->setPixmap(fitpix);
+#endif
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);  // 调用父类的 resizeEvent
+#ifndef OPENGL_RENDER
     //QLabel自动
-//    if(m_pix.isNull() == false)
-//    {
-//        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//        m_videoView->setPixmap(fitpix);
-//    }
+    if(m_pix.isNull() == false)
+    {
+        QPixmap fitpix = m_pix.scaled(m_videoView->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        m_videoView->setPixmap(fitpix);
+
     //QLabel手动
 //    m_playController->changeFrameSize(m_videoView->width(), m_videoView->height(), true);
+    }
+#endif
 }
 
+//鼠标点击事件，识别鼠标左键按下操作，并记录当前位置
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        m_lastMousePos = event->pos();
+        m_isDragging = true;
+    }
+}
 
+//鼠标移动事件，计算鼠标光标的坐标变化，并借助move事件使界面进行相同的移动。如果鼠标没有松开，需要判定鼠标一直在按钮内
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_isDragging && (event->buttons() & Qt::LeftButton))
+        move(pos() + event->pos() - m_lastMousePos);        // 计算窗口的新位置并移动窗口
+}
+
+//鼠标释放事件
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+        m_isDragging = false;               // 鼠标释放，停止拖动
+}

@@ -20,6 +20,7 @@
 #include <QListWidget>
 #include <QScreen>
 
+//#define OPENGL_RENDER
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +38,9 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     PlayController* m_playController;
@@ -48,5 +52,9 @@ private:
 
     QString m_mediaDirPath;
     QPixmap m_pix;
+
+    //窗口移动
+    bool m_isDragging;
+    QPoint m_lastMousePos;
 };
 #endif // MAINWINDOW_H

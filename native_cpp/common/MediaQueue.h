@@ -20,58 +20,16 @@ public:
     ~MediaQueue() { clear(); }
 
     // Reset the media queue for reuse
-    void reset()
-    {
-        clear();
-    }
+    void reset() { clear(); }
 
-    // Push an audio frame into the audio queue
-    void pushAudioFrame(const AVFrame* frame)
-    {
-        push(frame, audioFrames);
-    }
-
-    // Push a video frame into the video queue
-    void pushVideoFrame(const AVFrame* frame)
-    {
-        push(frame, videoFrames);
-    }
-
-    // Push an audio packet into the audio queue
-    void pushAudioPacket(const AVPacket* packet)
-    {
-        push(packet, audioPackets);
-    }
-
-    // Push a video packet into the video queue
-    void pushVideoPacket(const AVPacket* packet)
-    {
-        push(packet, videoPackets);
-    }
-
-    // Pop an audio frame from the audio queue
-    AVFrame* popAudioFrame()
-    {
-        return pop(audioFrames);
-    }
-
-    // Pop a video frame from the video queue
-    AVFrame* popVideoFrame()
-    {
-        return pop(videoFrames);
-    }
-
-    // Pop an audio packet from the audio queue
-    AVPacket* popAudioPacket()
-    {
-        return pop(audioPackets);
-    }
-
-    // Pop a video packet from the video queue
-    AVPacket* popVideoPacket()
-    {
-        return pop(videoPackets);
-    }
+    void pushAudioFrame(const AVFrame* frame) { push(frame, audioFrames); }
+    void pushVideoFrame(const AVFrame* frame) { push(frame, videoFrames); }
+    void pushAudioPacket(const AVPacket* packet) { push(packet, audioPackets); }
+    void pushVideoPacket(const AVPacket* packet) { push(packet, videoPackets); }
+    AVFrame* popAudioFrame() { return pop(audioFrames); }
+    AVFrame* popVideoFrame() { return pop(videoFrames); }
+    AVPacket* popAudioPacket() { return pop(audioPackets); }
+    AVPacket* popVideoPacket() { return pop(videoPackets); }
 
     int getAudioFrameCount() const { return audioFrames.size(); }
     int getVideoFrameCount() const { return videoFrames.size(); }

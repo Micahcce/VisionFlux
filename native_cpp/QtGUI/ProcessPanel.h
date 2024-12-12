@@ -31,6 +31,7 @@ private slots:
     void slotPushStream();
 
     void slotConvertFileSelect();
+    void slotConvert();
 
     void slotAllEnd();
 
@@ -41,6 +42,7 @@ private:
     QLineEdit* m_pushStreamUrlEdit;
     QLineEdit* m_pushStreamFileEdit;
     QLineEdit* m_convertFileEdit;
+    QComboBox* m_targetFormatCb;
 };
 
 #endif // PROCESSPANEL_H
