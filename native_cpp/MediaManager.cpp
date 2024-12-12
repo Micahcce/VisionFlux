@@ -3,8 +3,6 @@
 
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
-      m_mediaQueue(nullptr),
-      m_systemClock(nullptr),
       m_sdlPlayer(nullptr),
       m_soundTouch(nullptr),
       m_formatCtx(nullptr),
@@ -28,25 +26,26 @@ MediaManager::MediaManager()
       m_frameSw(nullptr),
       m_frameRgb(nullptr),
       m_swsCtx(nullptr),
-      m_thread_quit(true),
-      m_thread_pause(false),
-      m_thread_safe_exited(true),
-      m_thread_media_read_exited(true),
-      m_thread_video_decode_exited(true),
-      m_thread_audio_decode_exited(true),
-      m_thread_video_display_exited(true),
-      m_thread_audio_display_exited(true),
+      m_threadQuit(true),
+      m_threadPause(false),
+      m_threadSafeExited(true),
+      m_threadExitState({
+{ThreadType::MediaRead, true},
+{ThreadType::VideoDecode, true},
+{ThreadType::AudioDecode, true},
+{ThreadType::VideoDisplay, true},
+{ThreadType::AudioDisplay, true}}),
       m_videoLastPTS(0.0),
       m_audioLastPTS(0.0),
-      m_speedFactor(1.0)
+      m_speedFactor(1.0),
+      m_mediaQueue(new MediaQueue),
+      m_systemClock(new SystemClock)
 {
 //    av_log_set_level(AV_LOG_DEBUG);
 //    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
 
     m_rgbMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
-    m_mediaQueue = new MediaQueue;
-    m_systemClock = new SystemClock;
 }
 
 MediaManager::~MediaManager()
@@ -97,16 +96,14 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     // 相关变量初始化
     m_videoLastPTS = 0.0;
     m_audioLastPTS = 0.0;
-    m_thread_quit = false;
-    m_thread_pause = false;
-    m_thread_safe_exited = false;
-    m_thread_media_read_exited = false;
+    m_threadQuit = false;
+    m_threadPause = false;
+    m_threadSafeExited = false;
     m_mediaQueue->reset();
 
-    if(m_videoIndex < 0)
-        m_thread_video_display_exited = true;
-    if(m_audioIndex < 0)
-        m_thread_audio_display_exited = true;
+    // 读取线程
+    m_threadExitState[ThreadType::MediaRead] = false;
+    std::thread(&MediaManager::thread_media_read, this).detach();
 
     // 视频流
     if(m_videoIndex >= 0)
@@ -137,12 +134,10 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
             frameYuvToRgb();
 //            frameResize(m_windowWidth, m_windowHeight, true);
 
-        m_thread_video_decode_exited = false;
-        m_thread_video_display_exited = false;
-        std::thread videoDecodeThread(&MediaManager::thread_video_decode, this);
-        videoDecodeThread.detach();
-        std::thread videoDisplayThread(&MediaManager::thread_video_display, this);
-        videoDisplayThread.detach();
+        m_threadExitState[ThreadType::VideoDecode] = false;
+        m_threadExitState[ThreadType::VideoDisplay] = false;
+        std::thread(&MediaManager::thread_video_decode, this).detach();
+        std::thread(&MediaManager::thread_video_display, this).detach();
     }
 
     // 音频流
@@ -151,17 +146,11 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         initAudioCodec();
         initAudioDevice();
 
-        m_thread_audio_decode_exited = false;
-        m_thread_audio_display_exited = false;
-        std::thread audioDecodeThread(&MediaManager::thread_audio_decode, this);
-        audioDecodeThread.detach();
-        std::thread audioDisplayThread(&MediaManager::thread_audio_display, this);
-        audioDisplayThread.detach();
+        m_threadExitState[ThreadType::AudioDecode] = false;
+        m_threadExitState[ThreadType::AudioDisplay] = false;
+        std::thread(&MediaManager::thread_audio_decode, this).detach();
+        std::thread(&MediaManager::thread_audio_display, this).detach();
     }
-
-    // 读取线程
-    std::thread mediaReadThread(&MediaManager::thread_media_read, this);
-    mediaReadThread.detach();
 
     // 开启系统设置，目前只用于单视频流的渲染延时控制
     m_systemClock->start();
@@ -320,17 +309,15 @@ void MediaManager::delayMs(int ms)
 void MediaManager::close()
 {
     logger.debug("call close function");
-    m_thread_quit = true;
+    m_threadQuit = true;
     m_mediaQueue->clear();
 
     // 安全退出
-    while(m_thread_media_read_exited == false ||
-          m_thread_video_decode_exited == false ||
-          m_thread_audio_decode_exited == false ||
-          m_thread_video_display_exited == false ||
-          m_thread_audio_display_exited == false)
+    /*当有任何线程未退出时Lambda返回true，那么std::any_of将返回true，进行等待。*/
+    while (std::any_of(m_threadExitState.begin(), m_threadExitState.end(),
+                       [](const auto& pair) { return pair.second == false; }))
     {
-        logger.debug("waitting thread exit.");
+        logger.debug("waiting for threads to exit.");
         delayMs(20);
     }
 
@@ -378,7 +365,7 @@ void MediaManager::close()
     m_systemClock->stop();
 
     // 安全退出标志
-    m_thread_safe_exited = true;
+    m_threadSafeExited = true;
     logger.info("all thread exit.");
 }
 
@@ -485,10 +472,10 @@ int MediaManager::thread_media_read()
 {
     AVPacket* packet = av_packet_alloc();
 
-    while(m_thread_quit == false)
+    while(m_threadQuit == false)
     {
         // 暂停时停止读取和解码线程，防止跳转时出错
-        if(m_thread_pause)
+        if(m_threadPause)
         {
             delayMs(10);
             continue;
@@ -516,7 +503,7 @@ int MediaManager::thread_media_read()
     }
 
     av_packet_free(&packet);
-    m_thread_media_read_exited = true;
+    m_threadExitState[ThreadType::MediaRead] = true;
     logger.debug("media read thread exit.");
 
     return 0;
@@ -529,15 +516,15 @@ int MediaManager::thread_video_decode()
     AVPacket* packet = nullptr;
 
     //解码
-    while(m_thread_quit == false)
+    while(m_threadQuit == false)
     {
-        if(m_thread_pause)
+        if(m_threadPause)
         {
             delayMs(10);
             continue;
         }
 
-        if(m_thread_media_read_exited && m_mediaQueue->getVideoPacketCount() == 0)  //播放完毕
+        if(m_threadExitState[ThreadType::MediaRead] && m_mediaQueue->getVideoPacketCount() == 0)
             break;
 
         packet = m_mediaQueue->popVideoPacket();
@@ -548,9 +535,9 @@ int MediaManager::thread_video_decode()
         avcodec_send_packet(m_videoCodecCtx, packet);
         lock.unlock();
 
-        while(m_thread_quit == false)
+        while(m_threadQuit == false)
         {
-            if(m_thread_pause)
+            if(m_threadPause)
             {
                 delayMs(10);
                 continue;
@@ -579,7 +566,7 @@ int MediaManager::thread_video_decode()
 
     av_frame_free(&frame);
     av_packet_free(&packet);
-    m_thread_video_decode_exited = true;
+    m_threadExitState[ThreadType::VideoDecode] = true;
     logger.debug("video decode thread exit.");
 
     return 0;
@@ -592,15 +579,15 @@ int MediaManager::thread_audio_decode()
     AVPacket* packet = nullptr;
 
     //解码
-    while(m_thread_quit == false)
+    while(m_threadQuit == false)
     {
-        if(m_thread_pause)
+        if(m_threadPause)
         {
             delayMs(10);
             continue;
         }
 
-        if(m_thread_media_read_exited && m_mediaQueue->getAudioPacketCount() == 0)  //播放完毕
+        if(m_threadExitState[ThreadType::MediaRead] && m_mediaQueue->getAudioPacketCount() == 0)
             break;
 
         packet = m_mediaQueue->popAudioPacket();
@@ -611,9 +598,9 @@ int MediaManager::thread_audio_decode()
         avcodec_send_packet(m_audioCodecCtx, packet);
         lock.unlock();
 
-        while(m_thread_quit == false)
+        while(m_threadQuit == false)
         {
-            if(m_thread_pause)
+            if(m_threadPause)
             {
                 delayMs(10);
                 continue;
@@ -642,7 +629,7 @@ int MediaManager::thread_audio_decode()
 
     av_frame_free(&frame);
     av_packet_free(&packet);
-    m_thread_audio_decode_exited = true;
+    m_threadExitState[ThreadType::AudioDecode] = true;
     logger.debug("audio decode thread exit.");
 
     return 0;
@@ -653,15 +640,15 @@ int MediaManager::thread_video_display()
 {
     AVFrame* frame = nullptr;
 
-    while(m_thread_quit == false)
+    while(m_threadQuit == false)
     {
-        if(m_thread_pause)
+        if(m_threadPause)
         {
             delayMs(10);
             continue;
         }
 
-        if(m_thread_video_decode_exited && m_mediaQueue->getVideoFrameCount() == 0)  //播放完毕
+        if(m_threadExitState[ThreadType::VideoDecode] && m_mediaQueue->getVideoFrameCount() == 0)  //播放完毕
             break;
 
         frame = m_mediaQueue->popVideoFrame();
@@ -708,7 +695,7 @@ int MediaManager::thread_video_display()
         av_frame_unref(m_frame);
     }
     av_frame_free(&frame);
-    m_thread_video_display_exited = true;
+    m_threadExitState[ThreadType::VideoDisplay] = true;
     logger.debug("video display thread exit.");
 
     return 0;
@@ -720,15 +707,15 @@ int MediaManager::thread_audio_display()
     int ret;
     AVFrame* frame = nullptr;
 
-    while(m_thread_quit == false)
+    while(m_threadQuit == false)
     {
-        if(m_thread_pause)
+        if(m_threadPause)
         {
             delayMs(10);
             continue;
         }
 
-        if(m_thread_audio_decode_exited && m_mediaQueue->getAudioFrameCount() == 0)  //播放完毕
+        if(m_threadExitState[ThreadType::AudioDecode] && m_mediaQueue->getAudioFrameCount() == 0)  //播放完毕
             break;
 
         frame = m_mediaQueue->popAudioFrame();
@@ -764,7 +751,7 @@ int MediaManager::thread_audio_display()
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
-    m_thread_audio_display_exited = true;
+    m_threadExitState[ThreadType::AudioDisplay] = true;
     logger.debug("audio display thread exit.");
 
     return 0;
@@ -903,7 +890,7 @@ void MediaManager::renderDelayControl(AVFrame* frame)
      * 极大落后于新视频帧的PTS，因此可能出现长时间的延时，
      * 因此需要另外调整delayDuration的值
     */
-    if (delayDuration > 0.0 && m_thread_quit == false && m_thread_pause == false)
+    if (delayDuration > 0.0 && m_threadQuit == false && m_threadPause == false)
     {
         if(delayDuration > 0.1 / m_speedFactor)
             delayDuration = 0.04 / m_speedFactor;

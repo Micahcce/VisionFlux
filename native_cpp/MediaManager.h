@@ -72,12 +72,12 @@ public:
     void setSafeCudaAccelerate(bool state) {m_safeCudaAccelerate = state;}
 
     //线程状态
-    bool getThreadSafeExited() {return m_thread_safe_exited;}
-    void setThreadQuit(bool state) {m_thread_quit = state;}
+    bool getThreadSafeExited() {return m_threadSafeExited;}
+    void setThreadQuit(bool state) {m_threadQuit = state;}
     void setThreadPause(bool state)
     {
-        m_thread_pause = state;
-        if(m_thread_pause)
+        m_threadPause = state;
+        if(m_threadPause)
             m_systemClock->pause();
         else
             m_systemClock->resume();
@@ -134,14 +134,19 @@ private:
 
 
     //线程状态变量
-    std::atomic<bool> m_thread_quit;
-    std::atomic<bool> m_thread_pause;
-    bool m_thread_safe_exited;
-    bool m_thread_media_read_exited;
-    bool m_thread_video_decode_exited;
-    bool m_thread_audio_decode_exited;
-    bool m_thread_video_display_exited;
-    bool m_thread_audio_display_exited;
+    std::atomic<bool> m_threadQuit;
+    std::atomic<bool> m_threadPause;
+    bool m_threadSafeExited;
+
+    enum class ThreadType {
+        MediaRead,        // 媒体读取线程
+        VideoDecode,      // 视频解码线程
+        AudioDecode,      // 音频解码线程
+        VideoDisplay,     // 视频显示线程
+        AudioDisplay      // 音频显示线程
+    };
+
+    std::map<ThreadType, bool> m_threadExitState;
 
 
     //回调，用于GUI渲染
