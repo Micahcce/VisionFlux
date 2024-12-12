@@ -16,20 +16,12 @@ extern "C"
 class MediaQueue
 {
 public:
-    MediaQueue() : exit(false) {}
+    MediaQueue() {}
     ~MediaQueue() { clear(); }
-
-    // Add a method to signal exit
-    void signalExit()
-    {
-        exit = true;
-        cv.notify_all();
-    }
 
     // Reset the media queue for reuse
     void reset()
     {
-        exit = false;
         clear();
     }
 
@@ -80,9 +72,6 @@ public:
     {
         return pop(videoPackets);
     }
-
-    // Check if we should exit
-    bool shouldExit() const { return exit; }
 
     int getAudioFrameCount() const { return audioFrames.size(); }
     int getVideoFrameCount() const { return videoFrames.size(); }
@@ -135,7 +124,6 @@ private:
 
         std::unique_lock<std::mutex> lock(mutex);
         dataQueue.push(newData);
-        cv.notify_one();
     }
 
     // Template method to pop a frame or packet from the respective queue
@@ -143,12 +131,8 @@ private:
     T* pop(std::queue<T*>& dataQueue)
     {
         std::unique_lock<std::mutex> lock(mutex);
-        while (dataQueue.empty() && !exit)
-        {
-            cv.wait(lock);
-        }
-        if (exit) return nullptr;
-
+        if (dataQueue.empty())
+            return nullptr;
         T* data = dataQueue.front();
         dataQueue.pop();
         return data;
@@ -161,7 +145,6 @@ private:
     std::queue<AVPacket*> videoPackets; // Queue for video packets
     std::mutex mutex;                   // Mutex for thread safety
     std::condition_variable cv;         // Condition variable for synchronization
-    std::atomic<bool> exit;           // Exit flag
 };
 
 

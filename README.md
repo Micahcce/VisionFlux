@@ -1,23 +1,26 @@
 # VisionFlux：通用多媒体播放器
 
-VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项目。项目设计采用 C++ 编写的底层媒体处理逻辑，并使用 Qt 实现图形界面（GUI）。通过 Pybind11，将播放器功能编译为 Python 模块，方便未来加入 AI 功能（待开发）。
+**VisionFlux** 是一个基于 **FFmpeg** 和 **SDL** 实现的高性能、多功能媒体播放器项目。其核心采用 **C++** 实现底层媒体处理逻辑，结合 **Qt** 构建直观、高效的图形用户界面（GUI）。此外，**VisionFlux** 提供了模块化的播放器内核和开发者友好的 **SDK**，便于二次开发和功能扩展。通过 **Pybind11** 将播放器核心功能封装为 Python 模块，为未来集成 AI 功能（如智能视频分析与处理）预留扩展空间。
 
 ## 功能列表
 
 - **视频播放**：支持主流视频格式的流畅播放。
 - **变速播放**：可调整播放速度。
-- **暂停与恢复**：控制播放状态。
 - **视频切换**：无缝切换不同视频文件。
-- **进度条拖动**：支持通过进度条快速跳转视频。
+- **暂停与恢复**：控制播放状态。
+- **进度条拖动**：支持通过按键和进度条快速跳转视频。
 - **音量控制**：调节播放音量。
 - **单流播放**：支持仅包含视频流或音频流的文件。
 - **实时缩放**：实时调整视频画面大小。
-- **帧缓冲队列**：使用帧缓冲机制，保证视频播放的流畅性。
-- **音视频同步**：确保音频与视频播放保持同步。
+- **缓冲队列**：通过包缓冲和帧缓冲机制，平衡数据读取、解码与渲染过程，确保播放流畅性。
 - **硬件加速**：利用硬件资源加速视频解码。
+- **音视频同步**：确保音频与视频播放保持同步。
 - **流信息查询**：查询媒体文件的音视频流信息。
 - **编码与格式转换**：支持不同格式的编码和文件转换。
-- **网络拉流**：支持播放网络流，并将其保存。
+- **网络拉流**：支持播放网络流，并将其保存或者转发。
+- **跨平台设计**：支持 Windows 和 Linux 平台，具有良好的兼容性。
+- **多线程架构**：使用多个子线程实现高效的并发处理
+- **OpenGL 渲染**：使用 OpenGL 实现视频画面渲染，增强渲染效率与视觉效果。
 
 ## 技术栈
 
@@ -54,19 +57,19 @@ VisionFlux 是一个基于 FFmpeg 和 SDL 实现的多功能媒体播放器项�
 
 1. Qt工具链
 
-```
+```shell
 sudo apt install qtbase5-dev qtchooser qt5-qmake qttools5-dev-tools
 ```
 
 2. SDL2
 
-```
+```shell
 sudo apt install libsdl2-2.0-0 libsdl2-dev
 ```
 
 3. FFmpeg6.0（源码安装）
 
-```
+```shell
 cd ~
 wget https://ffmpeg.org/releases/ffmpeg-6.0.tar.bz2
 tar xjf ffmpeg-6.0.tar.bz2
@@ -95,33 +98,33 @@ sudo ldconfig		# 更新共享库
 
 1. 克隆代码仓库：
 
-   ```bash
+   ```shell
    git clone https://github.com/Micahcce/VisionFlux.git
    cd VisionFlux/native_cpp
    ```
 
 2. 创建构建目录：
 
-   ```
+   ```shell
    mkdir build && cd build
    ```
 
 3. 配置项目：`使用GNU编译，生成文件不包含 Qt 动态库`
 
-   ```
+   ```shell
    (Windows) cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
    (Linux) cmake ..
    ```
 
 4. 编译项目：
 
-   ```
+   ```shell
    cmake --build .
    ```
 
 5. 运行播放器：
 
-   ```
+   ```shell
    cd ../../libs
    ./VisionFlux
    ```
@@ -132,7 +135,7 @@ sudo ldconfig		# 更新共享库
 
 1. 启用 Python 绑定选项并重新编译项目：
 
-   ```
+   ```shell
    cmake -DENABLE_PYBIND=ON ..
    cmake --build .
    ```
@@ -141,7 +144,7 @@ sudo ldconfig		# 更新共享库
 
 3. 在 Python 中导入模块：
 
-   ```
+   ```python
    import visionflux
    ```
 

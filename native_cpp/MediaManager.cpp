@@ -181,10 +181,13 @@ bool MediaManager::streamConvert(const std::string& inputStreamUrl, const std::s
 
 void MediaManager::seekFrameByStream(int timeSecs)
 {
+    delayMs(5);     //确保两个解码线程已暂停
+
     // 优先根据视频帧来seek，因为音频帧的解码不需要I帧，跳转后可能会影响到视频帧的解码
     bool hasVideoStream = (m_videoIndex >= 0) ? true : false;
     int streamIndex = hasVideoStream ? m_videoIndex : m_audioIndex;
     AVCodecContext* codecCtx = hasVideoStream ? m_videoCodecCtx : m_audioCodecCtx;
+    std::mutex& decodeMtx = hasVideoStream ? m_videoDecodeMtx : m_audioDecodeMtx;
 
     AVRational time_base = m_formatCtx->streams[streamIndex]->time_base;
     logger.debug("time_base: %d / %d", time_base.num, time_base.den);
@@ -204,7 +207,7 @@ void MediaManager::seekFrameByStream(int timeSecs)
     m_mediaQueue->clear();
 
     // 清除解码器缓存
-    std::unique_lock<std::mutex> lock(m_decodeMtx);
+    std::unique_lock<std::mutex> lock(decodeMtx);
     if(m_videoIndex >= 0)
         avcodec_flush_buffers(m_videoCodecCtx);
     if(m_audioIndex >= 0)
@@ -223,7 +226,7 @@ void MediaManager::seekFrameByStream(int timeSecs)
 
         if (packet->stream_index == streamIndex)
         {
-            std::unique_lock<std::mutex> lock(m_decodeMtx);
+            std::unique_lock<std::mutex> lock(decodeMtx);
             avcodec_send_packet(codecCtx, packet);
             lock.unlock();
 
@@ -318,7 +321,6 @@ void MediaManager::close()
 {
     logger.debug("call close function");
     m_thread_quit = true;
-    m_mediaQueue->signalExit();
     m_mediaQueue->clear();
 
     // 安全退出
@@ -542,7 +544,7 @@ int MediaManager::thread_video_decode()
         if(!packet)
             continue;
 
-        std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
+        std::unique_lock<std::mutex> lock(m_videoDecodeMtx);     //手动控制加锁和解锁，减小细粒度
         avcodec_send_packet(m_videoCodecCtx, packet);
         lock.unlock();
 
@@ -608,7 +610,7 @@ int MediaManager::thread_audio_decode()
         if(!packet)
             continue;
 
-        std::unique_lock<std::mutex> lock(m_decodeMtx);     //手动控制加锁和解锁，减小细粒度
+        std::unique_lock<std::mutex> lock(m_audioDecodeMtx);     //手动控制加锁和解锁，减小细粒度
         avcodec_send_packet(m_audioCodecCtx, packet);
         lock.unlock();
 
@@ -627,7 +629,6 @@ int MediaManager::thread_audio_decode()
             }
 
             ret = avcodec_receive_frame(m_audioCodecCtx, frame);
-
             if(ret < 0)
             {
                 if(ret == AVERROR_EOF)

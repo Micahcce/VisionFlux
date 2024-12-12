@@ -182,7 +182,8 @@ private:
     unsigned char * m_outBuf;
 
     //公共变量
-    std::mutex m_decodeMtx;
+    std::mutex m_videoDecodeMtx;
+    std::mutex m_audioDecodeMtx;
     float m_speedFactor;
 
     //最后一帧的PTS，已转换为秒数
