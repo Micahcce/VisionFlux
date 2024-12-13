@@ -102,7 +102,6 @@ private:
     std::queue<AVPacket*> audioPackets; // Queue for audio packets
     std::queue<AVPacket*> videoPackets; // Queue for video packets
     std::mutex mutex;                   // Mutex for thread safety
-    std::condition_variable cv;         // Condition variable for synchronization
 };
 
 

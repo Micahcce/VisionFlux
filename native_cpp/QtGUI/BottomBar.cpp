@@ -230,7 +230,7 @@ void BottomBar::slotVolumeChanged()
 void BottomBar::slotUpdateProgress()
 {
 //    logger.trace("progress: %f", m_playController->getPlayProgress());
-    int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress() + 0.3);  //增加0.3s冗余时间，缓解进度条走不满的问题
+    int currentPlayProgress = static_cast<int>(m_playController->getPlayProgress());
 
     //进度条更新
     if (currentPlayProgress <= m_timeSlider->maximum())

@@ -211,7 +211,12 @@ void MediaManager::seekFrameByStream(int timeSecs)
     while (throwing)
     {
         if (av_read_frame(m_formatCtx, packet) < 0)
+        {
+            m_videoLastPTS = m_formatCtx->duration / AV_TIME_BASE;
+            m_audioLastPTS = m_formatCtx->duration / AV_TIME_BASE;
+            logger.info("End of stream reached.");
             break;
+        }
 
         if (packet->stream_index == streamIndex)
         {
@@ -695,6 +700,7 @@ int MediaManager::thread_video_display()
         av_frame_unref(m_frame);
     }
     av_frame_free(&frame);
+    m_videoLastPTS = m_formatCtx->duration / AV_TIME_BASE;
     m_threadExitState[ThreadType::VideoDisplay] = true;
     logger.debug("video display thread exit.");
 
@@ -751,6 +757,7 @@ int MediaManager::thread_audio_display()
         av_frame_unref(frame);
     }
     av_frame_free(&frame);
+    m_audioLastPTS = m_formatCtx->duration / AV_TIME_BASE;
     m_threadExitState[ThreadType::AudioDisplay] = true;
     logger.debug("audio display thread exit.");
 

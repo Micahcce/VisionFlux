@@ -178,17 +178,17 @@ private:
     int m_windowWidth;
     int m_windowHeight;
     std::mutex m_renderMtx;
+    std::mutex m_videoDecodeMtx;
     bool m_cudaAccelerate;
     bool m_safeCudaAccelerate;
     AVBufferRef* m_deviceCtx;
 
     //音频变量
     SwrContext* m_swrCtx;
+    std::mutex m_audioDecodeMtx;
     unsigned char * m_outBuf;
 
     //公共变量
-    std::mutex m_videoDecodeMtx;
-    std::mutex m_audioDecodeMtx;
     float m_speedFactor;
 
     //最后一帧的PTS，已转换为秒数
