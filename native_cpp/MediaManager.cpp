@@ -102,7 +102,6 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
     m_mediaQueue->reset();
 
     // 读取线程
-    m_threadExitState[ThreadType::MediaRead] = false;
     std::thread(&MediaManager::thread_media_read, this).detach();
 
     // 视频流
@@ -134,8 +133,6 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
             frameYuvToRgb();
 //            frameResize(m_windowWidth, m_windowHeight, true);
 
-        m_threadExitState[ThreadType::VideoDecode] = false;
-        m_threadExitState[ThreadType::VideoDisplay] = false;
         std::thread(&MediaManager::thread_video_decode, this).detach();
         std::thread(&MediaManager::thread_video_display, this).detach();
     }
@@ -146,8 +143,6 @@ bool MediaManager::decodeToPlay(const std::string& filePath)
         initAudioCodec();
         initAudioDevice();
 
-        m_threadExitState[ThreadType::AudioDecode] = false;
-        m_threadExitState[ThreadType::AudioDisplay] = false;
         std::thread(&MediaManager::thread_audio_decode, this).detach();
         std::thread(&MediaManager::thread_audio_display, this).detach();
     }
@@ -163,8 +158,7 @@ bool MediaManager::streamConvert(const std::string& inputStreamUrl, const std::s
 {
     m_inputStreamUrl = inputStreamUrl;
     m_outputStreamUrl = outputStreamUrl;
-    std::thread streamConvert(&MediaManager::thread_stream_convert, this);
-    streamConvert.detach();
+    std::thread(&MediaManager::thread_stream_convert, this).detach();
     return true;
 }
 
@@ -475,6 +469,8 @@ void MediaManager::initAudioDevice()
 // 读取线程
 int MediaManager::thread_media_read()
 {
+    m_threadExitState[ThreadType::MediaRead] = false;
+
     AVPacket* packet = av_packet_alloc();
 
     while(m_threadQuit == false)
@@ -516,6 +512,8 @@ int MediaManager::thread_media_read()
 
 int MediaManager::thread_video_decode()
 {
+    m_threadExitState[ThreadType::VideoDecode] = false;
+
     int ret;
     AVFrame* frame = av_frame_alloc();
     AVPacket* packet = nullptr;
@@ -579,6 +577,8 @@ int MediaManager::thread_video_decode()
 
 int MediaManager::thread_audio_decode()
 {
+    m_threadExitState[ThreadType::AudioDecode] = false;
+
     int ret;
     AVFrame* frame = av_frame_alloc();
     AVPacket* packet = nullptr;
@@ -643,6 +643,8 @@ int MediaManager::thread_audio_decode()
 //视频播放线程
 int MediaManager::thread_video_display()
 {
+    m_threadExitState[ThreadType::VideoDisplay] = false;
+
     AVFrame* frame = nullptr;
 
     while(m_threadQuit == false)
@@ -710,6 +712,8 @@ int MediaManager::thread_video_display()
 //音频播放线程
 int MediaManager::thread_audio_display()
 {
+    m_threadExitState[ThreadType::AudioDisplay] = false;
+
     int ret;
     AVFrame* frame = nullptr;
 
