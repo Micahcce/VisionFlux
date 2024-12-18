@@ -64,6 +64,11 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_addFileBtn->setIcon(addIcon);
     connect(m_addFileBtn, &QPushButton::clicked, this, &BottomBar::slotAddMediaFile);
 
+    //摄像头
+    m_cameraBtn = new QPushButton("camera", this);
+    m_cameraBtn->setFixedSize(30, 30);
+    connect(m_cameraBtn, &QPushButton::clicked, this, &BottomBar::slotOpenCamera);
+
     QHBoxLayout* hBox2 = new QHBoxLayout;
     hBox2->addWidget(m_playBtn);
     hBox2->addWidget(m_changeSpeedBtn);
@@ -71,6 +76,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     hBox2->addWidget(m_volumeSlider);
     hBox2->addWidget(hwAccelerateCb);
     hBox2->addWidget(m_addFileBtn);
+    hBox2->addWidget(m_cameraBtn);
 
     //垂直布局
     QVBoxLayout* vBox = new QVBoxLayout;
@@ -89,7 +95,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     connect(rightCut, &QShortcut::activated, this, [this]{changeProgress(+5);});
 }
 
-bool BottomBar::slotStartPlayMedia(QString mediaPath)
+bool BottomBar::slotStartPlayMedia(QString mediaPath, bool cameraInput)
 {
     if(mediaPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
     {
@@ -107,7 +113,7 @@ bool BottomBar::slotStartPlayMedia(QString mediaPath)
 
     //获取时长
     int totalTime = m_playController->getMediaDuration(mediaPath.toStdString());
-    if(totalTime == -1)
+    if(totalTime == -1 && !cameraInput)
     {
         logger.error("getMediaDuration failed");
         return false;
@@ -123,7 +129,7 @@ bool BottomBar::slotStartPlayMedia(QString mediaPath)
     m_playBtn->setIcon(playIcon);
 
     //开始播放
-    m_playController->startPlay(mediaPath.toStdString());
+    m_playController->startPlay(mediaPath.toStdString(), cameraInput);
 
     //定时器启动（非直播流）
     if(m_playController->getMediaPlayInfo()->isLiveStream == false)
@@ -167,6 +173,15 @@ void BottomBar::slotSliderReleased()
     m_playController->changePlayProgress(currentTime);
     if(m_playController->getMediaPlayInfo()->isLiveStream == false && m_playController->getMediaPlayInfo()->isPlaying)
         m_sliderTimer->start(TIMING_INTERVAL);
+}
+
+void BottomBar::slotOpenCamera()
+{
+    QList<QCameraInfo> cameraList = QCameraInfo::availableCameras();
+    for(int i = 0; i < cameraList.size(); i++)
+        logger.info("Camera Divice %d: %s", i, cameraList.at(i).description().toStdString().data());
+
+    slotStartPlayMedia(cameraList.at(0).description(), true);
 }
 
 void BottomBar::slotPlayAndPause()

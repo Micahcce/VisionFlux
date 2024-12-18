@@ -16,6 +16,8 @@
 #include <QFileDialog>
 #include <QShortcut>
 #include <QCheckBox>
+#include <QCameraInfo>
+#include <QCamera>
 #include "PlayController.h"
 
 
@@ -33,7 +35,7 @@ signals:
     void sigAddMediaItem(QString filePath);
 
 public slots:
-    bool slotStartPlayMedia(QString mediaPath);
+    bool slotStartPlayMedia(QString mediaPath, bool cameraInput = false);
 
 private slots:
     void slotPlayAndPause();
@@ -43,6 +45,7 @@ private slots:
     void slotUpdateProgress();
     void slotSliderPressed();
     void slotSliderReleased();
+    void slotOpenCamera();
 
 private:
     enum
@@ -64,6 +67,7 @@ private:
     QSlider* m_volumeSlider;
     QPushButton* m_addFileBtn;
     QTimer* m_sliderTimer;        //进度条定时器
+    QPushButton* m_cameraBtn;
 };
 
 #endif // BOTTOMBAR_H

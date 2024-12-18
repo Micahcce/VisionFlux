@@ -25,7 +25,7 @@ public:
     PlayController();
 
     //开始播放
-    void startPlay(const std::string filePath);
+    void startPlay(const std::string filePath, bool cameraInput = false);
     //继续播放
     void resumePlay();
     //暂停播放

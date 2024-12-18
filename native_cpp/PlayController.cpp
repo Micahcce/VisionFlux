@@ -7,7 +7,7 @@ PlayController::PlayController()
 {
 }
 
-void PlayController::startPlay(const std::string filePath)
+void PlayController::startPlay(const std::string filePath, bool cameraInput)
 {
     while (m_mediaManager->getThreadSafeExited() == false)
     {
@@ -21,7 +21,7 @@ void PlayController::startPlay(const std::string filePath)
         m_mediaInfo->isLiveStream = true;
 
     logger.debug("ready play: %s", filePath.data());
-    if(m_mediaManager->decodeToPlay(filePath) == false)
+    if(m_mediaManager->decodeToPlay(filePath, cameraInput) == false)
     {
         logger.error("media play failed.");
         return;

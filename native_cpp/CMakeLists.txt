@@ -66,7 +66,7 @@ else()
     set(CMAKE_AUTORCC ON)
 
     # 查找QT库
-    find_package(Qt5 COMPONENTS Widgets REQUIRED)
+    find_package(Qt5 COMPONENTS Widgets Multimedia REQUIRED)
 
     # 创建可执行文件
     add_executable(${PROJECT_NAME}
@@ -151,6 +151,7 @@ else()
         ${ALL_LIBS}
         Qt5::Core
         Qt5::Widgets
+        Qt5::Multimedia
     )
 endif()
 

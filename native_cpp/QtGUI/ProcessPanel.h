@@ -22,7 +22,7 @@ public:
     void setPlayController(PlayController* playController) {m_playController = playController;}
 
 signals:
-    void sigLiveStreamPlay(QString streamUrl);
+    void sigLiveStreamPlay(QString streamUrl, bool cameraInput = false);
 
 private slots:
     void slotLiveStreamSave();

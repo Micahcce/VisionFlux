@@ -28,6 +28,7 @@ extern "C"
 #include "libswscale/swscale.h"
 #include "libavutil/imgutils.h"
 #include "libavutil/time.h"
+#include "libavdevice/avdevice.h"
 }
 
 
@@ -38,7 +39,7 @@ public:
     ~MediaManager();
 
     //解码播放
-    bool decodeToPlay(const std::string& filePath);
+    bool decodeToPlay(std::string filePath, bool cameraInput = false);
 
     //流媒体转换
     /*

@@ -45,7 +45,8 @@ MediaManager::MediaManager()
 //    logger.setLogLevel(LogLevel::INFO);
     logger.debug("avformat_version :%d", avformat_version());
 
-    m_rgbMode = true;       // 目前仅对SDL有效，Qt只能为RGB渲染
+    avdevice_register_all();        //摄像头设备
+    m_rgbMode = true;               // 目前仅对SDL有效，Qt只能为RGB渲染
 }
 
 MediaManager::~MediaManager()
@@ -55,15 +56,33 @@ MediaManager::~MediaManager()
 }
 
 
-bool MediaManager::decodeToPlay(const std::string& filePath)
+bool MediaManager::decodeToPlay(std::string filePath, bool cameraInput)
 {
+    const AVInputFormat * inputFormat = nullptr;
+
+    if(cameraInput)
+    {
+#if defined(WIN32)
+        inputFormat = av_find_input_format("dshow");   // Windows下如果没有则不能打开摄像头
+#elif defined(LINUX)
+        inputFormat = av_find_input_format("video4linux2");   // Linux也可以不需要就可以打开摄像头
+#endif
+        if (!inputFormat)
+        {
+            logger.error("find AVInputFormat failed!");
+            return false;
+        }
+
+        filePath = "video=" + filePath;
+    }
+
     int ret;
 
     //1.创建上下文
     m_formatCtx = avformat_alloc_context();
 
     //2.打开文件
-    ret = avformat_open_input(&m_formatCtx, filePath.data(), nullptr, nullptr);
+    ret = avformat_open_input(&m_formatCtx, filePath.data(), inputFormat, nullptr);
     if(ret < 0)
     {
         logger.error("Error occurred in avformat_open_input");

@@ -26,7 +26,7 @@ public:
     void searchMediaFiles();
 
 signals:
-    void sigPlayMedia(QString mediaPath);
+    void sigPlayMedia(QString mediaPath, bool cameraInput = false);
 
 public slots:
     void slotAddMediaItem(QString filePath);
