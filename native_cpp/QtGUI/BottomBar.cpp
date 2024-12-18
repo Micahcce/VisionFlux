@@ -112,11 +112,15 @@ bool BottomBar::slotStartPlayMedia(QString mediaPath, bool cameraInput)
     m_sliderTimer->stop();
 
     //获取时长
-    int totalTime = m_playController->getMediaDuration(mediaPath.toStdString());
-    if(totalTime == -1 && !cameraInput)
+    int totalTime = 0;
+    if(!cameraInput)
     {
-        logger.error("getMediaDuration failed");
-        return false;
+        totalTime = m_playController->getMediaDuration(mediaPath.toStdString());
+        if(totalTime == -1)
+        {
+            logger.error("getMediaDuration failed");
+            return false;
+        }
     }
     QString totalTimeStr = QString::fromStdString(m_playController->timeFormatting(totalTime));
 

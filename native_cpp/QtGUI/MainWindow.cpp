@@ -46,12 +46,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     QFont font("微软雅黑");
     QWidget* playListTab = new QWidget(this);
+    QWidget* peripheralTab = new QWidget(this);
     QWidget* processPanelTab = new QWidget(this);
-    QWidget* videoSummaryTab = new QWidget(this);
     sideBar->setFont(font);
     sideBar->addTab(playListTab, "播放列表");
+    sideBar->addTab(peripheralTab, "设备");
     sideBar->addTab(processPanelTab, "处理");
-    sideBar->addTab(videoSummaryTab, "总结");
     sideBar->setStyleSheet("QTabBar::tab { width: 100px; height: 40px;background-color:transparent;color:rgb(120,120,120);}"
           "QTabBar::tab:selected{ color:rgb(75,75,110); border-bottom:2px solid#4b4b6e; }"
           "QTabBar::tab:hover{ color:rgb(0,0,0); }"

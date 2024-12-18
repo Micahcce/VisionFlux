@@ -17,7 +17,6 @@
 #include <QShortcut>
 #include <QCheckBox>
 #include <QCameraInfo>
-#include <QCamera>
 #include "PlayController.h"
 
 

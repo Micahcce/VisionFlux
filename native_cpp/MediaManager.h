@@ -199,6 +199,9 @@ private:
     //流媒体转换
     std::string m_inputStreamUrl;
     std::string m_outputStreamUrl;
+
+    //设备初始化
+    static bool m_initialized;
 };
 
 #endif // MEDIAMANAGER_H

@@ -1,5 +1,6 @@
 #include "MediaManager.h"
 
+bool MediaManager::m_initialized = false;
 
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
@@ -41,11 +42,16 @@ MediaManager::MediaManager()
       m_mediaQueue(new MediaQueue),
       m_systemClock(new SystemClock)
 {
-//    av_log_set_level(AV_LOG_DEBUG);
-//    logger.setLogLevel(LogLevel::INFO);
-    logger.debug("avformat_version :%d", avformat_version());
+    if(!m_initialized)
+    {
+//        av_log_set_level(AV_LOG_DEBUG);
+//        logger.setLogLevel(LogLevel::INFO);
+        logger.debug("avformat_version :%d", avformat_version());
 
-    avdevice_register_all();        //摄像头设备
+        avdevice_register_all();
+        m_initialized = true;
+    }
+
     m_rgbMode = true;               // 目前仅对SDL有效，Qt只能为RGB渲染
 }
 
