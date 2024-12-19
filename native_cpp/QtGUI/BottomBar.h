@@ -64,6 +64,7 @@ private:
     QPushButton* m_changeSpeedBtn;
     QPushButton* m_volumeBtn;
     QSlider* m_volumeSlider;
+    QCheckBox* m_hwAccelerateCb;
     QPushButton* m_addFileBtn;
     QTimer* m_sliderTimer;        //进度条定时器
     QPushButton* m_cameraBtn;

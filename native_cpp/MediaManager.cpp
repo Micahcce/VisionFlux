@@ -127,6 +127,7 @@ bool MediaManager::decodeToPlay(std::string filePath, bool cameraInput)
     m_mediaQueue->reset();
 
     // 读取线程
+    m_threadExitState[ThreadType::MediaRead] = false;
     std::thread(&MediaManager::thread_media_read, this).detach();
 
     // 视频流
@@ -158,6 +159,9 @@ bool MediaManager::decodeToPlay(std::string filePath, bool cameraInput)
             frameYuvToRgb();
 //            frameResize(m_windowWidth, m_windowHeight, true);
 
+        //在线程外设置状态，确保状态同步
+        m_threadExitState[ThreadType::VideoDecode] = false;
+        m_threadExitState[ThreadType::VideoDisplay] = false;
         std::thread(&MediaManager::thread_video_decode, this).detach();
         std::thread(&MediaManager::thread_video_display, this).detach();
     }
@@ -168,6 +172,8 @@ bool MediaManager::decodeToPlay(std::string filePath, bool cameraInput)
         initAudioCodec();
         initAudioDevice();
 
+        m_threadExitState[ThreadType::AudioDecode] = false;
+        m_threadExitState[ThreadType::AudioDisplay] = false;
         std::thread(&MediaManager::thread_audio_decode, this).detach();
         std::thread(&MediaManager::thread_audio_display, this).detach();
     }
@@ -406,6 +412,8 @@ void MediaManager::initVideoCodec()
     m_videoCodec = avcodec_find_decoder(m_videoCodecCtx->codec_id);
     if(!m_videoCodec)
         logger.error("Error occurred in avcodec_find_decoder");
+    else
+        logger.info("Using video decoder: %s", m_videoCodec->name);
 
     if(m_cudaAccelerate)
     {
@@ -450,6 +458,8 @@ void MediaManager::initAudioCodec()
     m_audioCodec = avcodec_find_decoder(m_audioCodecCtx->codec_id);
     if(!m_audioCodec)
         logger.error("Error occurred in avcodec_find_decoder");
+    else
+        logger.info("Using audio decoder: %s", m_audioCodec->name);
 
     ret = avcodec_open2(m_audioCodecCtx, m_audioCodec, nullptr);
     if(ret < 0)
@@ -494,8 +504,6 @@ void MediaManager::initAudioDevice()
 // 读取线程
 int MediaManager::thread_media_read()
 {
-    m_threadExitState[ThreadType::MediaRead] = false;
-
     AVPacket* packet = av_packet_alloc();
 
     while(m_threadQuit == false)
@@ -537,8 +545,6 @@ int MediaManager::thread_media_read()
 
 int MediaManager::thread_video_decode()
 {
-    m_threadExitState[ThreadType::VideoDecode] = false;
-
     int ret;
     AVFrame* frame = av_frame_alloc();
     AVPacket* packet = nullptr;
@@ -602,8 +608,6 @@ int MediaManager::thread_video_decode()
 
 int MediaManager::thread_audio_decode()
 {
-    m_threadExitState[ThreadType::AudioDecode] = false;
-
     int ret;
     AVFrame* frame = av_frame_alloc();
     AVPacket* packet = nullptr;
@@ -668,8 +672,6 @@ int MediaManager::thread_audio_decode()
 //视频播放线程
 int MediaManager::thread_video_display()
 {
-    m_threadExitState[ThreadType::VideoDisplay] = false;
-
     AVFrame* frame = nullptr;
 
     while(m_threadQuit == false)
@@ -737,8 +739,6 @@ int MediaManager::thread_video_display()
 //音频播放线程
 int MediaManager::thread_audio_display()
 {
-    m_threadExitState[ThreadType::AudioDisplay] = false;
-
     int ret;
     AVFrame* frame = nullptr;
 

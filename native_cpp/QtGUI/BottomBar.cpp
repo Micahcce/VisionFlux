@@ -52,10 +52,10 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     connect(m_volumeSlider, &QSlider::sliderMoved, this, &BottomBar::slotVolumeChanged);
 
     //硬件加速
-    QCheckBox* hwAccelerateCb = new QCheckBox("硬件加速", this);
-    hwAccelerateCb->setFixedSize(110, 20);
-    connect(hwAccelerateCb, &QCheckBox::stateChanged, this,
-            [=]{m_playController->setSafeCudaAccelerate(hwAccelerateCb->checkState());});
+    m_hwAccelerateCb = new QCheckBox("硬件加速", this);
+    m_hwAccelerateCb->setFixedSize(110, 20);
+    connect(m_hwAccelerateCb, &QCheckBox::stateChanged, this,
+            [=]{m_playController->setSafeCudaAccelerate(m_hwAccelerateCb->checkState());});
 
     //添加文件
     m_addFileBtn = new QPushButton(this);
@@ -74,7 +74,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     hBox2->addWidget(m_changeSpeedBtn);
     hBox2->addWidget(m_volumeBtn);
     hBox2->addWidget(m_volumeSlider);
-    hBox2->addWidget(hwAccelerateCb);
+    hBox2->addWidget(m_hwAccelerateCb);
     hBox2->addWidget(m_addFileBtn);
     hBox2->addWidget(m_cameraBtn);
 
@@ -181,6 +181,12 @@ void BottomBar::slotSliderReleased()
 
 void BottomBar::slotOpenCamera()
 {
+    if(m_hwAccelerateCb->checkState())
+    {
+        logger.error("Hardware acceleration cannot be used to play the camera image. Please uncheck Hardware Acceleration.");
+        return;
+    }
+
     QList<QCameraInfo> cameraList = QCameraInfo::availableCameras();
     for(int i = 0; i < cameraList.size(); i++)
         logger.info("Camera Divice %d: %s", i, cameraList.at(i).description().toStdString().data());
