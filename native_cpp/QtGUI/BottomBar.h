@@ -68,6 +68,7 @@ private:
     QPushButton* m_addFileBtn;
     QTimer* m_sliderTimer;        //进度条定时器
     QPushButton* m_cameraBtn;
+    QCheckBox* m_newWindow;
 };
 
 #endif // BOTTOMBAR_H

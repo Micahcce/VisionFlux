@@ -72,6 +72,9 @@ public:
     //cuda加速
     void setSafeCudaAccelerate(bool state) {m_safeCudaAccelerate = state;}
 
+    //设置新窗口播放
+    void setNewWindowPlay(bool state) {m_newWindowPlay = state;}
+
     //线程状态
     bool getThreadSafeExited() {return m_threadSafeExited;}
     void setThreadQuit(bool state) {m_threadQuit = state;}
@@ -132,6 +135,8 @@ private:
     int thread_video_display();
     int thread_audio_display();
     int thread_stream_convert();
+    int thread_new_window();
+    int thread_monitor();
 
 
     //线程状态变量
@@ -191,6 +196,7 @@ private:
 
     //公共变量
     float m_speedFactor;
+    bool m_newWindowPlay;
 
     //最后一帧的PTS，已转换为秒数
     double m_videoLastPTS;

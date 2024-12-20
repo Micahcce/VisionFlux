@@ -19,6 +19,7 @@ MediaManager::MediaManager()
       m_windowHeight(0),
       m_cudaAccelerate(false),
       m_safeCudaAccelerate(false),
+      m_newWindowPlay(false),
       m_deviceCtx(nullptr),
       m_frameBuf(nullptr),
       m_outBuf(nullptr),
@@ -181,8 +182,64 @@ bool MediaManager::decodeToPlay(std::string filePath, bool cameraInput)
     // 开启系统设置，目前只用于单视频流的渲染延时控制
     m_systemClock->start();
 
+    // 新窗口播放
+   if(m_newWindowPlay)
+       std::thread(&MediaManager::thread_new_window, this).detach();
 
     return true;
+}
+
+int MediaManager::thread_new_window()
+{
+    //创建窗口
+    if(m_videoIndex >= 0)
+        m_sdlPlayer->initVideoDevice(m_videoCodecCtx->width, m_videoCodecCtx->height, true);
+    else
+        m_sdlPlayer->initVideoDevice(400, 300, true);
+
+    SDL_Event event;                    //定义事件
+    while(std::any_of(m_threadExitState.begin(), m_threadExitState.end(),
+                      [](const auto& pair) { return pair.second == false; }))
+    {
+        SDL_WaitEvent(&event);
+
+        if(event.type == SDL_QUIT)      //程序退出
+        {
+            this->setThreadQuit(true);
+            break;
+        }
+        else if(event.type == SDL_KEYDOWN)
+        {
+            if(event.key.keysym.sym == SDLK_SPACE)  //空格键暂停
+            {
+                this->setThreadPause(!this->m_threadPause);
+            }
+        }
+        else if(event.type == SDL_WINDOWEVENT)
+        {
+            if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+            {
+                // 重新初始化渲染资源
+                m_sdlPlayer->resize(event.window.data1, event.window.data2, m_rgbMode);
+            }
+        }
+    }
+    close();
+    logger.debug("new window play thread exit.");
+
+    return 0;
+}
+
+int MediaManager::thread_monitor()
+{
+    while(std::any_of(m_threadExitState.begin(), m_threadExitState.end(),
+                      [](const auto& pair) { return pair.second == false; }))
+    {
+        delayMs(1000);
+    }
+    close();
+
+    return 0;
 }
 
 bool MediaManager::streamConvert(const std::string& inputStreamUrl, const std::string& outputStreamUrl)
@@ -1029,6 +1086,13 @@ void MediaManager::renderFrameRgb()
               m_videoCodecCtx->height,
               m_frameRgb->data,
               m_frameRgb->linesize);
+
+    // 新窗口渲染
+    if(m_newWindowPlay)
+    {
+        m_sdlPlayer->renderFrameRgb(m_frameRgb);
+        return;
+    }
 
     // 调用回调函数，通知 GUI 渲染
     if (m_renderCallback)

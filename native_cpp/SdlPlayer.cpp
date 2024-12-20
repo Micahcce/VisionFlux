@@ -31,12 +31,18 @@ SdlPlayer::~SdlPlayer()
 // 创建窗口和渲染器
 bool SdlPlayer::initVideoDevice(int width, int height, bool RgbMode)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
-        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-        return false;
+    static bool isSdlInitialized = false;
+    if (!isSdlInitialized)
+    {
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
+            std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+            return false;
+        }
+        isSdlInitialized = true;
     }
 
-    m_window = SDL_CreateWindow("SdlDisplay", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_RESIZABLE);
+    std::string windowName = "SdlDisplay_" + std::to_string(reinterpret_cast<uintptr_t>(this));     //需要避免命名冲突
+    m_window = SDL_CreateWindow(windowName.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_RESIZABLE);
     if (m_window == nullptr) {
         std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
         return false;

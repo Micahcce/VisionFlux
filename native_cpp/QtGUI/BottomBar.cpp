@@ -34,9 +34,8 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 
     //倍速
     m_playbackSpeeds << 0.5 << 0.75 << 1 << 1.25 << 1.5 << 2;
-    m_changeSpeedBtn = new QPushButton(this);
+    m_changeSpeedBtn = new QPushButton("倍速", this);
     m_changeSpeedBtn->setFixedSize(30, 30);
-    m_changeSpeedBtn->setText("倍速");
     connect(m_changeSpeedBtn, &QPushButton::clicked, this, &BottomBar::slotChangeSpeed);
 
     //音量
@@ -69,6 +68,11 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     m_cameraBtn->setFixedSize(30, 30);
     connect(m_cameraBtn, &QPushButton::clicked, this, &BottomBar::slotOpenCamera);
 
+    //新窗口播放
+    m_newWindow = new QCheckBox("新窗口播放", this);
+    m_newWindow->setFixedSize(110, 20);
+
+    //水平布局
     QHBoxLayout* hBox2 = new QHBoxLayout;
     hBox2->addWidget(m_playBtn);
     hBox2->addWidget(m_changeSpeedBtn);
@@ -77,6 +81,7 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
     hBox2->addWidget(m_hwAccelerateCb);
     hBox2->addWidget(m_addFileBtn);
     hBox2->addWidget(m_cameraBtn);
+    hBox2->addWidget(m_newWindow);
 
     //垂直布局
     QVBoxLayout* vBox = new QVBoxLayout;
@@ -97,6 +102,14 @@ BottomBar::BottomBar(QWidget *parent) : QWidget(parent), speedIndex(2)
 
 bool BottomBar::slotStartPlayMedia(QString mediaPath, bool cameraInput)
 {
+    //新窗口需要独立的控制器
+    if(m_newWindow->checkState())
+    {
+        m_playController->newWindowPlay(mediaPath.toStdString(), cameraInput);
+        return true;
+    }
+
+    //正常播放
     if(mediaPath.toStdString() == m_playController->getMediaPlayInfo()->mediaName)
     {
         return false;

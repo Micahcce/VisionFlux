@@ -8,25 +8,21 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     QFont font("微软雅黑");
 
     //网络流播放与保存
-    QLabel* StreamUrlLabel = new QLabel(this);
-    StreamUrlLabel->setText("网络流");
+    QLabel* StreamUrlLabel = new QLabel("网络流", this);
     StreamUrlLabel->setFont(font);
 
     m_pullStreamUrlEdit = new QLineEdit(this);
     m_pullStreamUrlEdit->setPlaceholderText("拉流地址");
     m_pullStreamUrlEdit->setFont(font);
 
-    QPushButton* StreamUrlPlayBtn = new QPushButton(this);
-    StreamUrlPlayBtn->setText("播放");
+    QPushButton* StreamUrlPlayBtn = new QPushButton("播放", this);
     connect(StreamUrlPlayBtn, &QPushButton::clicked, this, [this]{emit sigLiveStreamPlay(m_pullStreamUrlEdit->text());});
 
-    QPushButton* StreamUrlSaveBtn = new QPushButton(this);
-    StreamUrlSaveBtn->setText("保存");
+    QPushButton* StreamUrlSaveBtn = new QPushButton("保存", this);
     connect(StreamUrlSaveBtn, &QPushButton::clicked, this, &ProcessPanel::slotLiveStreamSave);
 
     //推流
-    QLabel* PushStreamLabel = new QLabel(this);
-    PushStreamLabel->setText("推流");
+    QLabel* PushStreamLabel = new QLabel("推流", this);
     PushStreamLabel->setFont(font);
 
     m_pushStreamUrlEdit = new QLineEdit(this);
@@ -37,12 +33,10 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     m_pushStreamFileEdit->setPlaceholderText("文件地址");
     m_pushStreamFileEdit->setFont(font);
 
-    QPushButton* PushStreamFileSelectBtn = new QPushButton(this);
-    PushStreamFileSelectBtn->setText("选择文件");
+    QPushButton* PushStreamFileSelectBtn = new QPushButton("选择文件", this);
     connect(PushStreamFileSelectBtn, &QPushButton::clicked, this, &ProcessPanel::slotPushStreamFileSelect);
 
-    QPushButton* PushStreamBtn = new QPushButton(this);
-    PushStreamBtn->setText("推流");
+    QPushButton* PushStreamBtn = new QPushButton("推流", this);
     connect(PushStreamBtn, &QPushButton::clicked, this, &ProcessPanel::slotPushStream);
 
     //格式转换
@@ -50,12 +44,10 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     m_convertFileEdit->setPlaceholderText("文件地址");
     m_convertFileEdit->setFont(font);
 
-    QPushButton* ConvertFileSelectBtn = new QPushButton(this);
-    ConvertFileSelectBtn->setText("选择文件");
+    QPushButton* ConvertFileSelectBtn = new QPushButton("选择文件", this);
     connect(ConvertFileSelectBtn, &QPushButton::clicked, this, &ProcessPanel::slotConvertFileSelect);
 
-    QLabel* ConvertLabel = new QLabel(this);
-    ConvertLabel->setText("格式转换");
+    QLabel* ConvertLabel = new QLabel("格式转换", this);
     ConvertLabel->setFont(font);
 
     m_targetFormatCb = new QComboBox(this);
@@ -64,16 +56,13 @@ ProcessPanel::ProcessPanel(QWidget *parent) : QScrollArea(parent)
     m_targetFormatCb->addItem("mp4");
     m_targetFormatCb->addItem("flv");
 
-    QPushButton* LocalFileConverBtn = new QPushButton(this);
-    LocalFileConverBtn->setText("转换");
+    QPushButton* LocalFileConverBtn = new QPushButton("转换", this);
     connect(LocalFileConverBtn, &QPushButton::clicked, this, &ProcessPanel::slotConvert);
 
-    QLabel* AllEndLabel = new QLabel(this);
-    AllEndLabel->setText("全部结束");
+    QLabel* AllEndLabel = new QLabel("全部结束", this);
     AllEndLabel->setFont(font);
 
-    QPushButton* AllEndBtn = new QPushButton(this);
-    AllEndBtn->setText("结束");
+    QPushButton* AllEndBtn = new QPushButton("结束", this);
     connect(AllEndBtn, &QPushButton::clicked, this, &ProcessPanel::slotAllEnd);
 
 

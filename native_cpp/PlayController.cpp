@@ -65,6 +65,18 @@ void PlayController::endPlay()
     m_mediaInfo->isLiveStream = false;
 }
 
+void PlayController::newWindowPlay(const std::string filePath, bool cameraInput)
+{
+    PlayController pc;
+    pc.setNewWindowPlay(true);
+    pc.startPlay(filePath, cameraInput);
+}
+
+void PlayController::setNewWindowPlay(bool state)
+{
+    m_mediaManager->setNewWindowPlay(state);
+}
+
 void PlayController::changePlayProgress(int timeSecs)
 {
     m_mediaManager->setThreadPause(true);

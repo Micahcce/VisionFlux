@@ -33,6 +33,11 @@ public:
     //结束播放
     void endPlay();
 
+    //新窗口播放
+    void newWindowPlay(const std::string filePath, bool cameraInput = false);
+    //设置新窗口播放
+    void setNewWindowPlay(bool state);
+
     //修改播放进度
     void changePlayProgress(int timeSecs);
     //修改播放速度
