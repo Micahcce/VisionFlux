@@ -1,8 +1,10 @@
-#ifndef SDLPLAYER_H
+﻿#ifndef SDLPLAYER_H
 #define SDLPLAYER_H
 
 #include <iostream>
 #include <map>
+#include <thread>
+#include "Logger.h"
 
 extern "C"
 {
@@ -19,6 +21,7 @@ static std::map<int,int> AUDIO_FORMAT_MAP = {
     {AV_SAMPLE_FMT_FLT, AUDIO_F32SYS}
 };
 
+class MediaManager;
 
 // 定义 SdlPlayer 类
 class SdlPlayer {
@@ -36,6 +39,11 @@ public:
     void resize(int width, int height, bool RgbMode);
     void setVolume(int volume);
     void audioChangeSpeed(float speedFactor);
+
+    // 新建窗口
+    Uint32 getWindowId() { return SDL_GetWindowID(m_window); }
+    static void thread_window_event();
+    static void createWindow(MediaManager* media, AVCodecContext* videoCodecCtx);
 
     unsigned int m_audioLen = 0;             //音频数据块的长度
     unsigned char *m_audioChunk = nullptr;   //指向新获取的音频数据块的指针，目前多余

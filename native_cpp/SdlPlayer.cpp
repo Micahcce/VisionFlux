@@ -1,9 +1,25 @@
-#include "SdlPlayer.h"
+﻿#include "SdlPlayer.h"
+#include "MediaManager.h"
+
+bool isSdlInitialized = false;
+
+// 自定义事件类型，全局只注册一次
+Uint32 CREATE_WINDOW_EVENT = SDL_RegisterEvents(123);
 
 // 构造函数
 SdlPlayer::SdlPlayer(): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr),
     m_volume(100), m_raw_frame_size(0)
 {
+    if (!isSdlInitialized)
+    {
+        std::thread(&SdlPlayer::thread_window_event).detach();
+
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
+            std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+            return;
+        }
+        isSdlInitialized = true;
+    }
 }
 
 // 析构函数
@@ -24,23 +40,13 @@ SdlPlayer::~SdlPlayer()
         m_window = nullptr;
     }
 
-    SDL_CloseAudio();
-    SDL_Quit();
+//    SDL_CloseAudio();
+//    SDL_Quit();
 }
 
 // 创建窗口和渲染器
 bool SdlPlayer::initVideoDevice(int width, int height, bool RgbMode)
 {
-    static bool isSdlInitialized = false;
-    if (!isSdlInitialized)
-    {
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
-            std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-            return false;
-        }
-        isSdlInitialized = true;
-    }
-
     std::string windowName = "SdlDisplay_" + std::to_string(reinterpret_cast<uintptr_t>(this));     //需要避免命名冲突
     m_window = SDL_CreateWindow(windowName.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_RESIZABLE);
     if (m_window == nullptr) {
@@ -67,7 +73,6 @@ bool SdlPlayer::initVideoDevice(int width, int height, bool RgbMode)
 
 bool SdlPlayer::initAudioDevice(AVCodecContext* audioCodecCtx, AVSampleFormat fmt)
 {
-    ///   SDL
     //配置音频播放结构体SDL_AudioSpec，和SwrContext的音频重采样参数保持一致
     m_wantSpec.freq = audioCodecCtx->sample_rate;        //48000/1024=46.875帧
     m_wantSpec.format = AUDIO_FORMAT_MAP[fmt];
@@ -80,7 +85,9 @@ bool SdlPlayer::initAudioDevice(AVCodecContext* audioCodecCtx, AVSampleFormat fm
     //保存原始采样率用于变速
     m_raw_frame_size = audioCodecCtx->frame_size;
 
+
     //打开音频设备
+    SDL_CloseAudio();   //先关闭
     if(SDL_OpenAudio(&m_wantSpec, nullptr) < 0)
     {
         std::cerr << "Error occurred in SDL_OpenAudio" << std::endl;
@@ -184,4 +191,84 @@ void SdlPlayer::fill_audio(void *udata, Uint8 *stream, int len)
 
     pThis->m_audioPos += len;
     pThis->m_audioLen -= len;
+}
+
+void SdlPlayer::createWindow(MediaManager *mediaManager, AVCodecContext *videoCodecCtx)
+{
+    // 构造自定义事件
+    SDL_Event event;
+    SDL_zero(event);
+    event.type = CREATE_WINDOW_EVENT;
+
+    // 可选数据
+    event.user.code = 0;
+    event.user.data1 = mediaManager;
+    event.user.data2 = videoCodecCtx;
+
+    SDL_PushEvent(&event);  // 推送事件到主线程
+}
+
+void SdlPlayer::thread_window_event()
+{
+    std::map<Uint32, MediaManager*> sdlManager;
+
+    SDL_Event event;                    //定义事件
+
+    while(true)
+    {
+        SDL_WaitEvent(&event);
+
+        if (event.type == SDL_WINDOWEVENT)
+        {
+            for(std::pair pair : sdlManager)
+            {
+                Uint32 windowsId = pair.first;
+                if (windowsId == event.window.windowID)
+                {
+                    MediaManager* mediaManager = pair.second;
+                    if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+                    {
+                        mediaManager->setThreadQuit(true);
+                        mediaManager->close();
+                        break;
+                    }
+                    else if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+                    {
+                        // 重新初始化渲染资源
+                        mediaManager->getSdlPlayer()->resize(event.window.data1, event.window.data2, true);
+                        break;
+                    }
+                }
+            }
+        }
+        else if(event.type == SDL_KEYDOWN)
+        {
+            if(event.key.keysym.sym == SDLK_SPACE)  //空格键暂停
+            {
+                for(std::pair pair : sdlManager)
+                {
+                    Uint32 windowsId = pair.first;
+                    MediaManager* mediaManager = pair.second;
+                    if (windowsId == event.window.windowID)
+                        mediaManager->setThreadPause(!mediaManager->getThreadPause());
+                }
+            }
+        }
+        else if (event.type == CREATE_WINDOW_EVENT)
+        {
+            MediaManager* mediaManager = static_cast<MediaManager*>(event.user.data1);
+            AVCodecContext* codecCtx = (AVCodecContext*)event.user.data2;
+            //创建窗口（要和Event在同一线程）
+            if (codecCtx != nullptr)
+            {
+                int width = codecCtx->width;
+                int height = codecCtx->height;
+                mediaManager->getSdlPlayer()->initVideoDevice(width, height, true);
+            }
+            else
+                mediaManager->getSdlPlayer()->initVideoDevice(400, 300, true);
+
+            sdlManager[mediaManager->getSdlPlayer()->getWindowId()] = mediaManager;
+        }
+    }
 }

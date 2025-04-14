@@ -1,10 +1,10 @@
-#include "MediaManager.h"
+﻿#include "MediaManager.h"
 
 bool MediaManager::m_initialized = false;
 
 MediaManager::MediaManager()
     : m_renderCallback(nullptr),
-      m_sdlPlayer(nullptr),
+      m_sdlPlayer(new SdlPlayer),
       m_soundTouch(nullptr),
       m_formatCtx(nullptr),
       m_videoIndex(-1),
@@ -184,50 +184,12 @@ bool MediaManager::decodeToPlay(std::string filePath, bool cameraInput)
 
     // 新窗口播放
    if(m_newWindowPlay)
-       std::thread(&MediaManager::thread_new_window, this).detach();
+   {
+       SdlPlayer::createWindow(this, m_videoCodecCtx);
+       std::thread(&MediaManager::thread_monitor, this).detach();
+   }
 
     return true;
-}
-
-int MediaManager::thread_new_window()
-{
-    //创建窗口
-    if(m_videoIndex >= 0)
-        m_sdlPlayer->initVideoDevice(m_videoCodecCtx->width, m_videoCodecCtx->height, true);
-    else
-        m_sdlPlayer->initVideoDevice(400, 300, true);
-
-    SDL_Event event;                    //定义事件
-    while(std::any_of(m_threadExitState.begin(), m_threadExitState.end(),
-                      [](const auto& pair) { return pair.second == false; }))
-    {
-        SDL_WaitEvent(&event);
-
-        if(event.type == SDL_QUIT)      //程序退出
-        {
-            this->setThreadQuit(true);
-            break;
-        }
-        else if(event.type == SDL_KEYDOWN)
-        {
-            if(event.key.keysym.sym == SDLK_SPACE)  //空格键暂停
-            {
-                this->setThreadPause(!this->m_threadPause);
-            }
-        }
-        else if(event.type == SDL_WINDOWEVENT)
-        {
-            if (event.window.event == SDL_WINDOWEVENT_RESIZED)
-            {
-                // 重新初始化渲染资源
-                m_sdlPlayer->resize(event.window.data1, event.window.data2, m_rgbMode);
-            }
-        }
-    }
-    close();
-    logger.debug("new window play thread exit.");
-
-    return 0;
 }
 
 int MediaManager::thread_monitor()
@@ -554,7 +516,6 @@ void MediaManager::initAudioDevice()
     soundtouch_setTempo(m_soundTouch, m_speedFactor);                           // 设置倍速播放
 
     // 开启音频设备
-    m_sdlPlayer = new SdlPlayer;
     m_sdlPlayer->initAudioDevice(m_audioCodecCtx, AV_SAMPLE_FMT_FLT);       //SDL仅支持部分音频格式
 }
 
@@ -832,7 +793,7 @@ int MediaManager::thread_audio_display()
         m_audioLastPTS = frame->pts * av_q2d(m_formatCtx->streams[m_audioIndex]->time_base);
 
         // 等待SDL音频播放器完成当前的音频数据处理和输出
-        while(m_sdlPlayer->m_audioLen > 0)
+        while(m_sdlPlayer->m_audioLen > 0 && m_threadQuit == false)
             delayMs(1);
 
         // 音频填充参数

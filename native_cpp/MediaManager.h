@@ -1,4 +1,4 @@
-#ifndef MEDIAMANAGER_H
+﻿#ifndef MEDIAMANAGER_H
 #define MEDIAMANAGER_H
 
 #include <iostream>
@@ -76,6 +76,7 @@ public:
     void setNewWindowPlay(bool state) {m_newWindowPlay = state;}
 
     //线程状态
+    bool getThreadPause() {return m_threadPause;}
     bool getThreadSafeExited() {return m_threadSafeExited;}
     void setThreadQuit(bool state) {m_threadQuit = state;}
     void setThreadPause(bool state)
@@ -89,6 +90,9 @@ public:
 
     //关闭线程与回收资源
     void close();
+
+    //获取SDL播放器
+    SdlPlayer* getSdlPlayer() {return m_sdlPlayer;}
 
     //设置渲染回调函数
 #ifdef ENABLE_PYBIND
@@ -135,7 +139,6 @@ private:
     int thread_video_display();
     int thread_audio_display();
     int thread_stream_convert();
-    int thread_new_window();
     int thread_monitor();
 
 
